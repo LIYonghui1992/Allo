@@ -1,0 +1,287 @@
+<style>
+.cart_title{width:202px;float:left;color:#FFF;font-size:18px;text-align:center;line-height:50px;}
+/* .cart_title2{width:202px;float:left;color:#FFF;font-size:18px;margin-top:5px;text-align:center;line-height:20px;}*/
+.field_div{width:172px;float:left;color:#666;font-size:14px;text-align:center;padding-top:20px;}
+.item_div{margin:0px auto; width:1280px;height:87px;margin-top:20px;margin-bottom:20px;border-bottom:1px solid #DDD;}
+.confire-item{float:right;margin:0px 10px; width:150px;line-height:50px;}
+.total_item{float:right;margin:0px 30px; line-height:50px;font-size:18px;font-weight:bold;color:#666666;}
+.footer{background-color:#884697}
+.footer .country {BACKGROUND-COLOR: #884697;}
+</style>
+
+<include file="Home:DNnav"/>
+<div class="fmian">
+	<div class="layout_list">
+		<div class="design_main clearfix" style="margin-top:30px;">
+			<div style="margin:0px auto;width:1280px;height:40px;color:#e60012;line-height:40px;<empty name="tip">display:none;</empty>"> {$tip} </div>
+
+<!--从这里开始-->
+	    <div style="margin:0px auto;width:1280px;height:50px;background-color:#884697;">
+	    	<div class="cart_title" style="width:450px;margin-left:90px;">Product</div>
+    		<div class="cart_title">Qty</div>
+    		<div class="cart_title">
+    			{$Think.lang.PRICE}
+    		</div>
+    		<div class="cart_title">Total</div>
+    	</div>
+    	
+    	<form action="/Cart/checkout" method="post"  id="form1">
+      <div class="main clearfix">
+    	
+        <ul id="check_items">
+        	<empty name="cartlist">
+        	<li style="margin-top:40px;height:62px;text-align:center;"> 
+        		<img src="../Public/image/cart_empty.png"/>
+        	</li>
+        	<li style="margin-top:20px;height:50px;text-align:center;"> 
+        		<font style="font-size:20px;"> {$Think.lang.SHOP_EMPTY} </font>
+        	</li>
+        	</empty>
+
+			<volist name="cartlist" id="vo">
+				<li id="{$vo['productid']}--{$vo['typeid']}" style="margin-top:20px;">
+					<div class="item_div">
+
+						<div class="field_div" style="width:60px;"><input  name="{$vo['productid']}--{$vo['typeid']}" type="checkbox" id="{$vo['productid']}--{$vo['typeid']}--{$vo['price']}" value="{$vo['productid']}--{$vo['typeid']}--{$vo['price']}--{$vo['qty']}"/></div>
+						<div class="field_div" style="width:100px;padding-top:0px;"><img src="{$vo['background_img']}" style="width:100px;height:75px;"/></div>
+
+						<div class="field_div" style="width:350px;">
+							{$vo['title']}
+							<notempty name="vo['type_pic']"><br> color:<img src="{$vo['type_pic']}" style="width:10px;height:10px;"/></notempty>
+
+						</div>
+
+						<div class="field_div" style="margin-left:75px;">
+							<div style="width:106px;height:26px;background-image:url(../Public/image/qty.png); ">
+										 <div id="minus" style="width:22px;height:26px;float:left;" onclick="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},0);"></div >
+										 <div style="float:left;width:62px;height:24px;padding-top:1px;overflow:hidden;">
+											 <input id="qty{$vo['productid']}--{$vo['typeid']}" type="text" value="{$vo['qty']}" onblur="javascript:changeqty('{$vo['price']}',{$vo['productid']},{$vo['typeid']},2);" style="width:62px;border-left:0px;border-top:0px;border-right:0px;border-bottom:0px; text-align:center;line-height:23px;/>
+										</div>
+										 <div id="plus"  style="width:22px;height:26px;float:left;" onclick="javascript:changeqty('{$vo['\price\']}',{$vo['productid']},{$vo['typeid']},1);"></div >
+							</div>
+						</div>
+
+					<div class="field_div" >
+						{$vo['price']}
+					</div>
+					<div class="field_div" style="margin-left:30px;">
+						<span style="font-size:20px">$</span>
+						<span style="font-size:20px" id="total{$vo['productid']}--{$vo['typeid']}">{$vo['total']}</span>
+
+					</div>
+
+					<div class="field_div" style="width:60px;">
+						<a href="#"><img src="../Public/image/cart_del.jpg" onclick="javascript:del({$vo['productid']},{$vo['typeid']},'{$vo[\'price\']}');"/></a>
+					</div>
+				 </div>
+			   </li>
+
+			</volist>
+        </ul>
+      
+      
+     </div>
+      <div style="margin:0px auto;width:1280px;height:50px;background-color:#DDD;margin-top:20px;">
+      	<div style="float:right;height:100%;width:150px;background-color:#884697;text-align:center;"><a href="javascript:submit1();" ><font style="color:#FFF;font-size:18px;line-height:50px;" > Checkout</font></a></div>
+       <!-- <div class="confire-item" style="font-size:18px;font-weight:bold;color:#666666;width:200px;"> <font>{$Think.lang.TOTAL}({:C('INCL_VAT')}):</font><font id="confire_total" style="color:#15869f;"></font> </div> -->
+        <div class="total_item"> <font>Total:</font><font id="confire_total" style="color:#884697;"></font> </div>
+        <div class="total_item" > <font>Item <font id="confire_pcs" style="color:#884697;">0</font> pcs</font> </div>
+        <div class="total_item" style="float:left;margin-left:10px;" > <input type="checkbox" id="all"><font> {$Think.lang.ALL}</font> </div>		
+      </div>
+    
+    </form>
+	
+		</div>
+	
+	<!--</div>-->
+	
+	
+	
+	
+
+<!-- <input type="submit" style="float:right;" value="checkout" />
+<include file="Home:bottom"/> 
+	 -->
+	
+	<script type="text/javascript">
+
+
+		$(document).ready(function()
+		{
+			document.getElementById("pathguide").innerHTML +=' > '+ "{$Think.lang.CART}";
+			$(":checkbox").attr("checked", true);  
+      		recalculate();
+		} );
+		
+		function submit1() 
+		{
+			$("#form1").submit();
+		}
+		
+		 //统计和
+		function recalculate()
+		{
+			pcs=0;
+  	    total=0.00;
+        $("#check_items :checkbox[checked]:visible").each(function(i){ 
+          //var info=$(this).id().split("--"); 
+          var info=this.id.split("--"); //把它的id 分割成字符串数组
+        	var productid = info[0];
+        	var typeid = info[1];
+        	var price = info[2].substring(1);
+        	var qtyid = "qty"+productid+"--"+typeid;
+        	var qty = parseInt(document.getElementById(qtyid).value); 
+        	pcs += qty;
+
+    	    temp = qty*price;
+      	  total += 1*temp.toFixed(2);
+      	  total = 1*total.toFixed(2);
+			//处理checkbox 的值
+			this.value=productid+"-"+typeid+"-"+qty+"-"+price;
+        	
+        }); 
+
+        document.getElementById("confire_total").innerHTML = "$"+total;
+      	document.getElementById("confire_pcs").innerHTML = pcs; 
+		}
+		
+		$("#all").click(function(){    
+      if(this.checked){
+          $(":checkbox").attr("checked", true);  
+          recalculate();
+      }else{    
+          $(":checkbox").attr("checked", false); 
+          pcs=0;
+    	    total=0.00;
+    	    document.getElementById("confire_total").innerHTML = "$"+total;
+        	document.getElementById("confire_pcs").innerHTML = pcs; 
+      }             
+    });
+
+		var pcs=0;
+	  var total=0.00;
+    $("#check_items :checkbox").click(function(){
+    	
+    	recalculate();
+    	return;
+    	//var info = this.id;
+//    	var info=this.id.split("--");
+//    	var productid = info[0];
+//    	var typeid = info[1];
+//    	var price = info[2];
+//    	var qtyid = "qty"+productid+"--"+typeid;
+//    	var qty = parseInt(document.getElementById(qtyid).value);
+
+//    	if(this.checked)
+//    	{
+//    	  pcs += qty;
+//    	  //total += qty*price;
+//    	  <if condition="C('INCL_TAX') eq 0">
+//    	      //total += Math.round(qty*price*"{:C('TAX_PERCENT')}"*100)/100 ;
+//    	      temp = qty*price*"{:C('TAX_PERCENT')}";
+//    	      //alert(temp.toFixed(2));
+//    	      total += temp.toFixed(2)*1;
+//    	      //total = (parseFloat(total)).toFixed(2);
+//    	  <else/>
+//      	    //total += qty*price;
+//      	    temp = qty*price;
+//      	    total += temp.toFixed(2)*1;
+//      	    //total = (parseFloat(total)).toFixed(2);
+//      	</if>
+//
+//    	}
+//    	else{
+//    		pcs -= qty;
+//    	  //total -= qty*price;
+//    	  <if condition="C('INCL_TAX') eq 0">
+//  	      //total -= Math.round(qty*price*"{:C('TAX_PERCENT')}"*100)/100 ;
+//  	      temp = qty*price*"{:C('TAX_PERCENT')}";
+//    	      //alert(temp.toFixed(2));
+//    	    total -= temp.toFixed(2)*1;
+//    	    //total = (parseFloat(total)).toFixed(2);
+//  	    <else/>
+//    	    temp = qty*price*1;
+//      	  total -= temp.toFixed(2)*1;
+//
+//    	  </if>
+//    	}
+//    	document.getElementById("confire_total").innerHTML = "{:L('Currency')}"+total;
+//    	document.getElementById("confire_pcs").innerHTML = pcs;
+//
+    	});
+	
+	
+	 
+	
+	
+	
+	
+	
+	
+	function changeqty(pri,productid,typeid,type)
+	{
+
+				var qty =	parseInt(document.getElementById("qty"+productid+"--"+typeid).value);
+				if(type==0 && qty>0)
+				{
+				  document.getElementById("qty"+productid+"--"+typeid).value = qty-1;
+				  qty = qty-1;
+				}
+				if(type==1){
+					document.getElementById("qty"+productid+"--"+typeid).value = qty+1;
+					qty = qty+1;
+				}
+				if(type==2)
+				{
+				}
+
+
+				//ͬcookie ajax
+				var url = "{:U('Cart/updateCart')}";
+				$.post(url, {
+					  action:'update',
+					  productid:productid,
+					  typeid:typeid,
+					  price:pri,
+					  qty:qty
+					},
+					function(data,status) {
+						if (status == "success") {
+							document.getElementById("total"+productid+"--"+typeid).innerHTML = data;
+							recalculate();
+						}
+						else{
+							alert("fail to update cart");
+						}
+					},
+					"json");
+
+	}
+	
+	
+	function del(productid,typeid,price)
+	{
+		var url = "{:U('Cart/updateCart')}";
+		$.post(url, {
+			  action:'del',
+			  productid:productid,
+			  typeid:typeid
+			},
+			function(data,status) {
+				if (status == "success") {
+					document.getElementById(productid+"--"+typeid).style.display="none";			
+					//document.getElementById("gocart").innerHTML= data.qty ;					
+					var domid = productid+"--"+typeid+"--"+price;					
+					document.getElementById(domid).checked=false;
+					//document.getElementById(productid+"--"+typeid).style.display="none";					
+					
+					recalculate();
+				}
+				else{
+					alert("fail to delete from cart");
+				}
+			},
+			"json");	
+
+	}
+	</script>

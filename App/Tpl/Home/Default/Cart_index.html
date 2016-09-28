@@ -1,0 +1,834 @@
+<style>
+.cart_title{width:202px;float:left;color:#FFF;font-size:18px;text-align:center;line-height:50px;}
+/* .cart_title2{width:202px;float:left;color:#FFF;font-size:18px;margin-top:5px;text-align:center;line-height:20px;}*/
+.item_div{margin:0px auto; width:1280px;height:87px;margin-top:20px;margin-bottom:20px;border-bottom:1px solid #DDD;}
+.confire-item{float:right;margin:0px 10px; width:150px;line-height:50px;}
+.footer{background-color:#884697}
+.footer .country {BACKGROUND-COLOR: #884697;}
+.shipping-div{float:left;margin-left:10px;width:610px;height:40px;padding-top:5px;
+	color:#999;
+}
+.shipping-field{width:40px;float:left;}
+.shipping-input{padding-left:10px;height:30px;margin:0px auto;width:500px;margin-left:50px;border:1px solid #CCC;
+	font-size:12px;color:#999999;background-color:#EEE;}
+</style>
+<script src=__PUBLIC__."/artDialog/artDialog.min.js"></script>
+<link rel="stylesheet" type="text/css" href=__PUBLIC__."/artDialog/skins/chrome.css"/>
+<link rel="stylesheet" type="text/css" href="../Public/css/cart_index_content.css"/>
+<!--<link rel="stylesheet" type="text/css" href="__CSS__/cart_index_content.css"/>-->
+<include file="Home:DNnav"/>
+<div class="fmian">
+	<div class="layout_list">
+		<div class="design_main clearfix" style="margin-top:30px;">
+			<div style="margin:0px auto;width:1280px;height:40px;color:#e60012;line-height:40px;<empty name='tip'>display:none;</empty>">{$tip}
+			</div>
+		</div>
+<!--从这里开始-->
+		<div id="cart_list">
+			<form action="{:U('Cart/checkout')}" method="post" id="form1">
+				<empty name="cart_save">
+					<div id="shop_empty">
+							<li style="margin-top:40px;height:62px;text-align:center;">
+								<img src="../Public/image/cart_empty.png"/>
+							</li>
+							<li style="margin-top:20px;height:50px;text-align:center;">
+								<font style="font-size:20px;"> {$Think.lang.SHOP_EMPTY} </font>
+							</li>
+					</div>
+				</empty>
+
+				<volist  name="cart_save" id="v">
+					<div class="order" id="{$Think.lang.$key}">
+						<!--地址里的数据可以算出来-->
+
+						<div class="address" >
+							<ul>
+								<li id="product_title{$Think.lang.$key}">{$Think.lang.$key}</li>
+								<li><span >Product: $</span><span id="product_fee{$Think.lang.$key}">{$Think.lang.$key}</span></li>
+								<li><span >Shipfee: $</span><span id="shipfee{$Think.lang.$key}">0</span></li>
+								<!--<li><a href="javascript:addaddress();" ><font style="color:#FFF;font-size:18px;line-height:50px;" > Add address </font></a></li>-->
+								<li class="address_des"><span >Address:</span><span id="address_des{$Think.lang.$key}" style="display: none"></span></li>
+								<!--这里给一个默认的国家id 初始化的时候可以先根据这个id计算运费-->
+								<li><input type="text" id="record_countryid{$Think.lang.$key}" style="display:none" value="1"></li>
+								<li><a id="address{$Think.lang.$key}" href="javascript:add_address({$Think.lang.$key});" ><font style="color:#FFF;font-size:12px;line-height:50px;" > Add address>> </font></a></li>
+							</ul>
+						</div>
+
+						<div class="product_list">
+								<volist name="v" id="vo">
+									<div class="suborder" id="suborder{$vo['productid']}--{$vo['typeid']}" >
+										<div class="checkbox">
+											<input  name="{$vo['productid']}--{$vo['typeid']}" type="checkbox" id="checkbox{$vo['productid']}--{$vo['typeid']}" value="{$vo['productid']}--{$vo['typeid']}--{$vo['price']}--{$vo['qty']}"/>
+										</div>
+
+										<div class="image" >
+											<img src="{$vo['background_img']}" style="width:100px;height:75px;"/>
+										</div>
+
+										<!--商品信息-->
+										<div class="product_info">
+											<ul>
+												<li>
+													<span class="product_title" id="product_title{$vo['productid']}{$vo['typeid']}">
+														{$vo['title']}
+													</span>
+													<notempty name="vo['typetitle']">
+													<span class="t"></span>
+													<span class="product_type">
+														<!--<notempty name="vo['type_pic']"> Type:<img src="{$vo['type_pic']}" style="width:10px;height:10px;"/></notempty>-->
+														Type:{$vo['typetitle']}
+													</span>
+													</notempty>
+												</li>
+
+												<li>
+													<span class="product_price" >
+													{$vo['price']}
+													</span>
+												</li>
+											</ul>
+										</div>
+
+
+										<div class="product_qty">
+											<div style="width:106px;height:26px;background-image:url(../Public/image/qty.png); background-repeat:no-repeat;margin:47px 0;">
+
+												<div id="minus" onclick="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},0);">
+												</div >
+
+												<div class="input"><input id="qty{$vo['productid']}--{$vo['typeid']}" type="text" value="{$vo['qty']}" onblur="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},2);" style="width:62px;border:0; text-align:center;line-height:23px;"/>
+												</div>
+												<div id="plus" onclick="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},1);">
+												</div >
+
+											</div>
+										</div>
+
+										<div class="product_del">
+											<a href="#"><img src="../Public/image/cart_del.jpg" onclick="javascript:del({$vo['productid']},{$vo['typeid']},'{$vo[\'price\']}');"/></a>
+										</div>
+									</div>
+								</volist>
+						</div>
+					<!--<div><hr style="width:120px;size:2px;"></div>-->
+						<div class="h"></div>
+					</div>
+
+
+				</volist>
+
+				<notempty name="cart_save">
+					<div id="total_checkout" style=" float:left;height:200px; width:900px;">
+						<div id="totals" style="float:left; width:20%;">
+							<ul>
+								<li style="float:left;"><font>Total: $</font><font id="allo_pay_total" style="color:#884697;">0</font></li>
+								<li style="float:left; margin-left:15px;"><font>Item : <font id="confire_pcs" style="color:#884697;">0</font> pcs</font></li>
+							</ul>
+						</div>
+
+						<div id="checkout" style="float:left; width:80%;">
+							<div style="float:left;"> <input type="checkbox" id="all"/><font> {$Think.lang.ALL}</font> </div>
+							<div style="float:right;width:150px;background-color:#884697;text-align:center;"><a href="javascript:submit1();" id="buy" ><font style="color:#FFF;font-size:18px;line-height:50px;" > Checkout</font></a></div>
+						</div>
+					</div>
+				</notempty>
+					<!-- <div class="confire-item" style="font-size:18px;font-weight:bold;color:#666666;width:200px;"> <font>{$Think.lang.TOTAL}({:C('INCL_VAT')}):</font><font id="confire_total" style="color:#15869f;"></font> </div> -->
+
+				<div style=" float:left;height:200px; width:800px;"></div>
+		</form>
+
+		</div>
+		<div style="clear: both;"> </div>
+
+	</div>
+
+
+	<!--这里是填写地址的弹出框-->
+	<div id="shipping" style="margin:0px auto;width:300px; display: none;">
+		<!--<img src="../Public/image/checkout_icon1.png" style="width:16px;height:23px;float:left;padding-left:10px; margin-top:15px;"/>-->
+		<font style="font-size:16px;font-weight:bold;color:#884697;padding-left:5px;">Shipping Address</font>
+	</div>
+
+	<div id="shipping-2" style="float:left;margin:0px auto;width:1080px;height:450px;margin-top:10px;border-top-width: 1px;border-top-style: solid;border-top-color: #884697;display:none;">
+
+		<div class="shipping-div" style="margin-top:15px;">
+			<font style="font-size:14px;font-weight:bold;font-color:#666666;">Shipping Address</font>
+		</div>
+		<div class="shipping-div">
+			<div class="shipping-field"><font style="font-size:12px; width:50px;">Name*</font></div>
+			<input name="firstname" id="firstname"  type="text" class="shipping-input" style="width:238px;" value="First Name"
+				   onfocus="if (value =='First Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='First Name';this.style.color='#999'}"
+			/>
+			<input name="lastname" type="text" id="lastname" class="shipping-input" style="width:238px; margin-left:10px;" value="Last Name"
+				   onfocus="if (value =='Last Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Last Name';this.style.color='#999'}"/>
+		</div>
+
+		<div class="shipping-div">
+			<div class="shipping-field"><font style="font-size:12px;width:50px;">Phone*</font></div>
+			<input name="phone" id="phone" type="text" class="shipping-input"  value="Your Phone Number"
+				   onfocus="if (value =='Your Phone Number'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Your Phone Number';this.style.color='#999'}"/>
+		</div>
+		<div class="shipping-div">
+			<div class="shipping-field"><font style="font-size:12px;width:50px;">Company</font></div>
+			<input name="company" id="company" type="text" class="shipping-input"  value="Company Name(optional)"
+				   onfocus="if (value =='Company Name(optional)'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Company Name(optional)';this.style.color='#999'}"/>
+		</div>
+		<div class="shipping-div">
+			<div class="shipping-field"><font style="font-size:12px;">Address*</font></div>
+			<input name="address" id="address" type="text" class="shipping-input"  value="Address"
+				   onfocus="if (value =='Address'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Address';this.style.color='#999'}"/>
+		</div>
+
+		<div class="shipping-div">
+			<div class="shipping-field"><font style="font-size:12px;">PostalCode*</font></div>
+			<input name="postcode" id="postcode" type="text" class="shipping-input" style="width:238px;" value="Postal Code"
+				   onfocus="if (value =='Postal Code'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Postal Code';this.style.color='#999'}"/>
+			<input name="city" type="text" id="city" class="shipping-input" style="width:238px;margin-left:10px;" value="City"
+				   onfocus="if (value =='City'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='City';this.style.color='#999'}"/>
+		</div>
+
+		<div class="shipping-div">
+			<div class="shipping-field"><font style="font-size:12px;">Country*</font></div>
+
+			<select id="countrylist" class="shipping-input" style="width:512px;" onchange="ship_price();" >
+				<option value="-1" selected>Choose your country</option>
+				<volist name="country_list" id="vo"  >
+					<option id="countrylist{$vo.id}" value="{$vo.id}">{$vo.title}</option>
+				</volist>
+			</select>
+
+		</div>
+	</div>
+	<div><input type="text" id="allo_total" style="display:none"></div>
+	<div><input type="text" id="record_productid" style="display:none"></div>
+
+</div>
+
+	
+
+	<script>
+
+		//选了国家之后 每次计算运费 返回的都是其中的一条订单的运费
+		//所以先要根据这个地址id=address productid 找到productid 然后把修改后的数量参数给穿回去
+		//在后端计算好当前的运费后，返回填写到
+		//根据国家的id拿到国家的运费即可，把计算方式放到前端 所以我只需要传过去一个id 然后拿回一个国家对应的费用
+		//但是这样我的运费暂时无法存到cookie里， 只能最后点击提交的时候 一起传送到后台数据库中存起来 同时生成订单
+//		var info_arr=new Array();
+		var arr=[];
+
+		function add_address(productid){
+			arr=[];
+			document.getElementById("record_productid").value=productid;
+			var dia=art.dialog({
+				width:300,
+				height:100,
+				id: 'shake-demo',
+				lock: true,
+				fixed: true,
+				ok: function () {
+					save_address();
+				},
+				okValue: '确定',
+				cancelValue:'取消',
+				cancel: function () {
+					alert('取消填写');
+				}
+			});
+			dia.title(document.getElementById('shipping'));
+			dia.content(document.getElementById('shipping-2'));
+			dia.show();
+		}
+
+
+		function save_address(){
+			//如果没有选国家，则会按照默认上次的国家计算一遍
+			ship_price();
+			var result = checkinput();
+			if(!result){
+				return false;
+			}
+
+			//接着往下执行：1.将当前的地址信息保存到div中
+			countrylistid="countrylist"+$("#countrylist").val();
+			productid=$("#record_productid").val();
+
+			address_des_id="address_des"+productid;
+
+
+			//2. 将所有的地址信息保存到后台的cookie里 这里用数组的形式给存起来
+			var url="{:U('Cart/save_address')}";
+			arr=[];
+			arr[0]=productid;
+			arr[1]=$("#firstname").val();
+			arr[2]=$("#lastname").val();
+			arr[3]=$("#phone").val();
+			arr[4]=$("#company").val();
+			arr[5]=$("#address").val();
+			arr[6]=$("#city").val();
+			arr[7]=$("#"+countrylistid).text();
+			arr[8]=$("#countrylist").val();
+			arr[9]=$("#postcode").val();
+
+
+//			arr["countryid"]=$("#countrylist").val();
+//			arr["country"]=$("#"+countrylistid).text();
+//			arr["city"]=$("#city").val();arr["firstname"]=$("#firstname").val();
+//			arr["lastname"]=$("#lastname").val();
+//			arr["phone"]=$("#phone").val();
+//			arr["company"]=$("#company").val();
+//			arr["address"]=$("#address").val();
+//			arr["postcode"]=$("#postcode").val();
+//			arr["city"]=$("#city").val();
+
+			var data={info:arr};
+			$.post(url,data,function (data,status) {
+				if(status=="success"){
+//					alert(data);
+					var str=$("#"+countrylistid).text()+" /"+$("#address").val()+" /"+$("#firstname").val()+$("#lastname").val()+" /"+$("#phone").val();
+					document.getElementById(address_des_id).style.display="block";
+					document.getElementById(address_des_id).innerHTML=str;
+				}
+			});
+
+
+
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		/*
+		 需要的信息:
+		 1.这个商品的所有子订单的typeid和qty
+		 2.地址的国家
+		 */
+//		var arr1=new Array;
+		function ship_price()
+		{
+			//遍历订单下已经调勾的子订单
+			//checkbox content:{$vo['productid']}--{$vo['typeid']}--{$vo['price']}--{$vo['qty']}
+			arr=[];
+			productid=$("#record_productid").val();
+
+			$(".checkbox :checkbox[checked]:visible").each(function(i) {
+//				var info=this.id.split("--"); //把它的id 分割成字符串数组
+				var info = this.value.split("--");
+				var pre_productid = info[0];
+				var typeid = info[1];
+				var price = info[2];
+				var qty = info[3];
+				if (pre_productid == productid) {
+					//productid--typeid--price--qty--countryid
+					str = this.value + "--" + document.getElementById("countrylist").value;
+					arr.push(str);
+
+				}
+				//也可能没产品没有调勾但是想添地址，这个时候要判断下，如果产品没有调勾则add address就隐藏了
+			});
+			shipfeeid="shipfee"+productid;
+			if(arr.length==0){
+				document.getElementById(shipfeeid).innerHTML = 0;
+				return;
+			}
+
+//			var currency = "$";
+			if(document.getElementById("countrylist").value==-1){
+				document.getElementById("countrylist") .style.color='#999';
+			}else{
+				document.getElementById("countrylist") .style.color='#333';
+			}
+			var url = "{:U('Cart/shipPrice')}";
+
+
+//			var data =  { countryid: document.getElementById("countrylist").value,allo_total:allo_total};
+			var data =  { info:arr};
+			$.post(url,data,function(data,status){
+				if(status == "success"){
+//					alert(data);
+					document.getElementById(shipfeeid).innerHTML = data;
+					recalculate();
+//					document.getElementById("allo_pay_total").innerHTML = currency+data.allo_pay_total;
+					document.getElementById("buy").disabled = false;
+					//window.location.reload();
+				}else{
+					alert(data.msg);
+					document.getElementById("buy").disabled = true;
+
+				}
+			},"json");
+		}
+
+
+		$(document).ready(function()
+		{
+			document.getElementById("pathguide").innerHTML +=' > '+ "{$Think.lang.CART}";
+
+			$(":checkbox").attr("checked", true);
+
+      		recalculate();
+
+		} );
+
+		//要判断只有有订单的时候 才能点提交
+		function submit1()
+		{
+			//遍历所有调勾的checkbox
+			//1.判断是不是所有调勾的订单信息填写完整,例如某个订单的地址没填写则提示填写
+			//2.用value存下所有的值
+			var flag=0;
+			$(".checkbox :checkbox[checked]:visible").each(function(i){
+				var info = this.value.split("--");
+				var productid = info[0];
+				var typeid = info[1];
+				var price = info[2].substring(1);
+				var qty=info[3];
+				address_des_id="address_des"+productid;
+
+				if(document.getElementById(address_des_id).textContent==""){
+					flag=1;
+					alert("您的地址"+productid+"没有填写");
+					return false;
+				}
+
+				checkboxid="checkbox"+productid+"--"+typeid;
+				product_feeid="product_fee"+productid;
+				shipfeeid="shipfee"+productid;
+				productfee=document.getElementById(product_feeid).textContent;
+				shipfee=document.getElementById(shipfeeid).textContent;
+				document.getElementById(checkboxid).value+="--"+productfee+"--"+shipfee;
+
+			});
+
+			if(flag==0) {
+				$("#form1").submit();
+			}else{
+
+			}
+		}
+		
+		 //统计和
+		function recalculate()
+		{
+			pcs=0;
+  	    	total=0.00;
+			product_fee=0;
+			lastproductid="";
+			status=0;
+			allo_pay_total=0;
+			total_shipfee=0;
+			num=$(".checkbox :checkbox[checked]:visible").length;
+			count=0;
+			/*
+			1.计算产品的价格
+			2.合计运费
+			3.计算总费用
+			这里操作的只是选中的，就是说如果没选中的product_fee是不会归0的
+			 */
+        	$(".checkbox :checkbox[checked]:visible").each(function(i){
+			  //var info=$(this).id().split("--");
+				count++;
+//				var info=this.id.split("--"); //把它的id 分割成字符串数组
+//				var productid = info[0];
+//				var typeid = info[1];
+
+				var info = this.value.split("--");
+				var productid = info[0];
+				var typeid = info[1];
+
+				var price = info[2].substring(1);
+				var qtyid = "qty"+productid+"--"+typeid;
+				var qty = parseInt(document.getElementById(qtyid).value);//数量要拿现在的数量，因为数量改了但是checkbox的value中qty没有变
+				pcs += qty;
+				temp = qty*price;
+
+				//刚开始先根据拿到的title值给address的title赋值
+				product_title1="product_title"+productid;
+				product_title="product_title"+productid+typeid;
+				str=document.getElementById(product_title).textContent;
+				document.getElementById(product_title1).innerHTML=str;
+
+
+				//如果第一次算 也就是算第一个调勾的子订单
+				if(status==0){
+					lastproductid=productid;
+					status=1;
+					if(count==num){
+						product_fee+=temp;
+						pro_id="product_fee"+lastproductid;
+						document.getElementById(pro_id).innerHTML=product_fee;
+						product_fee=0;
+					}
+					shipfeeid="shipfee"+productid;
+					total_shipfee+=parseInt(document.getElementById(shipfeeid).textContent);
+				}else{
+//					product_fee_id="product_fee"+productid;
+//					if(document.getElementById(product_fee_id).value!=lastproductid){
+					//这里要考虑 如果遍历完了所有的只有一种产品怎么办 所以不能碰到下一种不同的产品才计算上个订单的价格
+					//所以 如果当前id不等于上一个id 或者 这已经是最后一个productid了，那么如何判断这是最后一个盒子了呢？ 我们可以用checked的数组的长度和一个计数器来判断
+					//如果只有一种类型产品 没有问题根据count==num 如果只有一个产品 第一次id已经记录了， 如果有两个产品为3 1 形式
+					if(productid==lastproductid){
+						if(count==num){
+							product_fee+=temp;
+							pro_id="product_fee"+lastproductid;
+							document.getElementById(pro_id).innerHTML=product_fee;
+							product_fee=0;
+						}
+					}
+					//不管是不是最后一次 只要是不同产品 就先把上一次的结了
+					if(productid!=lastproductid){
+						shipfeeid="shipfee"+productid; //只有两种不同产品时才再次加运费 防止加两边
+						total_shipfee+=parseInt(document.getElementById(shipfeeid).textContent);
+
+						pro_id="product_fee"+lastproductid;
+						document.getElementById(pro_id).innerHTML=product_fee;
+
+						if(count==num){
+							pro_id="product_fee"+productid;
+							document.getElementById(pro_id).innerHTML=temp;
+						}
+						product_fee=0;//突然变成另一个产品，则在输出价格后应该置0，下面可以再次进行加
+					}
+//					if(productid!=lastproductid&&count!=num){ //当前产品是不同产品，并且不是最后一个 则只结账前次即可
+//						pro_id="product_fee"+lastproductid;
+//						document.getElementById(pro_id).innerHTML=product_fee;
+//						product_fee=0;
+//					}else if(productid==lastproductid&&count==num){//当前产品是同一个产品，且是最后一个
+//							//只分为不是最后一次 和是最后一次两种情况即可
+//							product_fee+=temp;
+//							lastproductid=productid;
+//							pro_id="product_fee"+lastproductid;
+//							document.getElementById(pro_id).innerHTML=product_fee;
+////							product_fee=0;
+////							order_total=0;
+//					}else if(productid!=lastproductid&&count==num){//当前产品是不同产品，且是最后一个产品了，要先结了久账，再结新账
+//							pro_id="product_fee"+lastproductid;
+//							document.getElementById(pro_id).innerHTML=product_fee;
+//							product_fee+=temp;
+//							pro_id="product_fee"+productid;
+//							document.getElementById(pro_id).innerHTML=product_fee;
+////							product_fee=0;
+
+//					}
+					lastproductid=productid;
+				}
+				product_fee+=temp;
+
+			  	total += 1*temp.toFixed(2);
+			  	total = 1*total.toFixed(2);
+        	
+       	 	});
+
+
+
+			allo_pay_total=total+total_shipfee;
+			document.getElementById("allo_total").value=total;
+			document.getElementById("allo_pay_total").innerHTML = allo_pay_total;
+			document.getElementById("confire_pcs").innerHTML = pcs;
+		}
+
+
+
+		
+		$("#all").click(function(){    
+			if(this.checked){
+				$(":checkbox").attr("checked", true);
+				recalculate();
+			}else{
+				$(":checkbox").attr("checked", false);
+			  	pcs=0;
+			  	total=0.00;
+			  	document.getElementById("allo_pay_total").innerHTML = "$"+total;
+			  	document.getElementById("confire_pcs").innerHTML = pcs;
+			}
+    	});
+
+
+		var pcs=0;
+	  	var total=0.00;
+
+		//如果先添加了地址缺没有勾选商品，则运费为0，如果再勾选则要按照商品计算运费
+    	$(".checkbox :checkbox").click(function(){
+//			alert($(this).attr("id"));
+			//一种方法： 条上钩之后将当前productid对应的所有的子订单合计一遍运费，调掉钩也是
+
+			arr=[];
+			var info = this.value.split("--");
+			var productid = info[0];
+//			var address_des_id="address_des"+productid;
+			var productfeeid="product_fee"+productid;
+			var shipfeeid="shipfee"+productid;
+			//只要点了就计算运费 因为刚开是可能初始化的时候会给record_countryid附一个值，就是说可以计算出运费的
+			//所以要判断是否可以计算运费了 主要是根据国家选没选
+			record_countryid="record_countryid"+productid;
+			if(!$("#"+record_countryid).val()==""){
+				if($("#"+productid+" :checkbox[checked]:visible").length>0){
+					$("#"+productid+" :checkbox[checked]:visible").each(function(i) {
+						arr[i]=this.value+"--"+$("#"+record_countryid).val();
+//						alert(arr[i]);
+//						return;
+					});
+					var url = "{:U('Cart/shipPrice')}";
+					$.post(url,{info:arr},function (data,status) {
+						if(status="success"){
+							document.getElementById(shipfeeid).innerHTML=data;
+							recalculate();
+							return;
+						}
+					});
+				}else{
+					document.getElementById(shipfeeid).innerHTML=0;
+					document.getElementById(productfeeid).innerHTML=0;
+					recalculate();
+				}
+			}else{
+				recalculate();
+			}
+
+
+//var info = this.id;
+//    	var info=this.id.split("--");
+//    	var productid = info[0];
+//    	var typeid = info[1];
+//    	var price = info[2];
+//    	var qtyid = "qty"+productid+"--"+typeid;
+//    	var qty = parseInt(document.getElementById(qtyid).value);
+
+//    	if(this.checked)
+//    	{
+//    	  pcs += qty;
+//    	  //total += qty*price;
+//    	  <if condition="C('INCL_TAX') eq 0">
+//    	      //total += Math.round(qty*price*"{:C('TAX_PERCENT')}"*100)/100 ;
+//    	      temp = qty*price*"{:C('TAX_PERCENT')}";
+//    	      //alert(temp.toFixed(2));
+//    	      total += temp.toFixed(2)*1;
+//    	      //total = (parseFloat(total)).toFixed(2);
+//    	  <else/>
+//      	    //total += qty*price;
+//      	    temp = qty*price;
+//      	    total += temp.toFixed(2)*1;
+//      	    //total = (parseFloat(total)).toFixed(2);
+//      	</if>
+//
+//    	}
+//    	else{
+//    		pcs -= qty;
+//    	  //total -= qty*price;
+//    	  <if condition="C('INCL_TAX') eq 0">
+//  	      //total -= Math.round(qty*price*"{:C('TAX_PERCENT')}"*100)/100 ;
+//  	      temp = qty*price*"{:C('TAX_PERCENT')}";
+//    	      //alert(temp.toFixed(2));
+//    	    total -= temp.toFixed(2)*1;
+//    	    //total = (parseFloat(total)).toFixed(2);
+//  	    <else/>
+//    	    temp = qty*price*1;
+//      	  total -= temp.toFixed(2)*1;
+//
+//    	  </if>
+//    	}
+//    	document.getElementById("confire_total").innerHTML = "{:L('Currency')}"+total;
+//    	document.getElementById("confire_pcs").innerHTML = pcs;
+//
+		});
+	
+
+		function changeqty(pri,productid,typeid,type)
+		{
+			var qty01=document.getElementById("qty"+productid+"--"+typeid).value;
+
+			var qty =	parseInt(document.getElementById("qty"+productid+"--"+typeid).value);
+			if(qty01==""){
+				document.getElementById("qty"+productid+"--"+typeid).value=0;
+				qty=0;
+			}
+
+
+			checkboxid=productid+"--"+typeid+"--"+pri;
+
+			if(type==0 && qty>0)
+			{
+				qty = qty-1;
+			  	document.getElementById("qty"+productid+"--"+typeid).value = qty;
+
+				document.getElementById(checkboxid).value=productid+"--"+typeid+"--"+pri+"--"+qty;
+
+			}
+			if(type==1){
+				qty = qty+1;
+				document.getElementById("qty"+productid+"--"+typeid).value = qty;
+				document.getElementById(checkboxid).value=productid+"--"+typeid+"--"+pri+"--"+qty;
+			}
+			if(type==2)
+			{
+				document.getElementById(checkboxid).value=productid+"--"+typeid+"--"+pri+"--"+qty;
+			}
+
+			arr=[];
+			var shipfeeid="shipfee"+productid;
+			//改变数量的时候，可以先判断有没有调勾，没有调勾这步直接省略
+			//或者像下面这个是 不管有没有调勾都重新计算了当前已经调勾的所有的
+			record_countryid = "record_countryid" + productid;
+			if(!$("#"+record_countryid).val()=="") {
+				if ($("#" + productid + " :checkbox[checked]:visible").length > 0) {
+					$("#" + productid + " :checkbox[checked]:visible").each(function (i) {
+						arr[i] = this.value + "--" + $("#" + record_countryid).val();
+					});
+					//有地址 则根据国家以及商品信息计算此条运费 商品数量要拿最新的数据
+					var url = "{:U('Cart/shipPrice')}";
+					$.post(url, {info: arr}, function (data, status) {
+						document.getElementById(shipfeeid).innerHTML = data;
+						recalculate();
+					});
+				}
+//				else {
+//					document.getElementById(shipfeeid).innerHTML = 0;
+//					recalculate();
+//				}
+			}else{
+				//如果没有初始国家，则直接执行运费为0
+				document.getElementById(shipfeeid).innerHTML=0;
+				recalculate();
+			}
+
+			//购物车的数量的更新是必须要执行的
+			//ͬcookie ajax
+			url = "{:U('Cart/updateCart')}";
+			$.post(url, {
+				  action:'update',
+				  productid:productid,
+				  typeid:typeid,
+				  price:pri,
+				  qty:qty
+				},
+				function(data,status) {
+					if (status == "success") {
+						//成功之后 只需要再次执行即可
+						recalculate();
+//							document.getElementById("total"+productid+"--"+typeid).innerHTML = data;
+					}
+					else{
+						alert("fail to update cart");
+					}
+				},
+				"json");
+
+		}
+	
+
+
+
+		function del(productid,typeid,price)
+		{
+		var url = "{:U('Cart/updateCart')}";
+		$.post(url, {
+			  action:'del',
+			  productid:productid,
+			  typeid:typeid
+			},
+			function(data,status) {
+				if (status == "success") {
+					suborderid="suborder"+productid+"--"+typeid;
+					document.getElementById(suborderid).style.display="none";
+					//document.getElementById("gocart").innerHTML= data.qty ;
+					var domid = productid+"--"+typeid+"--"+price;
+					document.getElementById(domid).checked=false;
+					//如果当前所有选中商品都没有了，那么下面的结算隐藏 换成返回购物页面
+					sum=$(".checkbox :checkbox[checked]:visible").length;
+					if(sum==0){
+						$("#total_checkout").hide();
+						$(".address").hide();
+//						$("#shop_empty").show();
+					}
+
+					recalculate();
+
+				}
+				else{
+					alert("fail to delete from cart");
+				}
+			},
+			"json");
+
+	}
+
+//		art.dialog({
+//					id: 'des',
+//					title: "Congratulations!",
+//					content: document.getElementById("succ"),
+//					width: _width,
+//					top: _top,
+//					lock: true,
+//					close: function () {
+//						window.location = '/DesignNest/index';
+//					}
+//				}
+//		);
+//
+
+
+	function checkinput()
+	{
+		rs = 1;
+
+		//check input
+		$("input[type='text']").each(function(index, element) {
+			//既不能为空，也不能为默认值
+			//如果必填的里面有空报false
+			if (this.value == '' && (this.name != 'company' && this.name != 'cardno'
+					&& this.name != 'expmonth' && this.name != 'cvc' && this.name != 'expyear'))
+			{
+				rs = 0;
+				//tip(this.name+' cannot be empty!');
+//				document.getElementById("msg").innerHTML = this.name+' cannot be empty!';
+//				document.getElementById("msgbox").style.display="block";
+//				scrollTo(400,100);
+				alert(this.name+' cannot be empty!');
+				return false;
+			}
+
+			if( (this.name == 'firstname' && this.value == 'First Name') ||
+					(this.name == 'lastname' && this.value == 'Last Name') ||
+					(this.name == 'phone' && this.value == 'Your Phone Number') ||
+					(this.name == 'address' && this.value == 'Address') ||
+					(this.name == 'postcode' && this.value == 'Postal Code') ||
+					(this.name == 'city' && this.value == 'City'))
+			{  rs = 0;
+//				document.getElementById("msg").innerHTML = this.name+' cannot be empty!';
+//				document.getElementById("msgbox").style.display="block";
+//				scrollTo(400,100);
+				alert(this.name+' cannot be empty!');
+				return false;
+			}
+
+		});
+
+		if(document.getElementById("countrylist").value==-1)
+		{
+			rs = 0;
+//			document.getElementById("msg").innerHTML = 'Please choose your country!';
+//			document.getElementById("msgbox").style.display="block";
+//			scrollTo(400,100);
+			alert("lease choose your country!");
+			return false;
+		}
+
+		return true;
+	}
+	</script>

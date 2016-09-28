@@ -1,0 +1,228 @@
+<style type="text/css">
+
+a:link    { text-decoration:none;color:#CBCBCB;}
+a:visited { text-decoration:none;color:#CBCBCB;}
+a:hover   { text-decoration:none;color:#CBCBCB;}
+a:active  { text-decoration:none;color:#CBCBCB;}
+
+.year_month{
+		margin:0px 0px 12px 2px;
+		font-size:20px;
+		padding-left:35px;
+		color:#278EA6;
+		background:url('/App/Tpl/Home/Default/Public/image/spot.png') 6px 8px no-repeat;
+		height:38px;
+		line-height:38px;
+}
+
+
+
+</style>
+<include file="Home:nav" />
+<meta charset="utf-8">  
+<div class="fmian">
+	<div class="layout_list">
+		<div class="blog_main clearfix" > 
+			<div class="news_top news_topn" style="margin:45px 0px 48px 19px;width:94.4%">
+			  <!-- 中英文切换 -->
+			    <li style="float:right;list-style-type:none;">
+				    <a class="no_color" href="javascript:change_lang(9,1); id='m_lang'" style="display:inline;font-size:14px;font-weight:bold;<if condition="$get_type eq '1'">color:#888</if>">EN</a>&nbsp;/
+				    <a class="no_color" href="javascript:change_lang(9,3);" style="display:inline;font-size:14px;font-weight:bold;<if condition="$get_type eq '3'">color:#888</if>">CN</a>&nbsp;/
+				    <a class="no_color" href="javascript:change_lang(9,'');"  style="display:inline;font-size:14px;font-weight:bold;<if condition="$get_type eq ''">color:#888</if>">ALL Languages</a>
+				</li>
+		    <!-- 中英文切换结束-->
+				<ul style="float:left;" class="choose_lang">
+						<li margin-right:10px;><a href="{:U('Blog/index',array('category'=>'Blog'))}" style="width:120px;height:40px;line-height:40px;margin:0px 15px 0px 0px;border:1px solid #C3C3C3;font-size:14px;<if condition="$get_category eq 'Blog' ">background-color:#14869F;color:#FFF;</if>">Blog</a></li>
+						<li><a href="{:U('Blog/index',array('category'=>'Awards'))}" style="width:120px;height:40px;margin:0px 15px 0px 17px;line-height:40px;border:1px solid #C3C3C3;font-size:14px;font-size:14px;font-size:14px;<if condition="$get_category eq 'Awards'">background-color:#14869F;color:#FFF;</if>">Awards</a></li>
+						<li><a href="{:U('Blog/index',array('category'=>'Reviews'))}" style="width:120px;height:40px;margin:0px 15px 0px 17px;line-height:40px;border:1px solid #C3C3C3;font-size:14px;<if condition="$get_category eq 'Reviews'">background-color:#14869F;color:#FFF;</if>">Reviews</a></li>
+						<li><a href="{:U('Blog/index',array('category'=>'Fairs'))}" style="width:120px;height:40px;margin:0px 15px 0px 17px;line-height:40px;border:1px solid #C3C3C3;font-size:14px;<if condition="$get_category eq 'Fairs'">background-color:#14869F;color:#FFF;</if>">Fairs</a></li> 
+			    </ul>
+			</div>
+			<div class="blog_l" style="width:100%;">
+			<!-- 开始 -->
+				<div class="box" style="overflow-y:auto;margin-top:30px">
+				    <ul  id="fair_data" style="float:right;background:url('/App/Tpl/Home/Default/Public/image/line2.jpg') 89px 0  repeat-y;margin-left:10px;padding-left:78px">
+				 <volist name="data_desc" id="v1">
+					<div id="{$key}" >
+					   <span class="year_month">
+					<if condition="substr($key,4,1) eq '0'"> 
+					{$key|substr=0,4}.{$key|substr=5,1}
+					<else/> 
+					{$key|substr=0,4}.{$key|substr=4,2}
+					</if>
+					</span>
+						<volist name="v1" id="v2">
+							    <div class="box_small"   style="width:1000px;height:140px;margin:20px 20px 20px 20px;">
+					                 <div  class="image" style="width:190px;height:112px;margin:15px;float:left;border-right:1px solid #D5D5D5;"><img src={$v2.background_image} style="width:170px;height:112px;"></div>
+					                 <div style="width:760px;height:90px;float:left;margin:28px 0px 0px 0px;">
+				                     <span class="title" style="font-size:15px;font-weight:bold;display:block;margin-bottom:5px">{$v2.title}</span>
+				                     <span class="month" style="display:block">{$v2.start_time|date="Y.m.d",###}-{$v2.end_time|date="Y.m.d",###}</span>
+				                     <span class="address" style="display:block">Address:{$v2.address}</span>
+				                     <span class="booth" style="display:block" >Booth No:{$v2.booth_no}</span>
+					                 </div>
+							    </div>
+						</volist>
+					</div>
+		</volist>
+	</ul>
+  </div>
+</div>
+	</div>
+		</div>
+		<div class="nodata"></div> 
+        <div id="loading" class="loading-wrap"></div>
+			 <div id="load_img" style="width:32px;margin:0px auto;margin-top:30px;visibility:hidden;">
+            	<img src="../Public/image/loading.gif">
+       </div>	
+		 <input type="hidden" id="get_cate" value="Fairs" />
+		 <input type="hidden" value="{$get_lang}" id="lang" />
+		 <input type="hidden" value="{$get_type}" id="article_type" />
+<script type="text/javascript" src="../Public/js/masonry/masonry.pkgd.js"></script>
+<script type="text/javascript" src="../Public/js/masonry/masonry.pkgd.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../Public/js/easyscroll/mousewheel.js"></script>
+<script type="text/javascript" charset="utf-8" src="../Public/js/easyscroll/easyscroll.js"></script>
+<script type="text/javascript">
+	function change_lang(lang,num){
+		var category = document.getElementById('get_cate').value;
+		window.location.href="/Blog/index/category/"+category+"/m_lang/"+lang+"/type/"+num;
+	}
+</script>
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'Blog/index\')}">'+"{$Think.lang.BLOG}"+'</a> ';
+    		
+    });
+</script>
+<script type="text/javascript">
+
+
+   
+$(function(){ 
+	 
+    var i = 1; //设置当前页数 
+    var stau = 0;
+
+     //滚动事件
+    var loading = $("#loading").data("on", false);//通过给loading这个div增加属性on，来判断执行一次json请求
+    $(window).scroll(function () { 	
+    if(loading.data("on")) return; 
+    // var winH = $(window).height(); //页面可视区域高度 
+    // var pageH = $(document.body).height(); 
+    // var scrollT = $(window).scrollTop(); //滚动条top 
+    var aa = $(document).height() - $(this).scrollTop() - $(this).height();
+        if(aa<2){ 
+        	loading.data("on", true).fadeIn(); //在这里将on设为true来阻止继续的json请求  
+        	document.getElementById("load_img").style.visibility="visible";
+       //当滚动条接近页底时，触发ajax加载
+       //    	 $.ajax({
+       //               type: "POST",
+       //               url: "/Home/Blog/ajax_data",
+       //               data:{'page':i},
+       //               success:function(e){
+       //           if(e == 1){
+           
+       //     }
+       // }
+       //      }); 
+       //当滚动条接近页底时，触发
+
+      //准备传到后台的数据
+       var data_new2 ={};
+           data_new2 ={
+           lang:9,
+       	   page:i,
+       	   category:document.getElementById("get_cate").value,
+       	   type:document.getElementById("article_type").value,
+       };
+
+       
+       $.getJSON("/Home/Blog/get_fairs",data_new2,function(json){ 
+                if(json){ 
+                    var str = "";
+               
+                    $.each(json,function(index,array){ 
+                    	// alert(index);
+						if($("#"+array['month']).length>0  ){
+                     $.each(array,function(index,fairs){ 
+                         $.each(fairs,function(index,infos){
+                     str += "<div class=\'box_small\'  style='width:1000px;height:140px;margin:20px 20px 20px 20px;'>"; 
+                     str +=  "<div class=\'image\' style='width:190px;height:112px;margin:15px;float:left;border-right:1px solid #D5D5D5;'>"+"<img style='width:170px;height:112px;' src='"+infos['background_image']+"'>"+"</div>";      
+                     str += "<div style='width:760px;height:90px;float:left;margin:28px 0px 0px 0px;'>";
+                     str += "<span class=\'title\' style='font-size:15px;font-weight:bold;display:block'>"+infos['title']+"</span>";
+                     str += "<span class=\'month\' style='display:block'>"+transformPHPTime(infos['start_time'])+"-"+transformPHPTime(infos['end_time'])+"</span>";     
+                     str += "<span class=\'address\' style='display:block'>"+"Address:"+infos['address']+"</span>";
+                     str += "<span class=\'booth\' style='display:block'>"+"Booth No:"+infos['booth_no']+"</span>";
+                     str += "</div>";
+                     str += "</div>";
+                        });
+                
+                      });
+                     
+                       $("#"+array["month"]).append(str); 
+					}else{     
+
+                  	 str = "<div id=\'"+array['month']+"\'>";
+                  	 str += "<span class=\'year_month\'>"+cut_date(array['month'])+"</span>";
+                    $.each(array,function(index,fairs){ 
+                       $.each(fairs,function(index,infos){
+                     str += "<div class=\'box_small\' style='width:1000px;height:140px;margin:20px 20px 20px 20px;'>"; 
+                     str +=  "<div class=\'image\' style='width:190px;height:112px;margin:15px;float:left;border-right:1px solid #D5D5D5;'>"+"<img style='width:170px;height:112px;' src='"+infos['background_image']+"'>"+"</div>";      
+                     str += "<div style='width:760px;height:90px;float:left;margin:28px 0px 0px 0px;'>";
+                     str += "<span class=\'title\' style='font-size:15px;font-weight:bold;display:block'>"+ infos['title']+"</span>";
+                     str += "<span class=\'month\' style='display:block'>"+transformPHPTime(infos['start_time'])+"-"+transformPHPTime(infos['end_time'])+"</span>";     
+                     str += "<span class=\'address\' style='display:block'>"+"Address:"+infos['address']+"</span>";
+                     str += "<span class=\'booth\' style='display:block'>"+"Booth No:"+infos['booth_no']+"</span>";
+                     str += "</div>";
+                     str += "</div>";
+                      });
+
+                     });
+
+                     str += "</div>"; 
+                     //alert(str);
+                        $("#fair_data").append(str); 
+                 
+							}  	
+                     });
+                     loading.data("on", false);
+                     i++; 
+                     document.getElementById("load_img").style.visibility="hidden";  
+                }else{ 
+                 
+                } 
+            }); 
+
+        }; 
+    }); 
+}); 
+
+function  cut_date(str){
+
+    
+        var a1 = str.toString().substring(0,4)+'.';
+        var a2 = (str.toString().substring(4,5) == '0' ? str.toString().substring(5,6) : str.toString().substring(4,6));
+
+       return a1+a2;
+            
+      
+}
+
+
+ function transformPHPTime(time) 
+{
+　　　　var date = new Date(time * 1000);
+　　　　
+       Y = date.getFullYear() + '.';
+　　　　M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
+　　　　D = (date.getDate() + 1 < 10 ? '0'+(date.getDate()) : date.getDate()) ;
+　　　　h = date.getHours() + ':';
+　　　　m = date.getMinutes() + ':';
+　　　　s = date.getSeconds();
+ 
+　　　　return Y+M+D;
+}
+</script>
+
+

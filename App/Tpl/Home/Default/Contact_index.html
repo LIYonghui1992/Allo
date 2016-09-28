@@ -1,0 +1,23 @@
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div class="contact clearfix">
+			<volist name="contact" id="vo">
+				<div class="contact_nr">
+					<img src="{$vo.imgs}" class="contact_img"/>
+					<div class="contact_cover">
+						<p>{$vo.contact}</p>
+					</div>
+				</div>
+			</volist>
+		</div>
+	<!--	<include file="Home:bottom" /> -->
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'Contact/index\')}">'+"{$Think.lang.CONTACT}"+'</a> ';
+    		
+    } );
+</script>

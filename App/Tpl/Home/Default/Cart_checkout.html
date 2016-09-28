@@ -1,0 +1,545 @@
+<style>
+/*.cart_title2{width:160px;float:left;color:#FFF;font-size:18px;margin-top:5px;text-align:center;line-height:20px;}*/
+
+.field_div{width:160px;float:left;color:#666;font-size:14px;text-align:center;padding-top:20px;}
+.item_div{margin:0px auto; width:1080px;height:87px;margin-top:20px;margin-bottom:20px;border-bottom:1px solid #DDD;}
+.footer{background-color:#884697}
+.footer .country {BACKGROUND-COLOR: #884697;}
+</style>
+<link rel="stylesheet" type="text/css" href="../Public/css/cart_checkout_content.css"/>
+<div class="fmian">
+<div class="layout_list">
+	<div style="margin:0px auto; width:1080px;height:89px;">
+  		<img src="../Public/image/DN_logo.png" style="width:260px;height:86px;"/>
+	 </div>
+
+<!-- display:none; -->
+	<div id="msgbox" style="display:none;margin:0px auto;width:1080px;height:50px;margin-top:20px;border:1px solid #e60012;background-color:#fff4f9;">
+		<div style="width:23px;height:23px;margin-top:15px;margin-left:10px;float:left;">
+			<img src="../Public/image/error.jpg" style="width:23px;height:23px;"/>
+		</div>
+		<div style="height:23px;margin-top:17px;margin-left:15px;float:left;">
+			<font id="msg" style="font-size:12px;font-weight:bold;color:#e60012;"></font>
+		</div>
+	</div>
+
+<!--payment-->
+	<div id="payment" style="margin:0px auto;width:1080px;">
+		<img src="../Public/image/checkout_icon2.png" style="width:28px;height:22px;float:left;padding-left:10px;" />
+		<font style="font-size:16px;font-weight:bold;color:#884697;padding-left:5px;">Payment</font>
+	</div>
+
+<!-- payment-2 -->
+	<div id="payment-2" style="margin:0px auto;width:1080px;height:120px;margin-top:10px;border-top-width: 1px;border-top-style: solid;border-top-color: #884697;">
+		<div class="shipping-div" style="margin:0px auto;width:1080px;margin-top:20px;">
+			<font style="font-size:14px;font-weight:bold;font-color:#666666;">Choose your method of payment</font>
+		</div>
+
+		<div style="margin:0px auto;width:1080px; height:200px;">
+				<label style="width:550px;">
+					<input type="radio" name="paytype"  style="margin-right:8px;" value="1" checked=true onclick="changetype(1);"/>
+					<img width=113px height=29px src="../Public/image/paypal.jpg" />
+				</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<label>
+					<input type="radio" name="paytype"   value="2" style="margin-right:8px;" onclick="changetype(2);"/>
+				  <img src="../Public/image/stripecards.png" />
+				</label>
+		</div>
+	</div>
+	<!--  end payment-2 -->
+
+
+
+	<!-- payment2 info area -->
+	<div  id="cardinfo" style="display:none;margin:0px auto;width:1080px;height:80px;margin-top:10px;border-top-width: 1px;border-top-style: solid;border-top-color: #DDD;" >
+		<div style="margin-top:22px;height:50px;">
+			<font style="font-size:14px;font-color:#666666;">	cardNo</font>&nbsp;
+		<input type="text" style="width:290px;"  id="cardno" name="cardno" class="card-input" placeholder="card number"/>
+		&nbsp;&nbsp;
+		<font style="font-size:14px;font-color:#666666;">	expiredate</font>&nbsp;
+		<input type="text"   id="expmonth" name="expmonth" class="card-input" placeholder="expmonth"/>&nbsp;
+		/ &nbsp;<input type="text"   id="expyear" name="expyear" class="card-input" placeholder="expyear"/>
+		&nbsp;&nbsp;
+		<font style="font-size:14px;font-color:#666666;">	cvc</font>&nbsp;
+		<input type="text"  id="cvc" name="cvc" class="card-input"/>
+		</div >
+	</div>
+
+	<!--receipt-->
+	<div id="receipt" style="margin:0px auto;width:1080px;height:30px;margin-top:80px;">
+		  <img src="../Public/image/checkout_icon3.png" style="width:17px;height:22px;float:left;padding-left:10px;"/>
+		  <font style="font-size:16px;font-weight:bold;color:#884697;padding-left:5px;">Receipt</font>
+	</div>
+	<div id="receipt-2" style="margin:0px auto;width:1080px;height:200px;margin-top:5px;border-top-width: 1px;border-top-style: solid;border-top-color: #884697;">
+
+		<div style="margin:0px auto;width:1080px;height:140px;margin-top:10px;">
+			<div style="width:500px;height:140px;float:left;">
+				<font style="font-family:'Century Gothic';font-size:14px;font-color:#666666;font-weight:bold;">Electronic receipt of purchase </font>
+			  <font style="font-family:'Century Gothic';font-size:14px;font-color:#888888;"><br>This receipt will be sent to you once the order has been confirmed. This receipt can be regarded as an official document and can be used for product warranty ans maintenance requests.</font>
+			</div>
+
+			<div style="height:140px; width:500px;margin-left:550px;margin-top:40px;">
+			  <font style="font-family:'Century Gothic';font-size:12px;">Mail *</font>
+			  <input name="email"  id="email"type="text" class="shipping-input" style="width:250px;" value="your e-mail address"
+			  onfocus="if (value =='your e-mail address'){value ='';this.style.color='#333'}" onblur="if (value ==''){ value='your e-mail address';this.style.color='#999'}"/>
+		  </div>
+		</div>
+	</div>
+
+<!--下面为订单信息-->
+	<div id="confire" style="margin:0px auto;width:1080px;height:30px;border-bottom-width: 1px;border-bottom-style: solid;border-bottom-color: #884697;">
+				  <img src="../Public/image/checkout_icon4.png" style="width:22px;height:20px;float:left;padding-left:10px;"/>
+				  <font style="font-size:16px;font-weight:bold;color:#884697;padding-left:5px;">Order Confirmation</font>
+	</div>
+
+  	<div id='OrderConfirmation'>
+		<ul>
+			<volist name="cartlist" id="v1">
+
+				<li class="order" id="{$Think.lang.$key}">
+						<div class="total_info">
+							<span>Product: $
+								<span class="sp" id="productfee--{$Think.lang.$key}">sfsfsf</span>
+							</span>
+							<span>Shipping fee: $
+								<span class="sp" id="shipfee{$Think.lang.$key}"></span>
+							</span>
+							<span>Total: $
+								<span class="sp" id="total{$Think.lang.$key}"></span>
+							</span>
+						</div>
+
+						<div class="product_list">
+							<volist name="v1" id="vo">
+								<!--<input id="product_fee{$Think.lang.$key}" type="hidden" value="{$vo['productfee']}"/>-->
+								<!--<input id="total_fee{$Think.lang.$key}" type="hidden" value="{$vo['total']}"/>-->
+								<!--<input id="ship_fee{$Think.lang.$key}" type="hidden" value="{$vo['shipfee']}"/>-->
+
+								<div class="suborder" id="suborder{$vo['productid']}--{$vo['typeid']}" >
+
+									<div class="image" >
+										<img src="{$vo['background_img']}" style="width:100px;height:75px;"/>
+									</div>
+
+
+									<!--商品信息-->
+									<div class="product_info">
+										<ul>
+											<li>
+											<span class="product_title" id="product_title{$vo['productid']}{$vo['typeid']}">
+												{$vo['title']}
+											</span>
+											</li>
+
+											<li>
+												<notempty name="vo['typetitle']">
+												<span class="product_type">
+													<!--<notempty name="vo['type_pic']"> Type:<img src="{$vo['type_pic']}" style="width:10px;height:10px;"/></notempty>-->
+													Type:{$vo['typetitle']}
+												</span>
+													<span class="t"></span>
+												</notempty>
+												<span class="product_qty" ><span>Qty:</span>{$vo['qty']}</span>
+											</li>
+										</ul>
+									</div>
+
+
+								</div>
+
+							</volist>
+						</div>
+
+
+				</li>
+
+				<li>
+					<div class="h"></div>
+				</li>
+			</volist>
+
+			<li>
+				<div id="checkout">
+					<div id="totals">
+						<span>Items:
+							<span class="sp" id="items"></span>
+							pcs
+						</span>
+						<span>Shipping: $
+							<span class="sp" id="shipping"></span>
+						</span>
+						<span>Total: $
+							<span class="sp" id="total_fee"></span>
+						</span>
+					</div>
+					<div id="pay">
+						<input type="button" id="buy" style="margin:0px auto;background-image:url(../Public/image/checkout_1.1.png);
+							   font-size: 18px;font-weight: bold;color:#FFF;background-color: transparent;
+							   width:265px;height:50px;" value="Go to payment" />
+					</div>
+				</div>
+			</li>
+		</ul>
+  
+  </div>
+
+
+<!--<include file="Home:bottom"/> -->
+
+
+<!--下面信息为在支付完成的时候显示-->
+
+	<div id="succ" style="text-align:center;display: none;">
+		<div style="margin:0px auto;">
+			<img  src="../Public/image/checkout_success.png" style="width:79px;height:79px;margin:0px auto;"/>
+		</div>
+		<div style="margin:0px auto;margin-top:30px;">
+			<font style="font-size:20px;color:#884697;"> Congratulations! </font>
+		</div>
+		<div id="succinfo" style="text-align:left;margin:5px auto;margin-top:30px;padding:40px;font-size:14px;font-color:#666666;">	
+			
+		</div>
+		
+		<div style="margin:0px auto;padding:40px;width:265px;height:50px; ">
+			<input type="button" style="background-image:url(../Public/image/checkout_1.1.png);
+				font-size: 18px;color:#FFF;background-color: transparent;
+			 width:265px;height:50px;"value="OK" onclick="closeart('des');"/>
+              
+		</div>
+
+    </div>
+  
+    <div id="fail" style="text-align:center;display: none;">
+		<div style="margin:0px auto;">
+			<img  src="../Public/image/checkout_fail.png" style="width:79px;height:79px;margin:0px auto;"/>
+		</div>
+		<div style="margin:0px auto;margin-top:30px;">
+			<font style="font-size:20px;color:#884697;"> Fail to pay! </font>
+		</div>
+		<div style="text-align:left;margin:5px auto;margin-top:30px;padding:40px;font-size:14px;font-color:#666666;" id="info">	
+			Sorry, unfortunately the payment failed. Please check whether all information is correct and try again.
+		</div>
+    
+    	<div style="margin:0px auto;padding:40px;width:265px;height:50px; ">
+			<input type="button" style="background-image:url(../Public/image/checkout_1.1.png);
+				font-size: 18px;color:#FFF;background-color: transparent;
+			 width:265px;height:50px;"value="OK" onclick="closeart('des2');"/>
+              
+		</div>
+		
+		
+		  
+  	</div>
+  
+</div>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>	
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+			document.getElementById("pathguide").innerHTML +=' > '+ "check out";
+			//document.getElementById("shop_img").src='../Public/image/shop_unselect.png';
+			//首先拿到所有类名为order的元素，取他们的id为str
+			var total_shipping=0;
+			var total_fee=0;
+			$(".order").each(function () {
+				var strs=new Array();
+				strs=this.id.split("--");
+				productid=strs[0];
+				productfee=strs[1];
+				shipfee=strs[2];
+				totalfee=strs[3];
+				productfeeid="productfee"+"--"+this.id;
+				shipfeeid="shipfee"+this.id;
+				totalfeeid="total"+this.id;
+				document.getElementById(productfeeid).textContent=productfee;
+				document.getElementById(shipfeeid).innerHTML=shipfee;
+				document.getElementById(totalfeeid).innerHTML=totalfee;
+				total_shipping+=parseInt(shipfee);
+				total_fee+=parseInt(totalfee);
+
+
+			});
+			num=$(".order").length;
+			document.getElementById("items").innerHTML=num;
+			document.getElementById("shipping").innerHTML=total_shipping;
+			document.getElementById("total_fee").innerHTML=total_fee;
+	});
+		
+	var rs = 1;	
+	var token;
+	var type;
+	var pay_type=1;
+	function closeart(dialogid)
+	{
+		window.top.art.dialog({id:dialogid}).close();
+	}
+
+	function changetype(paytype)
+	{
+		if (paytype == 2){
+			pay_type=2;
+			document.getElementById('cardinfo').style.display="block";
+		}
+		else{
+			pay_type=1;
+			document.getElementById('cardinfo').style.display="none";
+		}
+
+	}
+
+	function checkinput_email(){
+		$("input[type='text']").each(function(index, element) {
+//			if(pay_type==2){
+//				if(this.value==''&&(this.name=='cardno'||this.name=='expmonth'||this.name=='expyear'||this.name=='cvc')){
+//					rs = 0;
+//					alert( 'Master of VISA card information cannot be empty!');
+//					return false;
+//				}
+//			}
+
+			if (this.name == 'email') {
+
+				if(this.value==''){
+					rs = 0;
+					alert('Please enter a valid mailbox!')
+					return false;
+				}
+				if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))) {
+					rs = 0;
+					//tip('Please enter a valid mailbox!');
+//					document.getElementById("msg").innerHTML = 'Please enter a valid mailbox!';
+//					document.getElementById("msgbox").style.display="block";
+					//window.location.hash = "#msgbox";
+//					scrollTo(400,100);
+					alert('Please enter a valid mailbox! For example: abcd@allocacoc.com');
+					return false;
+				}
+			}
+
+		});
+		return true;
+
+	}
+
+	$(function() {
+		$("#buy").click(function() {
+
+			var result = checkinput_email();
+			if(!result){
+				return false;
+			}
+			alert("Please wait for a moment, it's turning to the payment page... ");
+			//if pay using card, check card input first
+			type = 1;
+			var paytype = document.getElementsByName("paytype");
+			for(var i=0;i<paytype.length;i++){
+				if(paytype[i].checked)
+					type = paytype[i].value;
+			}
+			//点击提交的时候 首先判断输入的卡的信息是否为空
+			if(type==2)
+			{
+				if(document.getElementById("cardno").value=='' || document.getElementById("expmonth").value==''
+						|| document.getElementById("expyear").value=='' || document.getElementById("cvc").value=='')
+				{
+					document.getElementById("msg").innerHTML = 'please input card info !';
+					document.getElementById("msgbox").style.display="block";
+					scrollTo(400,100);
+					return false;
+				}
+
+			}
+
+			//if pay using card,generate stripe token first
+			if(type==2)
+			{
+				Stripe.setPublishableKey('{:C('STRIPE_PK')}');//'pk_test_u1F10fuUigV8J5gnJjvsAgHg'
+				//根据提供的卡的信息在stripe.js 库中创建一个令牌
+				Stripe.card.createToken({
+					number: document.getElementById("cardno").value,
+					cvc: document.getElementById("cvc").value,
+					exp_month: document.getElementById("expmonth").value,
+					exp_year: document.getElementById("expyear").value
+				}, stripeResponseHandler);
+			}
+			if(type==1) {
+				submitPay();
+			}
+		});
+	});
+
+
+	function stripeResponseHandler(status, response) {
+		if (response.error) {
+//			alert(response.error);
+			// Show the errors on the form
+			document.getElementById("msg").innerHTML = 'invalid card info !';
+			document.getElementById("msgbox").style.display="block";
+			scrollTo(400,100);
+			alert('invalid card info!');
+			rs = 0;
+//			window.location = '/DesignNest/index';
+			window.location = '/Cart/index';
+			return false;
+
+		} else {
+			//document.getElementById("loading").height = $(window).height();//document.body.clientHeight;//(document.body).height();
+
+			// response contains id and card, which contains additional card details
+			token = response.id;
+			submitPay();
+		}
+	}
+	//submit pay info
+	//document.getElementById("loading").style.display='block';
+	//alert(document.getElementById("city").value);
+	function submitPay()
+	{
+		if(rs != 1)
+		{
+			return false;
+		}
+
+			//record into database[ajax],then pay
+			var url = "{:U('Cart/submit_order')}";
+			var price = '{$price}';
+			var data =  {
+				stripetoken: token,
+				cardno: document.getElementById("cardno").value,
+				expmonth: document.getElementById("expmonth").value,
+				expyear: document.getElementById("expyear").value,
+				cvc: document.getElementById("cvc").value,
+				paytype:type,
+				email:document.getElementById("email").value};
+//{
+//				first_name:document.getElementById("firstname").value,
+//				last_name:document.getElementById("lastname").value,
+//				phone:document.getElementById("phone").value,
+//				company:document.getElementById("company").value,
+//				countryid: document.getElementById("countrylist").value,
+//				address: document.getElementById("address").value,
+//				city: document.getElementById("city").value,
+//				zip: document.getElementById("postcode").value,
+////				countryid: document.getElementById("countrylist").value,
+//				qty: '{$qty}',
+//				designwinner_id: '{$designwinner_id}',
+//				designwinner_title: '{$title}',
+//				price_id: '{$typeid}',
+//				typename: '{$typename}',
+//				price: '{$price}' ,
+//				shipfee:document.getElementById("ship-price").innerHTML,
+//				total:document.getElementById("total-price").innerHTML
+// };
+
+		  $.post(url,data,function(data){
+					if(data.status != 1){
+						fail(data['msg']);
+						return false;
+					}
+					else//open paypal url,
+					{
+						if(type==1)
+						  window.location = data.paymenturl; //alert(data.paymenturl);
+						if(type==2)
+						  congratulation();
+					}
+			},"json");
+	}
+
+	//tip user that pay successfully
+	function congratulation()
+	{
+//		document.getElementById("loading").style.display='none';
+//document.getElementById("loading2").style.display='none';
+		var window_height = $(window).height();
+			if(window_height<800)
+			{
+				maxHeight=window_height*0.7;
+				_top=0;
+				_width='80%';
+			}else{
+				maxHeight='600px';
+				_top='115px';
+				_width='60%';
+			}
+			var id = $(this).data("id");
+
+			$('#succ').css('overflow', 'auto');
+			$('#succ').css('maxHeight',maxHeight);
+			document.getElementById("succinfo").innerHTML="Thanks for ordering our products! We will send your order information to the address <b> "
+			+ document.getElementById("email").value
+			+ " </b> and ship the goods as soon as possible. We would like to thank you for your support  so please do not hesitate to contact us if you have any further questions!	";
+
+			art.dialog({
+					id: 'des',
+					title: "Congratulations!",
+					content: document.getElementById("succ"),
+					width: _width,
+					top:_top,
+					lock: true,
+					close: function(){
+						window.location = '/DesignNest/index';
+					 }
+				}
+
+);
+
+	}
+
+	function fail(msg)
+	{
+		document.getElementById('fail').innerHTML="Sorry, unfortunately the payment failed. Please check whether all information is correct and try again.<br/>"+msg;
+//		document.getElementById("loading").style.display='none';
+//		document.getElementById("loading2").style.display='none';
+		var window_height = $(window).height();
+			if(window_height<800)
+			{
+				maxHeight=window_height*0.7;
+				_top=0;
+				_width='80%';
+			}else{
+				maxHeight='600px';
+				_top='115px';
+				_width='60%';
+			}
+			var id = $(this).data("id");
+
+			$('#fail').css('overflow', 'auto');
+			$('#fail').css('maxHeight',maxHeight);
+
+			art.dialog({
+					id: 'des2',
+					title: "Fail to pay!",
+					content: document.getElementById("fail"),
+					width: _width,
+					top:_top,
+					lock: true,
+					close: function(){
+						window.location = '/Cart/checkout';
+					 }
+				}
+
+);
+
+
+						//document.getElementById("msg").innerHTML = 'Sorry,fail to submit!';
+						//alert(data.msg);
+
+						//congratulation
+
+
+	}
+</script>
+	
+<style type="text/css">
+
+.card-input{padding-left:5px;height:40px;width:50px;font-size:12px;font-color:#999999;margin:0px auto;margin-left:5px;border:1px solid #CCC;background-color:#EEE;}
+
+.shipping-input{padding-left:10px;height:30px;margin:0px auto;width:500px;margin-left:50px;border:1px solid #CCC;
+	font-size:12px;color:#999999;background-color:#EEE;}
+.payment-select{width:160px;height:50px;margin-top:5px;margin-right:400px;float:right;}
+.confire-item{float:left;text-align:center; font-weight:bold;font-size:20px;color:#884697;width:120px;padding-left:40px;margin-top:15px;}
+.confire-item2{float:left;text-align:center; font-weight:bold;font-size:20px;color:#884697;width:120px;padding-left:40px;margin-top:35px;}
+.confiretext1{font-size:18px;color:#666666;}
+.confiretext2{font-size:18px;font-weight:bold;color:#884697;}
+</style>

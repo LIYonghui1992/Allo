@@ -1,0 +1,81 @@
+<div class="fullSlide">
+	<!--
+  <div class="bd">
+    <ul>
+      <notempty name="banners[0]">
+        <volist name="banners" id="vo">
+          <li _src="url({$vo})" style="background-position: center;"></li>
+        </volist>
+        <else />
+          <li _src="url(../Public/image/banner201.jpg)" style="background-position: center;"></li>
+      </notempty>
+    </ul>
+  </div> 
+  -->
+    <div class="bd">
+    	 <ul>
+    	<empty name="banners[0]">
+    		<!-- <li><img src="../Public/image/banner201.jpg"/></li> -->
+    		<li style="z-index: 900; display: none; background: url(../Public/image/banner201.jpg) 50% 0% no-repeat;"> </li>
+    	</empty>
+    	    	
+    	<volist name="banners" id="vo">  
+    		<notempty name="vo">
+    				<li style="z-index: 900; display: none; background: url({$vo}) 50% 0% no-repeat;"> </li>	
+    		</notempty>										  
+			</volist>
+								
+						     
+    </ul>
+    	<!--
+      <ul>
+      	<empty name="banners[0]">
+      		<li _src="url(../Public/image/banner201.jpg)" style="background-position: center;"></li>
+      	</empty>
+          <volist name="banners" id="vo">
+          	<notempty name="vo">
+          		 <li _src="url({$vo})" style="background-position: center;"></li>          	
+          	</notempty>  
+          </volist>      
+      </ul>
+      
+      -->
+    </div>
+  
+  <div class="bg">
+    <div class="logo"><a href="{:U('Index/index')}"><img src="../Public/image/logo.png" width="100%"></a></div>
+    <div class="nav" >
+      <ul>
+        <li><a href="{:U('Product/index')}" class="<if condition=" $module_name eq 'Product' ">home_a1<else />a</if>">{$Think.lang.PRODUCTS}</a></li>
+        <li><a href="{:U('DesignNest/index')}" target="_blank" class="<if condition=" $module_name eq 'DesignNest' ">home_a1<else />a</if>">{$Think.lang.DESIGN_CHALLENGE}</a></li>
+        <li><a href="{:U('Shop/index')}"  class="<if condition=" $module_name eq 'Shop' ">home_a1<else />a</if>">{$Think.lang.SHOP}</a></li>
+        <!--
+        <li><a href="{:U('News/index')}" class="<if condition=" $module_name eq 'News' ">home_a1<else />a</if>">{$Think.lang.NEWS}</a></li>
+        -->
+        <li><a href="{:U('Blog/index')}" class="<if condition=" $module_name eq 'Blog' ">home_a1<else />a</if>">{$Think.lang.BLOG}</a></li>
+        <!--
+        <li><a href="{:U('Download/index')}" class="<if condition=" $module_name eq 'Download' ">home_a1<else />a</if>">{$Think.lang.DOWNLOADS}</a></li>
+        <li><a href="{:U('About/index')}" class="<if condition=" $module_name eq 'About' ">home_a1<else />a</if>">{$Think.lang.ABOUT_US}</a> </li>
+        <li><a href="{:U('Contact/index')}" class="<if condition=" $module_name eq 'Contact' ">home_a1<else />a</if>">{$Think.lang.CONTACT}</a></li>
+        -->
+      </ul>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+	$(".fullSlide").slide({
+		titCell: ".hd ul",
+		mainCell: ".bd ul",
+		effect: "fold",
+		autoPlay: true,
+		autoPage: true,
+		interTime: 5000,
+		trigger: "click",
+		startFun: function(i) {
+			var curLi = jQuery(".fullSlide .bd li").eq(i);
+			if (!!curLi.attr("_src")) {
+				curLi.css("background-image", curLi.attr("_src")).removeAttr("_src")
+			}
+		}
+	});
+</script>

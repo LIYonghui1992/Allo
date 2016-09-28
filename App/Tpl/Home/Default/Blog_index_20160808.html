@@ -1,0 +1,204 @@
+<style type="text/css">
+
+</style>
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div class="blog_main clearfix">
+			
+			<div class="news_top news_topn">
+				<ul>
+					<volist name="categorys" id="vo">
+						<li><a href="{:U('Blog/index',array('category'=>$vo))}" <if condition="$get_category eq $vo">style="color: #111111;"</if>>{$vo}</a>
+						</li>
+					</volist>
+				</ul>
+			</div>
+			
+			
+			
+			<div class="blog_l" style="width:100%;">
+			<ul style="width:100%;">
+				<volist name="blogs" id="vo">
+					<li style="width:100%;height:160px;margin-top:20px;">
+						<a href="javascript:;" data-id="{$vo.id}" data-title="{$vo.title}" class="lists">
+						<div style="width:250px;height:100%;float:left;">
+							<img src={$vo.background_image} style="width:236px;height:150px;"/>
+						</div>
+						<div style="width:810px;height:100%;float:left;margin-left:20px;border-bottom:1px solid #EEE;">
+							<p style="line-height:20px;margin-bottom:5px;margin-top:15px;"> <font style="font-size:20px;color:#444;font-weight:bold;">{$vo.title}</font> <font> | {$vo.updatetime|date="Y.m.d",###}</font></p>
+							
+							<p style="text-align:justify;line-height:24px;margin-top:5px;font-size:14px;">
+									{$vo.article_text|str_cut=200}									
+							</p>
+							
+							<p style="line-height:30px;margin-top:10px;">								
+									<font style="color:#09C;font-size:14px;">Read more ></font>								
+							</p>
+						</div>
+					 </a>
+					</li>
+				</volist>
+			
+			</ul>
+			
+			
+		</div>
+			<!--
+			<div class="blog_l">
+				<volist name="blogs" id="vo">
+					<a href="javascript:;" data-id="{$vo.id}" data-title="{$vo.title}" class="lists">
+						<div class="blog_lay" style="background:url({$vo.background_image}) no-repeat;background-size:100%;filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=Enabled, sizingMethod=Scale , src={$vo.background_image})">
+							<div class="bgt">
+								<h1>{$vo.title}</h1>
+								<h2>by {$vo.author} - {$vo.updatetime|date="Y.m.d",###}</h2>
+							</div>
+							<div class="bgl">
+								<p style="text-align:justify;">
+									{$vo.article_text|str_cut=200}
+									<b><strong>more<span>&gt;&gt;</span></strong></b>
+								</p>
+							</div>
+						</div>
+					</a>
+				</volist>
+				<div id="detail"></div>
+				<div class="page" style="float: left;">
+					{$page}
+				</div>
+			</div>
+			<div class="blog_r">
+				<div class="search">
+					<form id="searchform" action="{:U('Blog/index')}" method="get">
+						<input placeholder="{$Think.lang.SEARCH}" id="title" name="title" style="border:0; width:75%" value="">
+						<button id="sub" style="background-color:#0087A0;padding: 2px 8px;color:#fff;width:25%">{$Think.lang.SEARCH_BUTTON}</button>
+					</form>
+				</div>
+				<div class="blog_rt">
+					<h2>{$Think.lang.WATCH_OUT}!</h2>
+					<ul>
+						<volist name="watch_outs" id="vo">
+							<li>
+								<a href="javascript:;" data-id="{$vo.id}" data-title="{$vo.title}|{$vo.updatetime|date=" Y.m.d ",###}" class="lists">
+									<div class="blog_pic">
+										<img src="{$vo['background_image']}" width="100%" /> </div>
+									<h3 style="line-height: 18px;"><strong>{$vo.title}</strong></h3>
+									<h4>by {$vo.author} - {$vo.updatetime|date="Y.m.d",###}</h4>
+								</a>
+							</li>
+						</volist>
+					</ul>
+				</div>
+			</div>
+			
+			
+			-->
+		</div>
+		
+		
+		<notempty name="page">
+		  <div class="page">
+					{$page}
+		  </div>
+		</notempty>	
+		<div id="detail"></div>
+		<!-- <include file="Home:bottom" /> -->
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'Blog/index\')}">'+"{$Think.lang.BLOG}"+'</a> ';
+    		
+    } );
+</script>
+		<script type="text/javascript">
+			
+			var show = 0;
+			$(function() {
+				/*
+				$(".lists").click(function(){
+					$.post(url,{id: id},function(data){
+							if (data.stauts == 1) {
+								html = "<div class='detail_con' id='blog_header'>
+								<a class='close' href='javascript:detail_close();'>×</a>"+
+								    "<h1>" + data.title + "</h1>" +
+								    "<h2>by&nbsp;"+ data.author+"&nbsp-&nbsp" + data.updatetime + "</h2>" +
+									"<h3><img id='expanded_image' src=" + data.expanded_image + "></h3></div>";
+								$('#detail').html(html+"<div class='detail_con' id='blog_detail'><p>" + data.article_text + "</p></div>");
+								$('#detail').css('height',$('.blog_r').height());
+								document.getElementById('expanded_image').onload=function(){
+                                    $('#blog_detail').css('height',$('.blog_r').height()-$('#blog_header').height()-70);
+                                };
+                                $('#detail').fadeIn();
+                                if ($(window).scrollTop()>100){
+                                    $('body,html').animate({scrollTop:100},1000);
+                                }
+							}
+						},"json");
+				});
+				*/
+				$(".lists").click(function() {
+					if(show ==1)
+					  return;
+					  
+					show = 1;
+					var id = $(this).data("id");
+					var title = $(this).data("title");
+					var url = "{:U('Blog/detail')}";
+					var html = '';
+					$.post(url, {id: id},function(data) {
+							if (data.stauts == 1) {
+								var window_height = $(window).height();
+								if(window_height<800)
+								{
+									maxHeight=window_height*0.7;
+									_top=0;
+									_width='80%';
+								}else{
+									maxHeight='600px';
+									_top='115px';
+									_width='60%';
+								}
+								html = "<div class='detail_con' id='blog_header'>"+
+								    "<h1>" + data.title + "</h1>" +
+								    "<h2>by&nbsp;"+ data.author+"&nbsp-&nbsp" + data.updatetime + "</h2>" +
+									"<h3><img id='expanded_image' src=" + data.expanded_image + ' style="margin-top:10px;margin-bottom:10px;"></h3></div>';
+								$('#detail').html(html+"<div class='detail_con' id='blog_detail'><p>" + data.article_text + "</p></div>");
+								$('#detail').css('maxHeight',maxHeight);
+								$('#detail').css('overflow', 'auto');
+								art.dialog({
+									title: data.title,
+									content: document.getElementById('detail'),
+									width: _width,
+									top:_top,
+									lock:true,
+									fixed: true,
+									close: function() {
+										$('#detail').html('');
+										show = 0;
+									}
+								});
+							}
+					},"json");
+				});
+				$("#sub").click(function() {
+					
+					var rs = 1;
+					if($('#title').val() == ''){
+						rs = 2;
+						alert("The search content cannot be empty!");
+						return false;
+					}else{
+						if(rs == 1){
+							$('form').submit();
+						}else{
+							return false;
+						}
+					}
+				});
+			});
+			function detail_close(){
+					$('#detail').fadeOut();
+			}
+		</script>

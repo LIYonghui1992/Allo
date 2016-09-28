@@ -1,0 +1,133 @@
+
+#OrderConfirmation{
+
+    margin:0 auto;
+    padding:0;
+    width:1000px;
+    height:auto;
+
+}
+.order{
+    margin:0 auto;
+    padding:0;
+    width:100%;
+    height:auto;
+}
+.h{
+    clear:both;
+    height:1px;
+    width:100%;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+}
+
+.product_list{
+    float:left;
+    width:50%;
+    height:auto;
+}
+
+.suborder{
+    width:100%;
+    height:120px;
+}
+
+.suborder .image{
+    float:left;
+    width:100px;
+    height:auto;
+    margin-top:12px;
+    /*background:yellow;*/
+}
+.suborder .product_info{
+    float:left;
+    width:300px;
+    height:auto;
+    /*background:red;*/
+}
+
+.product_info li{
+    height:60px;
+}
+.product_title{
+    line-height:85px;
+    margin-left:49px;
+    /*background:blue;*/
+}
+.product_type{
+    padding-left:5px;
+    float:left;
+    margin-left:49px;
+    /*background:yellow;*/
+}
+.t{
+    margin-left:6px;
+    margin-top:3px;
+    padding:0;
+    float:left;
+    width:1px;
+    background:black;
+    height:15px;
+
+}
+.product_qty{
+    margin-left:6px;
+    float:left;
+    display:block;
+    /*background:blue;*/
+}
+
+.total_info{
+    margin-top:5%;
+    /*line-height:100%;*/
+    float:right;
+    width:50%;
+    color: #000;
+    /*background:red;*/
+    /*height:100%;*/
+    text-align: right;
+}
+
+.total_info span{
+    padding: 0;
+    margin-left:20px;
+
+}
+.total_info span.sp{
+    padding: 0;
+    margin-left:-3px;
+
+}
+#checkout{
+    height:100px;
+    width:100%;
+}
+
+#totals{
+    margin-top:20px;
+    float:left;
+    width:50%;
+    height:100px;
+    /*background:red;*/
+}
+#totals  span{
+    padding: 0;
+    margin-left:20px;
+
+}
+#totals span.sp{
+    padding: 0;
+    margin-left:-3px;
+
+}
+
+#pay{
+    margin-top:20px;
+    float:right;
+    width:50%;
+    text-align: right;
+    height:100px;
+    /*background:yellow;*/
+}
+

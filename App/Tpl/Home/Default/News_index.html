@@ -1,0 +1,158 @@
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div class="news_list clearfix">
+			<div class="news_top news_topn">
+				<ul>
+					<volist name="years" id="vo">
+						<li><a href="{:U('News/index',array('year'=>$vo))}" <if condition="$get_year eq $vo">style="color: #111111;"</if>>{$vo}</a>
+						</li>
+					</volist>
+				</ul>
+			</div>
+			
+			
+			<div class="news_top clearfix">
+				<volist name="list" id="vo">
+					<div class="news_topa">
+  					<img src="{$vo.thumb}" style="width:250px;height:187px;"> 
+  					<div class="news_content">
+  						<a href="javascript:void();" data-id="{$vo.id}" data-title="{$vo.title}&nbsp;|&nbsp;{$vo.updatetime|date="Y.m.d",###}" class="lists">
+  							<if condition="$vo['fairflag'] eq 1">
+  								<div style="margin:0px auto; height:60px;margin-top:10px;">
+    								<h1 class="title">{$vo.title|str_cut=26|htmlspecialchars=###} </h1>
+    								<h1 class="title_2">{$vo.start_end|str_cut=30|htmlspecialchars=###} </h1>
+    							</div>
+      						<div style="width:100%;overflow:hidden;text-align: justify;height:90px;">
+      								<p class="text">Address:{$vo.address}</p>   
+      								<p class="text">Booth No:{$vo.booth_no}</p>   								
+      					  </div>
+      					  
+  							<else />
+    							<div style="margin:0px auto; height:60px;margin-top:10px;">
+    								<h1 class="title">{$vo.updatetime|date="Y.m.d",###} | {$vo.title|str_cut=30|htmlspecialchars=###} </h1>
+    							</div>
+      						<div style="width:100%;overflow:hidden;text-align: justify;height:90px;">
+      								<p class="text">{$vo.content|str_cut=150}</p>
+      						</div>
+  							</if>
+  							<div style="margin:0px auto;height:20px;margin-bottom:5px;">
+  								<h4><strong>more>></strong></h4>
+  							</div>
+  							
+  						</a>
+  					</div>
+  				</div>
+				</volist>	
+					<!--
+				<div class="news_topa">
+					<notempty name="list.0.thumb"><img src="{$list[0]['thumb']}"></notempty> 
+					<div class="news_content">
+						<a href="javascript:void();" data-id="{$list[0]['id']}" data-title="{$list[0]['title']}&nbsp;|&nbsp;{$list[0]['updatetime']|date="Y.m.d",###}" class="lists">
+							<h1 class="title">{$list[0]['updatetime']|date="Y.m.d",###} | {$list[0]['title']|htmlspecialchars=###} </h1>
+							<div style="width:100%;overflow:hidden;text-align: justify;">
+								<p class="text">{$list[0]['content']|str_cut=150}</p>
+							</div>
+							<h4><strong>more>></strong></h4>
+						</a>
+					</div>
+				</div>
+				
+				-->
+						
+			</div>
+			
+			<!--
+			<div class="news_top clearfix">
+				<div class="news_topa">
+					<notempty name="list.0.thumb"><img src="{$list[0]['thumb']}"></notempty> </div>
+				<div class="news_topa">
+					<notempty name="list.1.thumb"><img src="{$list[1]['thumb']}"></notempty> </div>
+				<div class="news_topa">
+					<notempty name="list.2.thumb"><img src="{$list[2]['thumb']}"></notempty> </div>
+				<div class="news_topa">
+					<notempty name="list.3.thumb"><img src="{$list[3]['thumb']}"></notempty> </div>
+			</div>
+			<div class="news_top clearfix" id="news_top">
+				<volist name="list" id="vo">
+					<div class="news_content">
+						<a href="javascript:void();" data-id="{$vo.id}" data-title="{$vo.title}&nbsp;|&nbsp;{$vo.updatetime|date="Y.m.d",###}" class="lists">
+							<h1 class="title">{$vo.updatetime|date="Y.m.d",###} | {$vo.title|htmlspecialchars=###} </h1>
+							<div style="width:100%;overflow:hidden;text-align: justify;">
+								<p class="text">{$vo.content|str_cut=150}</p>
+							</div>
+							<h4><strong>more>></strong></h4>
+						</a>
+					</div>
+				</volist>
+			</div>
+			
+			-->
+		</div>
+
+		<notempty name="page">
+		  <div class="page">
+					{$page}
+		  </div>
+		</notempty>	
+		
+		<div id="detail"></div>
+		<!-- <include file="Home:bottom" /> -->
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'News/index\')}">'+"{$Think.lang.NEWS}"+'</a> ';
+    		
+    } );
+</script>
+
+		<script type="text/javascript">
+			var show = 0;
+			$(function() {
+				$(".lists").click(function() {
+					if(show ==1)
+					  return;
+					  
+					show = 1;
+					var id = $(this).data("id");
+					var title = $(this).data("title");
+					var url = "{:U('News/detail')}";
+					var html = '';
+					$.post(url, {id: id},function(data) {
+							if (data.stauts == 1) {
+								var window_height = $(window).height();
+								if(window_height<800)
+								{
+									maxHeight=window_height*0.7;
+									_top=0;
+									_width='80%';
+								}else{
+									maxHeight='600px';
+									_top='115px';
+									_width='60%';
+								}
+								html =
+									"<h3><img src='" + data.thumb + "' height='300px'></h3>" +
+									"<p>" + data.content + "</p>";
+								$('#detail').html(html);
+								$('#detail').css('maxHeight',maxHeight);
+								$('#detail').css('overflow', 'auto');
+								art.dialog({
+									title: title,
+									content: document.getElementById('detail'),
+									width: _width,
+									top:_top,
+									lock:true,
+									fixed: true,
+									close: function() {
+										$('#detail').html('');
+										show = 0;
+									}
+								});
+							}
+					},"json");
+				});
+			});
+		</script>

@@ -1,0 +1,34 @@
+<include file="Home:nav"/>
+<div class="fmian">
+<div class="layout_list">
+
+  	<div class="shop_title">
+        <!--<p>{$Think.lang.SHOP_NO}</p>-->
+        <div class="shop_title_1">
+            <div class="choose_cou">
+                Choose your country:
+            </div>
+            <ul>
+                <volist name="country_1" id="cou">
+                <li>
+                	<a href="<if condition='$cou.link neq null '>{$cou['link']}
+                		<else/>http://www.allocacocshop.com/shop/</if>">
+                		<!-- <img src="../Public/image/pay.jpg" title="{$cou['title']}"/> -->
+                		<span title="{$cou['title']}">{$cou['title']}</span>
+                  </a>
+                </li>
+                </volist>
+            </ul>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+
+<!-- <include file="Home:bottom"/> -->
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'Shop/index\')}">'+"{$Think.lang.SHOP}"+'</a> ';
+    		
+    } );
+</script>

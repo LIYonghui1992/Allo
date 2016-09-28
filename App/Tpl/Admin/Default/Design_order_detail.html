@@ -1,0 +1,117 @@
+<table  class="search_table" width="100%">
+
+  <tr>
+
+    <td class="search">
+    	<form action="{:U($module_name.'/index')}" method="get">
+
+        <input type="hidden" name="g" value="{$Think.GROUP_NAME}" />
+
+        <input type="hidden" name="m" value="{$Think.MODULE_NAME}" />
+
+        <input type="hidden" name="a" value="{$Think.ACTION_NAME}" />
+
+        <input type="hidden" id="menuid" name="menuid" value="{$_GET['menuid']}"/>   
+
+      </form>
+    </td>
+  </tr>
+
+</table>
+
+<form name="myform" id="myform" action="" method="post">
+  <font style="font-size:20px;">order detail</font> 
+  
+  <table  border="1" cellpadding="3" cellspacing="1"   style="font-size:16px;background-color: #b9d8f3; margin-bottom:20px;">
+  	
+  	
+  	<tr>
+  		<td width="400">
+  			order No: {$order.orderid}
+  		</td>
+  		<td width="400">
+  			payflag[0 not paid, 1 paid]:{$order.payflag}
+  		</td>
+  	</tr>
+  	
+  	<tr>
+  		<td>
+  			reciever: {$order.first_name},{$order.last_name}
+  		</td>
+  	</tr>
+  	
+  	<tr>
+  		<td>
+  			shipfee: {$order.shipfee}
+  		</td>
+  		<td>
+  			total: {$order.total}
+  		</td>
+  	</tr>
+  	
+  	<tr>
+  		<td>
+  			phone: {$order.phone}
+  		</td>
+  		<td>
+  			email: {$order.email}
+  		</td>
+  	</tr>
+  	
+  	<tr>
+  		<td>
+  			shipping address: {$order.address}, {$order.company},{$order.city}, {$order.country} 			
+  		</td>
+  		<td>address2: {$order.address2}</td>
+  	</tr>
+  </table>
+  
+  
+  <div class="table-list">
+
+  <table width="100%" cellspacing="0">
+
+    <thead>
+
+      <tr> 
+        <th>product</th>
+        <th>type</th>
+        <th>qty</th>      
+        <th>price</th>        
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <volist name="itemlist" id="vo" key="k">
+        <tr> 
+          <td align="center">{$vo['product_name']}</td>
+          <td align="center">{$vo['type_name']}</td>
+          <td align="center">{$vo['qty']}</td>
+          <td align="center">{$vo['price']}</td>                 
+          
+        </tr>
+
+      </volist>
+
+    </tbody>
+
+  </table>
+
+
+</form>
+
+</div>
+
+
+<script>
+
+$('.a').css('display','none');
+//$('#succ').css('overflow', 'auto');
+function confirm_deleteall(){
+	art.dialog.confirm("{:L('real_delete')}", function(){ $('#myform').submit();});
+}
+
+
+</script>

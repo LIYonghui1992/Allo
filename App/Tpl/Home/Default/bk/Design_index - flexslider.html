@@ -1,0 +1,1107 @@
+<!--[if lte IE 8]> 
+<style type="text/css">
+.design_main {
+	padding-bottom:30px !important;
+}
+</style>
+<![endif]-->
+<script type="text/javascript" charset="utf-8" src="../Public/js/script.js"></script>
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div class="design_main ">
+			
+			<div class="designtitle" >
+  				 {$design_challenge.title}
+  		</div>
+  		
+  		<div id="header-all">
+        <div id="h-vedio">
+          {$design_challenge.demovideo}
+        </div>
+        
+        <div id="explan">
+          <div id="explan-text">
+            {$design_challenge.explanation} 
+          </div>
+          
+          <div id="b-more">
+          	<a href="javascript:findmore({$design_challenge['id']});">
+          		<font id="more">find out more</font> 
+          	</a>
+             
+          </div>        
+         
+        </div>  <!-- explan -->
+                
+        
+      </div>  <!-- end header-all -->
+      
+
+			<div  class="designtitle"  >       
+	      <font style="font-weight:bold;font-size:18px;margin-left:20px;color:#333333;">Current Project</font>               
+	      <font style="font-size:14px;margin-left:20px;color:#666666;"><br> An overview of the projects waiting for your supports:</font>                     
+      </div>  
+      
+      <!--
+      <div id="mid">
+         
+          <div id="left-img">
+          <a href="javascript:step(0);" ><img src="/image/index.2.2.png"   class="step-img" onclick="step(0);" /></a>
+          </div>
+        
+            <volist name="fund_list" id="vo" key="k">
+            	
+            	 <div class="product" name="product_info" >
+            	 	<div style="width:220px; height:170px;"> 
+            	 		<a href="{:U('Design/detail',array('id'=>$vo['id']))}">
+                  <img src="{$vo.background_img}" style="width:220px; height:170px;" />
+                 </a>
+                 </div>
+            	 	 
+                 <div style="margin:0px auto; width:180px;height:50px;margin-left:15px;">
+                 	 <h1>
+                   <strong><font class="p-font">{$vo.title} </font></strong>
+                   </h1>
+                   <h1>
+                    <font class="p-font2">{$vo['date']} | {$vo['developer']}</font>
+                   </h1>
+                 </div>
+                 
+                 <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;">
+                 	
+                 	<ul style="line-height:30px;">
+                 		<font class="p-font3" style="font-size:16px;vertical-align: bottom;">{$vo.price|substr=0,1} </font>
+                   <font class="p-font3" style="vertical-align: bottom;" >{$vo.price|substr=1} </font>
+                   
+					        </ul> 
+                 	
+                 </div>
+                
+                
+                
+                 <div style="border:1px solid #DDD; border-radius:10px; width:88%;overflow:hidden;margin-left:15px;margin-top:15px;">
+                  <span style="display: block;background:#15869f; 
+                  height:8px;width:{$vo['pcs_ordered']/$vo['funding_goal']*100}%;"></span>
+                </div>
+                
+                 <div style="margin:0px auto; width:180px;height:30px;margin-right:10px;text-align:right;">
+                 	 <h1>
+                   <font class="p-font2">{$vo['pcs_ordered']}/{$vo['funding_goal']} pcs required </font>
+                   </h1>
+                 </div>
+                 
+                 <div style="margin:0px auto; width:162px;height:27px;text-align:center;background-color:transparent;
+                 	background-image:url(/image/index.4.1.png);line-height:27px;">
+                 	 <a href="javascript:godetail({$vo['id']});">
+                    <font style="font-size: 14px;font-weight: bold;color:#15869f;">order now</font> 
+                                      
+					       
+                   </a>
+                 </div>
+                              
+                
+  
+               </div>
+            
+  							
+  					</volist>
+        
+         
+          
+          <div id="right-img">
+          <a href="javascript:step(1);" ><img src="/image/index.3.1.png" class="step-img" onclick="step(1);" /></a>
+          </div>
+          
+          
+      </div>  
+      -->
+      
+      <!-- end mid -->
+      
+      
+       <div id="mid" class="flexslider">	  
+           
+             <div class="products" >
+              <volist name="fund_list" id="vo" key="k">
+          		<div class="product">
+          			<div style="width:220px; height:170px;"> 
+                	 		<a href="{:U('Design/detail',array('id'=>$vo['id']))}">
+                      <img src="{$vo.background_img}" style="width:220px; height:170px;" />
+                     </a>
+                </div>
+                	 	 
+                <div style="margin:0px auto; width:180px;height:50px;margin-left:15px;">                     	 
+                       <strong><font class="p-font">{$vo.title} </font></strong>                                              
+                        <font class="p-font2"><br>{$vo['date']} | {$vo['developer']}</font>
+                </div>
+                     
+                <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;">                 	
+                     	<ul style="line-height:30px;">
+                     		<font class="p-font3" style="font-size:16px;vertical-align: bottom;">{$vo.price|substr=0,1} </font>
+                       <font class="p-font3" style="vertical-align: bottom;" >{$vo.price|substr=1} </font>
+                       
+    					        </ul>                  	
+                </div>
+                                   
+                    
+                <div style="border:1px solid #DDD; border-radius:10px; width:88%;overflow:hidden;margin-left:15px;margin-top:15px;">
+                      <span style="display: block;background:#15869f; 
+                      height:8px;width:{$vo['pcs_ordered']/$vo['funding_goal']*100}%;"></span>
+                </div>
+                    
+                <div style="margin:0px auto; width:180px;height:30px;margin-right:10px;text-align:right;">
+                       <font class="p-font2">{$vo['pcs_ordered']}/{$vo['funding_goal']} pcs required </font>
+
+                </div>
+                     
+                <div style="margin:0px auto; width:162px;height:27px;text-align:center;background-color:transparent;
+                     	background-image:url(/image/index.4.1.png);line-height:27px;">
+                     	 <a href="javascript:godetail({$vo['id']});" >
+                        <font style="font-size: 14px;font-weight: bold;color:#15869f;">order now</font> 
+                       </a>
+                </div>
+          		</div>	
+          	</volist>
+          
+             </div>
+
+         
+       </div>
+  
+  
+     
+    
+      
+      
+      <!-- page UI  <input type="radio" class="page-button" name="pageno" id="pageno" value="{$i}"/> -->
+      <!-- 
+      <div id="page" style="margin:0px auto;height:30px;width:{$pagecount*23}px;margin-top: 10px;">
+      	<for start="0" end="$pagecount">  
+      		
+      		 <if condition="$i+1 eq $currpage">
+      		 	 <div  class="pagetype" id="page{$i}" style="float:left;width:18px;height:18px;margin-left:5px;
+          		background-image:url(/image/index.6.1.png);" >
+          		<else />
+          			<div   class="pagetype" id="page{$i}" style="float:left;width:18px;height:18px;margin-left:5px;
+          		background-image:url(/image/index.6.2.png);" >         		
+      		 </if>        	          	
+          		<a href="javascript:current_pageturn({$i});"><font style="margin:0px auto;margin-left:5px;height:18px;color:#FFF;"> {$i+1} </font></a>
+          	</div>       	        
+        </for>
+      </div>
+      -->
+      <div id="page" style="margin:0px auto;height:30px;width:{$pagecount*23}px;margin-top: 10px;">  	
+      </div>
+      <!-- page UI end -->
+      
+        
+       <div id="bottom">
+       	 
+       	 <div  class="designtitle"  >
+	         <font style="font-weight:bold;font-size:18px;margin-left:20px;color:#333333;">Past Project</font>
+	         <font style="font-size:14px;margin-left:20px;color:#666666;"><br>An overview of past projects, sucessful or not:</font>              
+         </div>  
+      
+          
+          
+          <div id="b-bottom">
+          
+            <div id="b-left">            	
+              <div id="b-left-left" style="background-image:url(/image/index.12.1.png); background-repeat:no-repeat;background-position: center;">
+              	<ul >
+              		
+              		<li style="width:100px;height:20px;line-height:20px; padding:0 10px 0 0px; list-style:none; float:left;">
+              			<a href="javascript:yearturn(0);"><img src="/image/index.8.1.png" style="padding-left:30px;" onclick="yearturn(0);"/> </a>
+              		</li>
+              		<volist name="years" id="vo" key="k">
+              			
+              			<if condition="$k eq 1">
+              				<li  style="width:100px;height:40px;line-height:40px; padding:0 10px 0 0px; list-style:none; float:left;" >
+              			   <a href="javascript:yearturn({$vo});">
+              			   	<img src="/image/index.11.2.png" class="yearimg" id="yearimg{$vo}"/> 
+              			   <font class="yearname" id="year{$vo}" style="color:#09C; font-size:20px; padding-left:10px;" onclick="yearturn({$vo});">{$vo}</font>
+              		     </a>
+              		    </li>
+              			<else />
+              				<li style="width:100px;height:40px;line-height:40px; padding:0 10px 0 0px; list-style:none; float:left;">
+              			  <a href="javascript:yearturn({$vo});">
+              			  	<img src="/image/index.11.2.png" style="visibility:hidden;" class="yearimg" id="yearimg{$vo}"/>
+              			  <font class="yearname" id="year{$vo}" style="font-size:12px; padding-left:10px;" onclick="yearturn({$vo});">{$vo}</font>
+              		    </a>
+              		    </li>
+              		  
+              			</if>
+              		</volist>	
+              		
+              		<li style="width:100px;height:20px;line-height:20px; padding:0 10px 0 0px; list-style:none; float:left;">
+              			<a href="javascript:yearturn(1);"><img src="/image/index.8.2.png" style="padding-left:30px;" onclick="yearturn(1);"/> </a>
+              		</li>
+              	</ul>
+              	
+              </div>
+              
+              
+             
+              
+              
+            </div>
+            
+            <div id="b-right" class="flexslider"> 
+
+                  <div class="pastproducts" id="productlist">
+                    <volist name="pastfund_list" id="vo" key="k">
+                		<div class="pastproduct">
+                			
+                			<div style="width:212px; height:180px;"> 
+                				<a href="{:U('Design/detail',array('id'=>$vo['id']))}">
+                        <img src="{$vo.background_img}" style="width:212px; height:170px;"/>
+                        </a>
+                      </div>
+                 
+                  	
+                      <div style="margin:0px auto; width:180px;height:40px;margin-left:15px;margin-top:10px;">
+                        <font class="p-font2" style="font-size:16px;font-weight:bold;">{$vo.title} </font> 
+                        <font class="p-font2" style="font-size:16px;"><br>{$vo.price}</font>
+                      
+                      </div> 
+                  
+                      <div style="margin-top:15px;border:1px solid #DDD;overflow:hidden; border-radius:10px; width:88%;margin-left:15px;">
+                      <span style="display: block;background:#15869f;
+                      text-align:left;height:8px;width:{$vo['pcs_ordered']/$vo['funding_goal']*100}%;"></span>
+                      </div>
+                   
+                      <div style="margin:0px auto; width:180px;height:30px;margin-right:15px;text-align:right;">
+                        <font class="p-font2">{$vo['pcs_ordered']}/{$vo['funding_goal']} pcs required </font>
+                      </div>  
+                                                             
+                    </div>                     							
+      					  </volist>	
+      					  
+             	    </div>
+          
+            	
+            </div>
+            
+           
+            
+          </div> <!-- end b-bottom -->
+          
+        </div> <!-- end bottom -->  
+		
+		
+			
+			
+			
+			
+		</div>
+		<include file="Home:bottom" />
+	
+<!--
+<link rel="stylesheet" href="/slidertrack/css/lrtk.css" type="text/css" media="screen">
+<script type="text/javascript" src="/slidertrack/js/jquery.min.js"></script>
+<script type="text/javascript" src="/slidertrack/js/jquery-easing-1.3.0.js"></script>
+<script type="text/javascript" src="/slidertrack/js/modernizr.mediaqueries.js"></script>
+<script type="text/javascript" src="/slidertrack/js/responsive-hub.js"></script>
+<script type="text/javascript" src="/slidertrack/js/jquery.silver_track.js" charset="utf-8"></script>
+<script type="text/javascript" src="/slidertrack/js/jquery.silver_track_recipes.js" charset="utf-8"></script>
+<script type="text/javascript" src="/slidertrack/js/jquery.silver_track.navigator.js" charset="utf-8"></script>
+<script type="text/javascript" src="/slidertrack/js/jquery.silver_track.bullet_navigator.js" charset="utf-8"></script>
+<script type="text/javascript">
+  
+  var track = $(".slider-container").silverTrack();
+  var parent = track.container.parents(".track");
+  
+  // 左右箭头
+  track.install(new SilverTrack.Plugins.Navigator({
+   prev: $("a.prev", parent),
+   next: $("a.next", parent)
+  }));
+  
+  //下面三个小圆点 , #products
+  track.install(new SilverTrack.Plugins.BulletNavigator({
+  container: $(".bullet-pagination", parent)
+  })); 
+  track.start();
+   
+</script>
+
+<link type="text/css"  href="../Public/flexslider/flexslider.css" rel="stylesheet"  />
+-->
+
+<script type="text/javascript" src="../Public/flexslider/jquery.flexslider-min.js"></script>
+<link type="text/css"  href="/slidertest/flexslider/flexslider.css" rel="stylesheet"  />
+
+
+
+
+		
+		<script type="text/javascript">
+			
+			var pastyear = {$years[0]};
+			var truepage = {$currpage-1};
+			var pastpage = 0;
+			var pastpagecount = {$pastpagecount};
+			
+			function yearturn(yearid)
+			{
+				var url = "{:U('Design/pastyearProducts')}";
+				$.post(url,{yearid:yearid,pastyear:pastyear},function(data)
+				{
+					if(data.status==1)
+					{
+						pastpage = 0;
+						pastyear = data.pastyear;
+						var oImg = document.getElementsByTagName('img');
+    				for (var i = 0; i < oImg.length; i++) 
+    				{
+    					if(oImg[i].className =='yearimg')
+    					{
+    					  if (oImg[i].id ==  ('yearimg'+pastyear) ) 
+    					    oImg[i].style.visibility="visible";
+    					  else 
+    					  	oImg[i].style.visibility="hidden";    					  	
+    				  }
+    				}
+    				
+    				var oImg = document.getElementsByTagName('font');
+    				for (var i = 0; i < oImg.length; i++) 
+    				{
+    					if(oImg[i].className =='yearname')
+    					{
+    					  if (oImg[i].id ==  ('year'+pastyear) ) 
+    					  {
+    					  	oImg[i].style.fontSize="20px";
+    					  	oImg[i].style.color="#09C";
+    					  }
+    					  else 
+    					  {
+    					  	oImg[i].style.fontSize="12px";
+    					  	oImg[i].style.color="#000";
+    					  }    					
+    				  }   				  
+    				  
+    				}
+    				
+    				var models = data.fund_list;
+    				//alert(data.pastcount);
+    				//alert(models[0].id);
+						var productHtml='';
+
+						for(var j in models)
+						{
+  						productHtml += '<div class="pastproduct">'
+  						+'<div style="width:212px; height:180px;">'
+  						+'<a href="/Design/detail/id/'+models[j].id +'">'
+  						+'<img src="' +models[j].background_img+ '" width=212px height=170px/>'
+  						+'</a>'
+  						+'</div>'
+  						+'<div style="margin:0px auto; width:180px;height:40px;margin-left:15px;margin-top:10px;">'
+  						+'<font class="p-font2" style="font-size:16px;font-weight:bold;">'+ models[j].title+ '</font>'
+  						+'<font class="p-font2" style="font-size:16px;"><br>'+  models[j].price +'</font>'
+  						+'</div>'
+  						+'<div style="margin-top:15px;border:1px solid #DDD;overflow:hidden; border-radius:10px; width:88%;margin-left:15px;">'
+  						+'<span style="display: block;background:#15869f; text-align:left;height:8px;width:'+ models[j].pcs_ordered*100/models[j].funding_goal +'%;"></span>'
+  						+'</div>'
+  						+'<div style="margin:0px auto; width:180px;height:30px;margin-right:15px;text-align:right;">'
+  						+'<font class="p-font2"> '+models[j].pcs_ordered+'/'+models[j].funding_goal+ ' pcs required</font>'
+  						+'</div>'
+  								
+  						+'</div>';
+						
+							
+						}
+    				
+    				//document.getElementById('productlist').innerHTML= productHtml ;
+    				document.getElementById('b-right').innerHTML= '<div class="pastproducts" id="productlist">' + productHtml + '</div>'
+    				//document.getElementById('b-right')
+    				 //$('#b-right').datagrid('reload');
+    				
+    				 
+    				  //jQuery('#b-right.flexslider').init();
+    				$('#b-right').flexslider({
+      	selector: ".pastproducts > .pastproduct",
+        animation: "slide",
+        minItems: 4,
+        maxItems: 4,
+        slideshow: false,
+        itemWidth: 212,//一个滚动项目的宽度
+        itemHeight: 300,
+        itemMargin: 12,//滚动项目之间的间距
+      });
+					}
+				},"json");
+			}
+			
+			
+			/**
+			function yearturn(yearid)
+			{
+				var url = "{:U('Design/pastyearProducts')}";
+				//alert(pastyear);
+				$.post(url,{yearid:yearid,pastyear:pastyear},function(data)
+				{
+					
+					if(data.status==1)
+					{	
+						pastpage = 0;
+						pastyear = data.pastyear;		    
+						//alert(pastyear);             			   
+						var oImg = document.getElementsByTagName('img');
+    				for (var i = 0; i < oImg.length; i++) 
+    				{
+    					if(oImg[i].className =='yearimg')
+    					{
+    					  if (oImg[i].id ==  ('yearimg'+pastyear) ) 
+    					    oImg[i].style.visibility="visible";
+    					  else 
+    					  	oImg[i].style.visibility="hidden";    					  	
+    				  }
+    				}
+    				
+    				var oImg = document.getElementsByTagName('font');
+    				for (var i = 0; i < oImg.length; i++) 
+    				{
+    					if(oImg[i].className =='yearname')
+    					{
+    					  if (oImg[i].id ==  ('year'+pastyear) ) 
+    					  {
+    					  	oImg[i].style.fontSize="20px";
+    					  	oImg[i].style.color="#09C";
+    					  }
+    					    
+    					    //    					    "color:#09C; font-size:20px; padding-left:10px;";
+    					  else 
+    					  {
+    					  	oImg[i].style.fontSize="12px";
+    					  	oImg[i].style.color="#000";
+    					  }
+    					  	//oImg[i].style="font-size:12px; padding-left:10px;";
+    					
+    				  }
+    				}
+    				
+    				//change product list
+    				var lefthtml = '<div style="margin:0px auto;height:300px;">'
+    				+'<div style="float:left;width:12px;height:300px;">'
+    				+'<img src="/image/index.9.1.png"   style="padding-top:100px;width:12px;height:47px;" />'
+    				+'</div>';
+    				
+    				var righthtml = '<div style="float:right;width:12px;height:300px;margin-right:10px;">'
+    				+' <img src="/image/index.9.2.png"   style="padding-top:100px;width:12px;height:47px;" />'
+    				+'</div>'
+    				+'</div>'
+    				+'<div id="page2" style="width:31px;margin:0px auto;height:30px;margin-top: 30px;">'
+    				+'<for start="0" end="' + data.pastcount + '"> '
+    				+'<if condition="$i+1 eq ' + 0  +'">'
+    				+'<div  style="float:left;width:8px;height:8px;margin-left:5px;background-image:url(/image/index.11.2.png);" onclick="test();"> '
+    				+'<a onclick=""></a>'
+    				+'</div>  '
+    				+'<else />'
+    				+'<div  style="float:left;width:8px;height:8px;margin-left:5px;background-image:url(/image/index.11.1.png);" > '
+    				+'<a onclick=""></a>'
+    				+' </div>'
+    				+' </if>   '
+    				+'</for>'
+    				+'</div>';
+    				
+    				var models = data.fund_list;
+    				//alert(data.pastcount);
+    				//alert(models[0].id);
+						var productHtml='';
+
+						for(var j in models)
+						{
+						productHtml += '<div class="b-product">'
+						+'<a href="/Design/detail/id/'+models[j].id +'">'
+						+'<img src="' +models[j].background_img+ '" width=190px height=140px/>'
+						+'</a>'
+						+'<div style="margin:0px auto; width:180px;height:60px;margin-left:15px;">'
+						+'<h1><strong><font class="p-font2">'+ models[j].title+ '</font></strong></h1>'
+						+'<h1><font class="p-font2">'+  models[j].price +'</font></h1>'
+						+'</div>'
+						+'<div style="border:1px solid #333333; border-radius:10px; width:88%;margin-left:15px;">'
+						+'<span style="display: block;background:#09C;text-align:left;height:8px;width:'+ models[j].pcs_ordered*100/models[j].funding_goal +'%;"></span>'
+						+'</div>'
+						+'<div style="margin:0px auto; width:180px;height:30px;margin-right:15px;text-align:right;">'
+						+'<h1><font class="p-font2">'+models[j].pcs_ordered+'/'+models[j].funding_goal+ ' pcs required</font></h1>'
+						+'</div>'
+						
+						+'<div style="margin:0px auto; width:118px;height:30px;text-align:right;">'
+						+' <a href="/Design/detail/id/'+models[j].id +'">'
+						+'<input type="button" data-id="'+ models[j].id + '" style="background-color:transparent;background-image:url(/image/test-order1.png); padding: 3px 8px; margin-top: 5px;width:118px;height:24px;">'
+						+' </a>'
+						+'</div>'
+								
+						+'</div>';
+						
+							
+						}
+						
+    				//document.getElementById('b-right').innerHTML=lefthtml + productHtml + righthtml;
+    				
+    				document.getElementById('pastproducts').innerHTML= productHtml ;
+    				pastpagecount = data.pastpagecount;
+            var pagehtml = '';
+            for(i=0;i<data.pastpagecount;i++)
+            {
+            	if(i==0)
+            	 pagehtml+='<div  style="float:left;width:8px;height:8px;margin-left:5px;background-image:url(/image/index.11.2.png);" onclick="test();">'
+            	 +'<a onclick=""></a>'
+            	 +'</div>';
+            	     
+            	else
+            		pagehtml+='<div  style="float:left;width:8px;height:8px;margin-left:5px;background-image:url(/image/index.11.1.png);" > '
+            		+'<a onclick=""></a>'
+            		+'</div>  ';
+            }
+            
+            
+            
+            document.getElementById('page2').innerHTML= pagehtml ;
+            
+                  
+                
+    				//var pastyear = yearid;
+					}
+				},"json"); 
+				
+			}
+			
+			*/
+			
+			//
+			function  past_pageturn(pageid)
+			{
+				//pastpage = 0;
+				
+				var url = "{:U('Design/pastProducts')}";
+					$.post(url, {pageid:pageid,pastyear:pastyear}, function(data) {
+						if(data.status==0)
+						return;
+						
+						var models = data.fund_list;
+						var productHtml='';
+
+						for(var j in models)
+						{
+						productHtml += '<div class="b-product">'
+						+'<a href="/Design/detail/id/'+models[j].id +'">'
+						+'<img src="' +models[j].background_img+ '" width=190px height=140px/>'
+						+'</a>'
+						+'<div style="margin:0px auto; width:180px;height:60px;margin-left:15px;">'
+						+'<h1><strong><font class="p-font2">'+ models[j].title+ '</font></strong></h1>'
+						+'<h1><font class="p-font2">'+  models[j].price +'</font></h1>'
+						+'</div>'
+						+'<div style="border:1px solid #333333; border-radius:10px; width:88%;margin-left:15px;">'
+						+'<span style="display: block;background:#09C;text-align:left;height:8px;width:'+ models[j].pcs_ordered*100/models[j].funding_goal +'%;"></span>'
+						+'</div>'
+						+'<div style="margin:0px auto; width:180px;height:30px;margin-right:15px;text-align:right;">'
+						+'<h1><font class="p-font2">'+models[j].pcs_ordered+'/'+models[j].funding_goal+ ' pcs required</font></h1>'
+						+'</div>'
+						
+						+'<div style="margin:0px auto; width:118px;height:30px;text-align:right;">'
+						+' <a href="/Design/detail/id/'+models[j].id +'">'
+						+'<input type="button" data-id="'+ models[j].id + '" style="background-color:transparent;background-image:url(/image/test-order1.png); padding: 3px 8px; margin-top: 5px;width:118px;height:24px;">'
+						+' </a>'
+						+'</div>'
+								
+						+'</div>';
+						
+							
+						}
+						
+    				//document.getElementById('b-right').innerHTML=lefthtml + productHtml + righthtml;
+    				
+    				document.getElementById('pastproducts').innerHTML= productHtml ;
+						
+						
+						var oImg = document.getElementsByTagName('div');
+    				for (var i = 0; i < oImg.length; i++) 
+    				{
+    					if(oImg[i].className =='pastpagetype')
+    					{
+    					  if (oImg[i].id ==  ('pastpage'+pageid) ) 
+    					   oImg[i].style.backgroundImage = 'url(/image/index.11.2.png)';			   
+    					  else 
+    						 oImg[i].style.backgroundImage = 'url(/image/index.11.1.png)';
+    						  
+    					  
+    				}
+    				}
+    				
+    				pastpage = pageid;
+    				
+					},"json");
+			}
+			
+			
+			
+			function current_pageturn(pageid)
+			{
+				var url = "{:U('Design/currentProducts')}";
+					$.post(url, {pageid:pageid}, function(data) {
+						if(data.status==0)
+						return;
+						
+						//var fund_list = data.fund_list;
+						//alert(data.fund_list[0].id); 
+						//alert(data.fund_list[0].length());product_info
+						//document.getElementById("title").style.display = "none";
+						//document.getElementById("mid").innerHTML = "hh";
+						
+						var leftHtml = '<div id="left-img"> <img src="/image/index.2.2.png"   class="step-img" onclick="step(0);"/> </div>';
+						var rightHtml = '<div id="right-img"> <img src="/image/index.3.1.png" class="step-img" onclick="step(1);" /> </div>';
+
+						var models = data.fund_list;
+						var productHtml='';
+
+						for(var i in models){
+							productHtml +='<div class="product" name="product_info" >'
+							//+'<a href="{:U(\'Design/detail\',array(\'id\'=>'+models[i].id +'))}">'
+							+'<a href="/Design/detail/id/'+models[i].id +'">'
+							+'<img src="'+models[i].background_img+ '" width=200px height=180px/></a>'
+							+' <div style="margin:0px auto; width:180px;height:60px;margin-left:15px;">'
+							+' <h1><strong><font class="p-font">'+models[i].title +'</font></strong></h1>'
+              +' <h1><font class="p-font2">'+models[i].date+' |'+ models[i].developer+'</font></h1>'
+              +'  </div>'
+              +' <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;">'
+              +'  <h1><font class="p-font3">'+models[i].price+ '</font></h1>'
+              +'  </div>'
+              +'<div style="border:1px solid #333333; border-radius:10px; width:88%;margin-left:15px;">'
+              +'    <span style="display: block;background:#09C;text-align:left;height:8px;width:'+(models[i].pcs_ordered*100)/models[i].funding_goal+'%;"></span>'
+              +'</div>'
+              +' <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;text-align:right;">'
+              +' <h1><font class="p-font2">'+models[i].pcs_ordered+'/'+models[i].funding_goal+ ' pcs required </font></h1>'
+              + '</div>'
+              +'<div style="margin:0px auto; width:118px;height:30px;text-align:right;">'
+              +' <a href="/Design/detail/id/'+models[i].id+ '">'
+              +' <input type="button" data-id="'+models[i].id+ '" style="background-color:transparent;background-image:url(/image/test-order1.png);padding: 3px 8px; margin-top: 5px;width:118px;height:24px;">'
+              +' </a>'
+              +' </div>'
+              +'</div>';
+							//alert(models[i].date);	
+						}	
+						document.getElementById("mid").innerHTML = 	leftHtml + productHtml + rightHtml;
+						
+						
+						var oImg = document.getElementsByTagName('div');
+    				for (var i = 0; i < oImg.length; i++) 
+    				{
+    					if(oImg[i].className =='pagetype')
+    					{
+    					  if (oImg[i].id ==  ('page'+pageid) ) 
+    					   oImg[i].style.backgroundImage = 'url(/image/index.6.1.png)';			   
+    					  else 
+    						 oImg[i].style.backgroundImage = 'url(/image/index.6.2.png)';
+    						  
+    					  
+    				}
+    				}
+    				
+    				truepage = pageid;
+    				
+					},"json");
+			}
+			
+			
+			
+			function paststep(type)
+			{
+				if(type==0)
+				{
+					if(pastpage>0)
+					  past_pageturn(pastpage-1);
+				}
+				
+				if(type==1)
+				{
+					if(pastpage<(pastpagecount-1))
+					  past_pageturn(pastpage+1);
+				}
+			}
+			
+			
+			function step(type)
+			{
+				if(type==0)
+				{
+					if(truepage>0)
+					  current_pageturn(truepage-1);
+				}
+				
+				if(type==1)
+				{
+					if(truepage<{$pagecount-1})
+					  current_pageturn(truepage+1);
+				}
+				
+			}
+			
+			
+			function findmore(chanid)
+			{
+				window.location = "/Design/more/id/"+chanid;
+			}
+			
+			function godetail(productid)
+			{
+				window.location = "/Design/detail/id/"+productid;
+			}
+			//"javascript:godetail({$vo['id']});"  "{:U('Design/detail',array('id'=>$vo['id']))}"
+			
+			//($design_challenge['id']);"  "{:U('Design/more',array('id'=>$design_challenge['id']))}"
+			
+			
+			//setTimeout('check();',1000);
+			$(function() {
+				$('#mid').flexslider({
+        	selector: ".products > .product",
+          animation: "slide",
+          minItems: 4,
+          maxItems: 4,
+          move:4,
+          slideshow: false,
+          itemWidth: 220,
+          itemMargin: 28,
+        });
+        
+        
+       $('#b-right').flexslider({
+      	selector: ".pastproducts > .pastproduct",
+        animation: "slide",
+        minItems: 4,
+        maxItems: 4,
+        move:4,
+        slideshow: false,
+        itemWidth: 212,//一个滚动项目的宽度
+        itemMargin: 10,//滚动项目之间的间距
+      });
+  
+  
+  
+  
+  
+				DD_belatedPNG.fix('.design_year li');
+				//var k=parseInt($('.design_font_on').data('k')/4);
+				//$(".picScroll").slide({mainCell:".bd ul",autoPage:true,effect:"left",autoPlay:false,scroll:4,vis:4,pnLoop: false,defaultIndex:k});
+				$(".desc").click(function() {
+					var window_height = $(window).height();
+					if(window_height<800)
+					{
+						maxHeight=window_height*0.7;
+						_top=0;
+						_width='80%';
+					}else{
+						maxHeight='600px';
+						_top='115px';
+						_width='60%';
+					}
+					var id = $(this).data("id");
+					
+					var url = "{:U('Design/fundDetail')}";
+					$.post(url, {id:id}, function(data) {
+						var title = data.title;
+						var text = data.winner_text;
+						var developer = data.developer;
+						var img = data.expanded_img;
+						var deadline = data.deadline;
+						var price = data.price;
+						var backgroundimg = data.background_img;
+						
+						$('#detail_order').data("id",id);
+						
+						$('.detail_title').html(title+"<br><span style='text-align: left;font-size: 16px;position: relative;top: -8px;'>"+developer);
+						$('.detail_img').attr("src", img);
+						$('.detail_text').html(text);
+						$('#detail_price').text("$"+price);
+						$('#detail').css('overflow', 'auto');
+						$('#detail').css('maxHeight',maxHeight);
+						art.dialog({
+							id: 'des',
+							title: title,
+							content: document.getElementById("detail"),
+							width: _width,
+							top:_top,
+							lock: true,
+						});
+						
+					},"json");			
+				});
+				
+				
+				
+				$(".order").click(function() {
+					var window_height = $(window).height();
+					var window_width = $(window).width();
+					if(window_height<800)
+					{
+						maxHeight=window_height*0.7;
+						_top=0;
+						if(window_width<1080){
+                             _width='80%';  
+                         }else{
+                             _width='auto';  
+                         }
+					}else{
+						maxHeight='600px';
+						_top='115px';
+						_width='60%';
+					}
+					art.dialog.list['des'].close();
+					var id = $(this).data("id");
+					
+					var url = "{:U('Design/fundDetail')}";
+					$.post(url, {id:id}, function(data) {
+						var title = data.title;
+						var img = data.background_img;
+						var deadline = data.deadline;
+						var price = data.price;
+						
+						var num = $('#num').val();
+						if(num == '') num=1;
+						var all_price = parseInt(price)*parseInt(num);
+						$('.order_title').text(title);
+						$('.order_h3').text(deadline);
+						$('#price').text(price);
+						$("#order_img").attr("src", img);
+						$('#design_id').val(id);
+						$('#price').text("$"+all_price);
+						$('#ecprice').val(price);
+						$('#order').css('overflow', 'auto');
+						$('#order').css('maxHeight',maxHeight);
+						art.dialog({
+							title: title,
+							content: document.getElementById("order"),
+							width: _width,
+							top:_top,
+							lock: true,
+							close: function () {
+								$('#num').val('');
+							}
+						});
+						
+						
+					},"json");					
+					
+				});
+				
+				$("#check").click(function() {
+					var url = "{:U('Design/order')}";
+					var data = $("#pform").serializeArray();
+					var rs = 1;
+					/*var pcs_ordered = $('.order').data("ordered");
+					var funding_goal = $('.order').data("funding");
+					if (parseInt(funding_goal) - parseInt(pcs_ordered) <= 0) {
+						rs = 0;
+						tip('The quota is full!');
+						return false;
+					}*/
+					$("input[type='text']").each(function(index, element) {
+						if (this.value == '' && (this.name != 'company' && this.name != 'phone')) {
+								rs = 0;
+								tip('Entry cannot be empty!');
+								return false;
+						}
+						if (this.name == 'email') {
+							if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))) {
+								rs = 0;
+								tip('Please enter a valid mailbox!');
+								return false;
+							}
+						}
+					});
+					if (rs == 1) {
+						$('#check').attr('disabled',"true");
+						$.post(url, data, function(data) {
+							if(data.stauts == 1){
+								tip(data.msg);
+								window.location.reload();
+							}else{
+								tip(data.msg);
+								return false;
+							}
+						}, "json");
+					} else {
+						return false;
+					}
+					return false;
+				});
+			});
+			function price(price){
+				var num = $('#num').val();
+				if(num == '') num=1;
+				var all_price = parseInt(price)*parseInt(num);
+				$('#price').text("$"+all_price);
+			}
+			
+			
+			
+			
+			
+			function tip(msg) {
+				$('body').append('<div id="msg" style="width:60%;position: fixed;top:30px;right:20%;word-wrap: break-word;border-radius:3px; background-color:rgba(0,0,0,0.5);box-shadow: 0 3px 6px rgba(0, 0, 0, .175); display: none; text-align: center; line-height:48px; padding:10px; font-size: 36px; z-index: 9999; color:#fff;font-family: Microsoft YaHei;"></div>');
+				$("#msg").text(msg);
+				$("#msg").fadeIn();
+				setTimeout('$("#msg").fadeOut();$("#msg").remove();', 2000);
+			}
+		</script>
+		
+		
+
+<style type="text/css">
+	.flexslider{width:982;height:360px;margin:1px auto;padding:1px;}
+	.flexslider2{width:902;height:360px;margin:1px auto;padding:1px;}
+	.flex-viewport{padding-left:5px;padding-right:5px;}
+	.products{margin:0px auto;margin-left:2px;margin-right:2px;width:982px;height:360px;}
+	.pastproducts{margin:0px auto;margin-left:20px;margin-right:20px;width:902px;height:350px;}
+	.product {height: 350px;width: 220px;margin-right: 28px;
+	/*float: left;position: relative;*/ border: 1px solid #DDD;}
+
+.pastproduct {height: 300px;width: 212px;margin-right: 10px;
+  /*float: left;position: relative;*/ border: 1px solid #CCC;background-color: #FFF;}
+
+
+.designtitle {
+	margin: 0px auto;
+	width: 1080px;
+	height:40px;
+	padding-bottom:10px;
+	padding-top:30px;
+}
+
+#b-bottom {
+	margin: 0px auto;
+	margin-top:20px;
+	width: 1080px;
+}
+#b-left {
+	float: left;
+	height: 380px;
+	width: 130px;
+}
+#b-right {
+	height: 350px;
+	width: 902px;
+	margin-left: 130px;
+}
+#header-all {
+	margin: 0px auto;
+	width: 1080px;
+	height: 250px;
+	margin-top:0px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CCC;
+}
+#mid {
+	margin: 0px auto;
+	margin-top:5px;
+	width: 982px;
+	height:360px;
+}
+
+
+.step-img{
+	width:30px;height:98px; 
+	padding-top:110px;
+}
+#bottom {
+	background-color: #f3f3f3;
+	height: 500px;
+	width: 100%;
+	margin-top: 40px;
+}
+
+#left-img {
+	height: 350px;
+	float: left;
+	width: 30px;
+}
+#right-img {
+	height: 350px;
+	float: right;
+	width: 30px;
+}
+#b-more {
+	margin-top: 20px;
+	margin-left: 3px;
+	height: 42px;
+	width: 195px;
+	background-image: url(/image/product1.1.png);
+	background-color: transparent;
+	text-align:center;
+	line-height:42px;
+}
+#more {
+	font-family: "Century Gothic",;
+	font-size: 16px;
+	font-weight: bold;
+	color: #15869f;
+
+}
+#explan {
+	padding: 5px;
+	
+	margin-left: 380px;
+	height: 180px;
+}
+#b-left-left {
+	float: left;
+	height: 393px;
+	width: 50px;
+	padding-left: 40px;
+}
+#b-left-right {
+	height: 393px;
+	width: 150px;
+	margin-left: 5px;
+	padding-left: 20px;
+}
+.step-img-2 {
+	height: 7px;
+	width: 15px;
+	margin-top: 10px;
+	padding-left: 5px;
+}
+
+.b-year {
+	height: 28px;
+	width: 100px;
+	margin-top: 18px;
+	float: top;
+	position: relative;
+}
+
+#h-vedio {
+	margin: 0px;
+	float: left;
+	width: 350px;
+}
+
+.p-font{
+	font-family:'Century Gothic';
+	font-size:18px;
+	font-weight:bold;
+	color:#666666;
+	margin: 0px auto;	
+}
+.p-font2{
+	font-family:'Century Gothic';
+	font-size:12px;
+	color:#666666;
+	margin:0 auto;
+}
+.p-font3{
+	font-family:'Century Gothic';
+	font-size:34px;
+	
+	margin:0 auto;
+}
+
+.bottom{height:100px;background-color:#CCC;margin-bottom:37px;margin-top:0px;position:relative;z-index:99;[
+ margin-bottom:0 !important;];[
+ bottom:37px !important;];}
+
+</style>

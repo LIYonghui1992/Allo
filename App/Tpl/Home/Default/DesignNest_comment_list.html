@@ -1,0 +1,119 @@
+<html>
+		
+	<head>
+	</head>
+	
+	<body style="width:1080px; background-color:#FAFAFA;" onload="auto_bottom();" onresize="auto_bottom();">	
+		
+		<div style="margin:0px auto;width:1080px;margin-top:20px;height:50px;">
+			<input name="nickname" id="nickname"  type="text" class="comment_input"  value="Your nickname"
+					 onfocus="if (value =='Your nickname'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Your nickname';this.style.color='#999'}" />		  
+  	</div>
+  	
+  	
+  	<div style="margin:0px auto;width:1080px;margin-top:5px;height:130px;">
+  	  <textarea name="comment_content"  id="comment_content" class="comment_text" 
+  					onfocus="if (this.value =='Say something...'){this.value ='';this.style.color='#333'}" 
+  					onblur="if (this.value ==''){this.value='Say something...';this.style.color='#999'}">
+  		</textarea>
+    </div>
+  	
+  	<div style="margin:0px auto;width:1080px;margin-top:5px;height:50px;">
+  			<input name="verify_code" id="verify_code"  type="text" class="comment_input"  style="width:160px;float:left;" />	
+  			<div class="comment_input"  style="width:160px;float:left;margin-left:10px;padding-left:0px;border-radius:0px;background-color:#FFF;">
+  				<img src="{:U('Home/Index/verify_big')}" onclick="javascript:resetVerifyCode();"   title="{:L('resetVerifyCode')}" id="verifyImage"/>
+  			</div>  					  
+  	</div>
+  	
+  	<div style="margin:0px auto;margin-top:5px;width:1080px;height:90px;">		  		
+  				<div style="height:50px;width:265px;background-color:#884697;text-align:center;border-radius:50px;margin:0px auto;" >
+    		    <a href="javascript:submit_comment();" id="buttonhref"> 
+    		  	 <font style="font-size:20px;font-weight: bold;color:#FFF;line-height:50px;" id="buttontip"> comment</font>
+    		    </a> 		
+          </div>  
+  	</div>
+
+
+	<notempty name="comment_list">
+		<ul>			            
+      <volist name="comment_list" id="comment" key="k">
+  		<li>
+  			<div style="width:1080px;height:100%;padding:20px 10px;margin-top:10px;border-top:1px solid #DDD;">
+					<p style="line-height:20px;margin-bottom:5px;margin-top:15px;"> 
+						<font style="font-size:20px;color:#444;font-weight:bold;">{$comment.nick_name}</font>
+						<font> | {$comment.createtime|date="Y.m.d",###}</font>
+					</p>
+					
+					<p style="line-height:24px;margin-top:5px;font-size:14px;">
+							{$comment.content|nl2br}									
+					</p>	
+					
+					<notempty name="comment['admin_reply']">
+					  <p style="line-height:20px;margin-bottom:5px;margin-top:15px;"> 
+					  	<img src="../Public/image/reply.png" style="margin:0px 10px 3px 10px;"/>
+					  	<font style="color:#444;font-weight:bold;">Allocacoc</font>
+							<font> | {$comment.admin_reply|nl2br} </font> 									
+					  </p>	
+					</notempty>					
+				
+				</div>
+  		</li>                               
+	    </volist>	
+	  </ul>
+	  
+	<else/>
+		
+		<!--  
+		<div style="margin:0px auto;width:1080px;margin-top:20px;height:50px;">
+		-->
+		<div style="width:1080px;height:180px;padding:20px 10px;margin-top:10px;border-top:1px solid #DDD;">
+		
+			<div style="margin:0px auto;width:69px;margin-top:60px;">
+  			<img  src="../Public/image/leave_comment.png" style="width:69px;height:53px;margin:0px auto;"/>
+  		</div>
+  		<div  style="text-align:center;margin:5px auto;margin-top:10px;font-size:18px;color:#999;">	
+		   <font> Leave your comment</font>
+	    </div>	
+		</div>
+  	
+	</notempty>	
+	
+	
+	
+	
+	  <notempty name="page">
+		  <div class="page">
+					{$page}
+		  </div>
+		</notempty>	
+		
+		<div style="width:100%;height:10px;"></div>
+	</body>
+	
+</html>
+
+<script type="text/javascript">	
+	
+	$(document).ready(function()
+  	  {	 $(".bottom").css('margin-top','0px');
+  	  	 $("#comment_content").val("Say something..."); 	
+  	   	 $(".page a").each(function(index){
+  	   	 	 temp_href = this.href;
+  	   	 	 //this.attr('href',val.replace('%2c',','));
+  	   	 	 this.removeAttribute('href');
+  	   	 	 //this.onclick="load_commnent('"+temp_href+ "')";
+  	   	 	 //this.attr('onclick','load_commnent('+temp_href+',this)');
+  	   	 	 $(this).attr('href','javascript:load_commnent(\''+ temp_href + '\');'); 
+  	   	 	// $(this).bind("click", 'load_commnent('+temp_href+')');
+  	   	 });
+  	  } );
+  	  
+  	  
+</script>
+
+
+
+  
+           
+
+

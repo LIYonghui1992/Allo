@@ -1,0 +1,8 @@
+<if condition="ACTION_NAME neq 'comment_list'  && ACTION_NAME neq 'blog_list'">
+  <include file="Home:header"/>
+</if>
+		{__CONTENT__}
+<if condition="ACTION_NAME neq 'comment_list' && ACTION_NAME neq 'blog_list'">
+	<include file="Home:footer"/>
+
+</if>

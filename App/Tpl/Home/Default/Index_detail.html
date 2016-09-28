@@ -1,0 +1,215 @@
+<div stye="width:100%;height:770px;">
+	<div class="fullSlide" id="top_slider" style="width:100%; min-width:1280px;margin: 0 auto;height: 850px; background: rgba(255, 255, 255, 0);">
+			<div class="bd" style="height: 700px;">
+				<ul>
+					<notempty name="banners[0]">
+						<!--
+						<volist name="banners" id="vo">
+							<li _src="url({$vo})"></li>
+						</volist>
+						-->
+						<volist name="banners" id="vo">  
+							<notempty name="vo">
+							<li style="z-index: 900; display: none; background: url({$vo}) 50% 0% no-repeat;"> </li>
+							</notempty>		  
+						</volist>
+						
+						<else />
+						  <!--<li style="z-index: 900; display: none; background: url(../Public/image/banner201.jpg) 50% 0% no-repeat;"> </li>-->
+							<!--<li style="z-index: 900; display: none; background: url(../Public/image/banner201.jpg) 50% 0% no-repeat;"> </li>-->
+							<!--<li style="z-index: 900; display: none; background: url(../Public/image/banner201.jpg) 50% 0% no-repeat;"> </li>-->
+							<!--<li style="z-index: 900; display: none; background: url(../Public/image/banner201.jpg) 50% 0% no-repeat;"> </li>-->
+					</notempty>
+				</ul>
+			</div>
+			<div class="top" style="width:100%;height:700px;">
+				<a href="{:U('Index/index')}">
+				<div class="logo"><img src="../Public/image/logo.png" width="100%" />
+				</div>
+				</a>
+				<div class="nav">
+					<ul>
+						<li>
+							<a href="{:U('Product/index')}" class="<if condition=" $module_name eq 'Product' "> a1<else />a</if>">{$Think.lang.PRODUCTS}</a>
+						</li>
+
+						<li>
+							<a href="{:U('DesignNest/index')}" target="_blank" class="<if condition=" $module_name eq 'DesignNest' ">a1<else />a</if>">{$Think.lang.DESIGN_CHALLENGE}</a>
+						</li>
+						<li>
+							<a href="{:U('Shop/index')}" class="<if condition=" $module_name eq 'Shop' ">a1<else />a</if>">{$Think.lang.SHOP}</a>
+						</li>
+						<!--
+						<li>
+							<a href="{:U('News/index')}" class="<if condition=" $module_name eq 'News' ">a1<else />a</if>">{$Think.lang.NEWS}</a>
+						</li>
+						-->
+						<li>
+							<a href="{:U('Blog/index')}" class="<if condition=" $module_name eq 'Blog' ">a1<else />a</if>">{$Think.lang.BLOG}</a>
+						</li>
+						<!--
+						<li>
+							<a href="{:U('Download/index')}" class="<if condition=" $module_name eq 'Download' ">a1<else />a</if>">{$Think.lang.DOWNLOADS}</a>
+						</li>
+						<li>
+							<a href="{:U('About/index')}" class="<if condition=" $module_name eq 'About' ">a1<else />a</if>">{$Think.lang.ABOUT_US}</a>
+						</li>
+						<li>
+							<a href="{:U('Contact/index')}" class="<if condition=" $module_name eq 'Contact' ">a1<else />a</if>">{$Think.lang.CONTACT}</a>
+						</li>
+						-->
+					</ul>
+				</div>
+			</div>
+			<div class="hd" style="margin:0px auto;">
+				<ul style="margin:0px auto;">
+					<li></li>
+				</ul>
+			</div>
+	</div>
+</div>		
+		
+<div class="fmian">
+	<div class="layout_list">
+		
+		<if condition="$Think.lang.VIDEO_URL eq 'VIDEO_URL'">
+		<else />
+			<div class="video2">
+  			<div class="content">
+  				{$Think.lang.VIDEO_URL}
+  			</div>
+		  </div> 
+		</if>
+		
+		<!-- <include file="Home:bottom" /> -->
+		<script type="text/javascript">
+			$(function() {
+				$(".fullSlide").slide({
+					titCell : ".hd ul",
+					mainCell : ".bd ul",
+					effect : "fold",
+					autoPlay : true,
+					autoPage : true,
+					interTime : 5000,
+					trigger : "click",
+					startFun : function(i) {
+						var curLi = $(".fullSlide .bd li").eq(i);
+						if (!!curLi.attr("_src")) {
+							curLi.css("background-image", curLi.attr("_src")).removeAttr("_src")
+						}
+					}
+				});
+				var imglist = "{$imglist}";
+				var strs = new Array();
+				//定义一数组
+				strs = imglist.split(",");
+				//字符分割
+				$(".fullSlide .hd li").each(function(index) {
+					$(this).css("background", "url(" + strs[index] + ")").css('backgroundSize', '100%');
+					$(this).css("filter","progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=Enabled, sizingMethod=Scale , src=" + strs[index] + ")");
+				});
+			})
+		</script>
+		<style type="text/css">
+			/*
+			.fullSlide .hd {
+				width: 100%;
+				position: absolute;
+				z-index: 1;
+				bottom: 0;
+				left: 0;
+				height: 150px;
+				line-height: 30px;
+			}
+    */
+    .fullSlide .hd {
+				margin:0px auto;
+				overflow:hidden;
+				width:1100px;			
+				position: relative;
+				z-index: 1;
+				bottom: 0;
+				left: 0;
+				height: 150px;
+				line-height: 30px;
+			}
+			
+			.fullSlide .hd ul {
+				text-align: center;
+			}
+      /*
+			.fullSlide .hd ul li {
+				cursor: pointer;
+				display: inline-block;
+				*display: inline;
+				zoom: 1;
+				width: 180px;
+				height: 90px;
+				margin: 25px 10px;
+				overflow: hidden;
+				filter: alpha(opacity=50);
+				opacity: 0.5;
+				line-height: 999px;
+			}
+			*/
+			.fullSlide .hd ul li {
+				cursor: pointer;
+				display: inline-block;
+				*display: inline;
+				zoom: 1;
+				width: 255px;
+				height: 90px;
+				margin: 25px 10px 25px 10px;
+				
+				overflow: hidden;
+				filter: alpha(opacity=50);
+				opacity: 0.5;
+				line-height: 999px;
+			}
+
+			.fullSlide .hd ul .on {
+				opacity: 1;
+				filter: alpha(opacity=100);
+				background-color: #000000;
+			}
+			.fullSlide .bd li {
+				width: 100% !important;
+				height: 700px;
+				overflow: hidden;
+				text-align: center;
+			}
+
+			.bd ul li {
+				background-size: 100%;
+				background: no-repeat;
+				height: 620px;
+				background-repeat: no-repeat;
+			}
+			
+      /*
+			.video2 {
+				width: 1080px;
+				margin: 20px auto
+			}
+
+			.video2 > .content {
+				width: 900px;
+				margin: 10px auto;
+				text-align: center;
+			}
+			*/
+			.video2 {
+				width: 1080px;
+				margin: 0px auto;				
+				min-width:1080px;
+				margin-bottom:20px;
+				
+			}
+
+			.video2 > .content {
+				width: 1080px;
+				margin: 0px auto;
+				text-align: center;
+				min-width:1080px;
+			}
+		</style>

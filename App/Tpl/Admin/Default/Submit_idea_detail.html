@@ -1,0 +1,84 @@
+<div id="msg"></div>
+<div id="filelist" class="hide"></div>
+<div class="error"><ul></ul></div>
+<table cellpadding=0 cellspacing=0 border=1 class="table_form" width="100%">
+
+
+	<tr>
+			<td width="10%" >title</td><td width="90%" >{$idea.title}</td>
+	</tr>
+	<tr>
+			<td width="10%" >name</td><td width="90%" >{$idea.first_name}, {$idea.last_name}</td>
+	</tr>
+	<tr>
+			<td width="10%" >email</td><td width="90%" >{$idea.email}</td>
+	</tr>
+	<tr>
+			<td width="10%" >country</td><td width="90%" >{$idea.country}</td>
+	</tr>
+	<tr>
+			<td width="10%" >submit time</td><td width="90%" >{$idea.createtime|date="Y.m.d",### }</td>
+	</tr>
+  <tr>
+			<td width="10%" >desc</td><td width="90%" >{$idea.product_desc}</td>
+	</tr>
+	<tr>
+			<td width="10%" >video</td><td width="90%" ><a href="{$idea.videourl}">{$idea.videourl}</a></td>
+	</tr>
+	<tr>
+			<td width="10%" >product_pic</td><td width="90%" ><img src="{$idea.product_pic}" style="width:200px;height:160px;"/></td>
+	</tr>
+	
+	<tr>
+			<td width="10%" >slider_pic</td>
+			<td width="90%" >
+				<table>
+					<volist name="idea.slider" id="vo" >
+						<tr>
+							<td>
+				      <img src="{$vo}" style="width:200px;height:160px;"/>
+				      </td>
+				    </tr>
+				  </volist>
+				</table>
+				
+			</td>
+	</tr>
+	</table>
+	
+	<br/>
+	<br/>
+	<br/>
+	
+	<table cellpadding=0 cellspacing=0 border=1 class="table_form">
+		<tr>
+			<td width="200px" align="center">feature pic</td>
+			<td width="600px" align="center">feature text</td>
+		</tr>
+		
+			<volist name="idea.featurelist" id="vo" key="k">
+				<tr height="180px">
+					<td width="200px" height="180px"> <img src="{$vo.pic}" style="width:200px;height:160px;"/> </td>
+				  <td width="600px">{$vo.text}</td>
+				</tr>
+				
+			</volist>
+		
+	</table>
+
+
+<div id="bootline"></div>
+
+<div id="btnbox" class="btn">
+<if condition="$vo['id']!=''"><input TYPE="hidden" name="id" value="{$vo.id}"></if>
+<input type="hidden"  name="lang" value="{$langid}" />
+<input type="hidden" name="forward" value="{$_SERVER['HTTP_REFERER']}" />
+<INPUT TYPE="button"  value="go back" class="button" onclick="javascript:history.back(-1);">
+</div>
+
+
+</div>
+
+<script>
+$("#nav  ul").hide();
+</script>

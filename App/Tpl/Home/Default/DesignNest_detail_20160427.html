@@ -1,0 +1,707 @@
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		 <div class="design_main clearfix" style="margin-top:30px;">
+			
+			<div id="top" style="margin:0px auto;margin-top:50px;width:1080px;height:400px;">
+				<div id="design-img" style="float:left;width:430px;height:400px;">
+					
+					<div style="width:430px;height:340px;margin-top:10px;">
+						<img id="scrollpic" src="{$fund['expanded_img']}" style="width:400px;height:320px;padding-left:20px;"  />
+					</div>
+										
+				</div>
+				
+				<div  style="float:left;margin-left:10px;width:2px;margin-top:10px;height:310px;border-right-width: 1px;border-right-style:solid;border-right-color: #CCC;">
+				</div>
+				
+				
+				
+				<form>
+				<div id="top-right" style="width:580px;margin-left:510px;height:500px;"> 
+					<ul>
+						 <font style="font-size:30px;font-weight:bold;"> {$fund['title']}  </font>
+						 
+						
+						 <if condition=" $fund['orderflag'] eq 1">
+						   <div style="float:right;margin-right:20px;width:195px;height:42px;text-align:center;
+						 	 background-color:transparent;background-image:url(../Public/image/product1.1.png);line-height:42px;">
+						 	
+						 	   <a href="javascript:go_order({$fund['id']});">
+						 		  <font style="font-size: 20px;color:#15869f;">Pre-order now</font>                                       					       
+                 </a>              
+				       </div>        
+            </if>   
+                 
+					</ul>
+					<ul>
+						 <font style="font-family:'Century Gothic';font-size:12px;"> {$fund['developer']}  </font>
+					</ul>
+					<br> 
+					<ul style="line-height:40px;">
+					<font id="pricetype" style="font-family:'Century Gothic';font-size:20px;color:#15869f;vertical-align: bottom;">{$fund['price']|substr=0,1}</font>
+					<font id="price" style="font-family:'Century Gothic';font-size:40px;color:#15869f;vertical-align: bottom;">{$fund['price']|substr=1}  </font>
+					</ul> 
+					<br> 
+					<if condition="$type_listsize gt 0">
+						<ul>
+  						<font style="font-family:'Century Gothic';float:left;">type</font>
+  						
+  						<volist name="type_list" id="vo">						 
+  							 <input type="radio" name="aaa" style="display:none"> 
+  							 <img id="{$vo.id}" class="type" src="{$vo.type_pic}" title="{$vo.type_name}" 
+  							 onclick="changeType(this.id,'{$vo.price}','{$vo.big_pic}','{$vo.type_pic}');" /> 							 							
+  						</volist>
+  					
+  					</ul> 					
+					 <br> 
+					</if>
+					
+  					
+					
+					<ul style="line-height:26px;">
+						<font style="font-family:'Century Gothic';float:left;">qty</font>
+						
+						<div style="margin-left:40px;width:106px;height:26px;
+							background-image:url(../Public/image/product2.1.png); ">
+							<div id="minus" style="width:22px;height:26px;float:left;" onclick="changeqty(0);"></div >
+							<div style="float:left;width:62px;height:24px;padding-top:1px;overflow:hidden;">
+								<input id="qty" type="input" value="1" style="width:62px;border-left:0px;border-top:0px;border-right:0px;border-bottom:0px; text-align:center;line-height:24px; "/>
+							</div>
+						<div id="plus"  style="width:22px;height:26px;float:left;" onclick="changeqty(1);"></div >
+						</div>   
+						
+					</ul>
+					
+					<br>
+					<ul style="line-height:46px;">
+						 <font style="font-family:'Century Gothic';font-size:18px;color:#666666;"> Funding target  </font>
+					</ul> 
+					
+					<ul style="line-height:36px;"> 
+						<div style="border:1px solid #DDD; overflow:hidden;border-radius:10px; width:58%;">
+                  <span style="display: block;background:#15869f;
+                  text-align:left;height:8px;width:{$fund['pcs_ordered']/$fund['funding_goal']*100}%;"></span>
+            </div>
+                
+						  
+					</ul>
+					
+					<ul style="line-height:26px;"> 
+						<font style="font-family:'Century Gothic';font-size:20px;font-weight:bold;color:#666666;"> {$fund['pcs_ordered']}  </font>
+						of 
+						<font style="font-family:'Century Gothic';font-size:20px;font-weight:bold;color:#666666;"> {$fund['funding_goal']}  </font>
+						target
+						</ul>
+					
+					<ul>
+					  <div style="width:575px;height:55px;background-image:url(../Public/image/detail_more.png); margin-top:20px;">
+					  	<div  style="margin:0px auto;padding-top:10px;padding-left:20px;padding-right:10px;" >
+					  		<font style="font-size:14px;color:#777777;">
+                When the product reaches its funding target we will let you know its estimated time of delivery,
+               </font>
+               <a href="/Bottom/disclaimer" style="text-decoration:underline;"> <font style="font-size:14px;color:#15869f;"> read more here >> </font> </a>
+                  
+					  	</div>
+					  	
+            </div>
+					</ul>
+				</div>
+				</form>
+				<input type="hidden" id="typeid" value=""/>
+				<input type="hidden" id="typepic" value=""/>
+			</div>
+			
+			<!--
+			<div style="margin:0px auto;margin-top:10px;width:1080px;margin-bottom:5px;">
+				<strong><font style="font-family:'Century Gothic';font-size:20px;color:#333333;"> Introduction  </font></strong>
+
+			</div>
+			
+			-->
+			<empty name="fund['slide_pic']">
+				<empty name="fund['slide_pic_2']">
+					<empty name="fund['videourl']">
+					<div style="margin:0px auto;margin-top:10px;width:1080px;margin-bottom:5px;border-bottom: 1px solid #CCC;">
+			    </div>
+			    </empty>
+				</empty>	
+			</empty>
+			
+			
+			<!--
+			<notempty name="fund['videourl']">
+  			<div id="info" style="margin:0px auto;height:300px;margin-top:1px;width:1080px;margin:20px 0px;background-color:#363636;">  				   				 
+  				  <div id="show_video" style="width:608px;margin:0px auto;"><img src="../Public/image/product1.1.png" onclick="play_video();"/></div>
+  			<input type="hidden" id="video_url" value='{$fund['videourl']|stripslashes}'/>
+  			</div>
+			</notempty>
+			-->
+		
+			<notempty name="fund['videourl']">
+				<div style="margin:0px auto;margin-top:10px;width:1080px;margin-bottom:5px;border-bottom: 1px solid #CCC;">
+			  </div>
+			    
+  			<div id="info" style="margin:0px auto;margin-top:1px;width:1080px;margin:20px 0px;background-color:#363636;">  				   				 
+  				  <div style="width:608px;margin:0px auto;">{$fund['videourl']|stripslashes}</div>
+  			</div>
+			</notempty>
+		
+
+
+      <notempty name="fund['slide_pic']">
+        <div class="picslide">
+          <div class="bd flexslider" id="slide_img">
+            <ul class="slides">
+              <volist name="fund['slide_pic']" id="vo">
+                <li><img src="{$vo}" width="100%"></li>
+              </volist>
+            </ul>
+          </div>
+        </div>
+      </notempty>
+      
+      
+      <notempty name="fund['slide_pic_2']">
+        <div class="picslide">
+          <div class="bd flexslider" id="slide_img_2">
+            <ul class="slides">
+              <volist name="fund['slide_pic_2']" id="vo">
+                <li><img src="{$vo}" width="100%"></li>
+              </volist>
+            </ul>
+          </div>
+        </div>
+      </notempty>
+      
+      <notempty name="features">
+      	<div class="list3" style="margin-top:20px;margin-bottom:20px;border-bottom: 1px solid #CCC;">
+          <ul>
+            <volist name="features" id="vo">
+              <li style="margin-bottom:30px;width:100%;margin-left:0px;height:144px;">
+                <div style="float:left;width:236px;height:144px;" ><img src="{$vo.img}" style="width:236px;height:144px;" ></div>
+                <div style="float:left;margin-left:30px;width:800px;height:112px;padding-top:20px;">
+                  <p style="font-size:20px; color:#444; font-weight:bold;">{$vo.title}</p>
+                  <p style="font-size:16px; color:#666;margin-top:10px;line-height:29px;">{$vo.text}</p>
+                </div>
+              </li>
+            </volist>
+          </ul>
+        </div>
+  
+  
+      </notempty>
+      
+      <notempty name="fund['time_info']">
+  			<div style="margin:0px auto;margin-top:1px;width:1080px;padding:20px 0px;border-bottom: 1px solid #CCC;">  				   				 
+  				  {$fund['time_info']}
+  			</div>
+			</notempty>
+     
+
+      <!--
+			<div id="info" style="margin:0px auto;margin-top:1px;width:1080px;border-top: 1px solid #CCC;">
+				{$fund['winner_text']}
+			</div>
+			-->
+			<div id="info" style="margin:0px auto;margin-top:1px;width:1080px;height:380px;padding:20px 0px 0px 0px;">
+				<div style="float:left;height:380px;width:560px; ">
+					<img src="{$fund['designer_img']}" style="height:380px;width:560px; "/>
+				</div>
+				<div style="float:left;margin-left:30px;padding-top:20px;padding-right:50px;width:440px;height:360px;text-align:justify;line-height:2;">
+					<ul >
+						<li> <h1><if condition="$fund['cooperateflag'] eq 0">Designer<else/>Designers</if></h1> </li>
+						<li> <font >{$fund['designer_introd']|nl2br}</font></li>
+					</ul>
+					
+					
+				</div>
+			</div>
+			
+			
+		</div>
+
+<!-- update 20160119-->
+</div>
+</div>
+
+<div id="bg_div" style="width:100%;min-width:1280px;margin-top:50px;background-color:#FAFAFA;">
+	<div style="margin:0px auto;width:1080px;height:85px;border-bottom: 1px solid #DDD;">
+		<!--
+		<div id="tab_1" onclick="set_tab_index(1);" class="comment_or_blog">
+			Designer Blogs
+		</div>	
+		-->
+		<div id="tab_0" onclick="set_tab_index(0);" class="comment_or_blog">
+			Comments
+		</div>		
+	</div>
+	
+	<div class="comment_blog_div" id="comment_list">
+	</div>
+	<div class="comment_blog_div" id="blog_list">
+	</div>
+	
+</div>		
+
+<div id="succ" style="text-align:center;display: none;padding-bottom:50px;">
+	<div style="margin:0px auto;margin-top:40px;">
+		<img  src="../Public/image/checkout_success.png" style="width:79px;height:79px;margin:0px auto;"/>
+	</div>	
+	<div id="succinfo" style="text-align:center;margin:5px auto;margin-top:30px;padding:10px;font-size:16px;font-color:#666666;">	
+		Comment submitted, waiting for approval.
+	</div>				     
+</div>
+  
+<div id="fail" style="text-align:center;display: none;padding-bottom:50px;">
+	<div style="margin:0px auto;margin-top:40px;">
+		<img  src="../Public/image/checkout_fail.png" style="width:79px;height:79px;margin:0px auto;"/>
+	</div>	
+	<div id="error_tip" style="text-align:center;margin:5px auto;margin-top:30px;padding:10px;font-size:16px;font-color:#666666;" id="info">	
+		
+	</div>    
+</div>		
+  
+	<!--	   <include file="Home:bottom" /> -->
+	<link type="text/css"  href="../Public/flexslider/flexslider.css" rel="stylesheet"  />
+  <script type="text/javascript" src="../Public/flexslider/jquery.flexslider-min.js"></script>
+	<script type="text/javascript">	
+			//var tab_index = 0;//0 comment, 1 blog
+			/*
+			tab_index=0;
+			if tab_index==0 comments,ready  load comment list
+			else load blog list
+				comment list && blog list, in a big div, div display==none, first yincang div ,ready, display a div according to tab_index
+			*/	
+			
+			$(document).ready(function()
+  	  {		
+  	   	document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+  	   	+'<a href="{:U(\'DesignNest/index\')}">'+"{$Think.lang.DESIGN_CHALLENGE}"+'</a>'
+  	   	+'<img src="../Public/image/arrow_footer.png"/>' 
+  	   	+'<a href="'+"/DesignNest/detail/id/"+"{$fund['id']}"+'" >'
+  	   	+"{$fund['title']}"+'</a> '; 	
+  	   	
+  	   	set_tab_index(0);
+  	   	
+  	   	
+  	   	//$(".bottom").css('margin-top','0px');
+  	  } );
+			
+			
+			
+			function load_commnent(comment_url){
+				//alert(comment_url);
+				$('#comment_list').load(comment_url);
+			}
+			
+			function load_blog(go_page){
+				blog_url = '/DesignNest/blog_list/design_id/'+"{$fund['id']}"+'/page/'+go_page;
+				//alert(blog_url);
+				$('#blog_list').load(blog_url);
+			}
+			
+			
+			function set_tab_index(tab_index){
+				if(tab_index == 0){
+					//$('.comment_or_blog')   border-bottom: 2px solid #09c;
+					$('#tab_1').css("border-bottom","");
+					$('#tab_1').css("color","#666");
+					$('#tab_0').css("border-bottom","2px solid #09c");
+					$('#tab_0').css("color","#15869f");
+  	   		$('#comment_list').load('/DesignNest/comment_list/design_id/'+"{$fund['id']}");
+  	   		//document.getElementById("comment_list").innerHTML = 'comment';
+  	   		document.getElementById("blog_list").style.display='none';
+  	   		document.getElementById("comment_list").style.display='block';
+  	   	}
+  	   	if(tab_index == 1){
+  	   		$('#tab_0').css("border-bottom","");
+					$('#tab_0').css("color","#666");
+					$('#tab_1').css("border-bottom","2px solid #09c");
+					$('#tab_1').css("color","#15869f");
+					
+  	   		$('#blog_list').load('/DesignNest/blog_list/design_id/'+"{$fund['id']}");
+  	   		//document.getElementById("blog_list").innerHTML = 'blog';
+  	   		document.getElementById("comment_list").style.display='none';
+  	   		document.getElementById("blog_list").style.display='block';
+  	   	}
+  	   	//document.getElementById("comment_list").innerHTML = '<div style="width:200px;height:800px;"></div>';
+  	   	
+			}
+			
+			function changeType(typeId,price,big_pic,type_pic)
+			{
+				var oImg = document.getElementsByTagName('img');
+				for (var i = 0; i < oImg.length; i++) 
+				{
+					if(oImg[i].className =='type')
+					{
+					  if (oImg[i].id == typeId) {
+						oImg[i].previousSibling.previousSibling.checked = true;
+						oImg[i].style.border = '1px solid #DDD';
+						document.getElementById("scrollpic").src = big_pic;
+						document.getElementById("price").innerHTML = price.substring(1);
+						document.getElementById("typeid").value = typeId;
+						document.getElementById("typepic").value = type_pic;
+						
+						
+					  } 
+					  else {
+						 oImg[i].style.border = '1px  ';
+					  }
+				}
+				}
+			}
+			
+			
+			
+			function changeqty(type)
+			{
+				qty =	parseInt(document.getElementById("qty").value);
+				if(type==0 && qty>0)
+				  document.getElementById("qty").value = qty-1;
+				else if(type==1)
+					document.getElementById("qty").value = qty+1;
+				
+ 
+			}
+			
+			function go_order(winnerid)
+			{
+				//var url = {:U('Design/order_designwinner',array('id'=>winnerid))};
+				var typeid = document.getElementById("typeid").value;
+				var price = document.getElementById("pricetype").innerHTML+document.getElementById("price").innerHTML;
+				var size = {$type_listsize};
+				if(typeid==""  && parseInt(size)>0 )
+				{
+					 alert('please choose color');
+				 	 return;
+				}
+				
+				var qty = document.getElementById("qty").value;
+				 if(qty=="" || qty==null)
+				 {
+				 	 alert('please input qty');
+				 	 return;
+				 }
+				 if(parseInt(qty)<1)
+				 {
+				 	 alert('qty is 0');
+				 	 return;
+				 }
+				 
+				var url = '/DesignNest/order_designwinner/id/'+winnerid + '/qty/' + parseInt(qty)
+				         +  '/typeid/' + typeid  + '/price/'+price;
+				if(typeid=="")
+				  var url = '/DesignNest/order_designwinner/id/'+winnerid + '/qty/' + parseInt(qty)
+				         +  '/price/'+price;
+				//alert(url);
+				window.location = url;
+				
+				
+				
+			}
+			
+			
+			function price(price){
+				var num = $('#num').val();
+				if(num == '') num=1;	
+				var all_price = parseInt(price)*parseInt(num);
+				$('#price').text("$"+all_price);
+			}
+			
+			
+
+			$(function(){
+				
+				if($(".flexslider").width()<=1280)
+      	{
+      	   $(".flexslider").width(1080);
+      	}
+      	$("#slide_img").flexslider({
+      	    animation:"slide",
+      	    slideshowSpeed: 5000,
+      	    pauseOnHover:true,
+      	    pauseOnAction:false,
+      	    controlNav:false,
+      	    slideshow: true,
+      	    animationLoop: true,
+      	});
+      	
+      	$("#slide_img_2").flexslider({
+      	    animation:"slide",
+      	    slideshowSpeed: 5000,
+      	    pauseOnHover:true,
+      	    pauseOnAction:false,
+      	    controlNav:false,
+      	    slideshow: true,
+      	    animationLoop: true,
+      	    reverse:true,
+      	});
+     
+	
+				$(".desc").click(function() {					
+					var window_height = $(window).height();
+					var window_width = $(window).width();
+					var maxHeight='600px';
+                    var _top='115px';
+                    var _width='60%';
+                    if(window_height<800)
+                    {
+                        maxHeight=window_height*0.7;
+                        _top=0;
+                        if(window_width<1080){
+                             _width='80%';  
+                        }else{
+                             _width='auto';  
+                        }
+                    }
+
+					var id = $(this).data("id");
+					
+					var url = "{:U('DesignNest/fundDetail')}";
+					$.post(url, {id:id}, function(data) {
+						var title = data.title;
+						var text = data.winner_text;
+						var developer = data.developer;
+						var img = data.expanded_img;
+						var deadline = data.deadline;
+						var price = data.price;
+						$('#detail_order2').data("id",id);
+						
+						$('.detail_title').html(title+"<br><span style='text-align: left;font-size: 16px;position: relative;top: -8px;'>"+developer+"</span>");
+						$('.detail_img').attr("src", img);
+						$('.detail_text').html(text);
+						$('#detail_price2').text("$"+price);
+						$('#detail2').css('overflow', 'auto');
+						$('#detail2').css('maxHeight',maxHeight);
+						art.dialog({
+							id: 'des',
+							title: title,
+							content: document.getElementById("detail2"),
+							width: _width,
+							top:_top,
+							lock: true,
+							fixed: true,
+						});
+					},"json");	
+                    
+				});
+			
+				$(".order").click(function() {
+					art.dialog.list['des'].close();
+					var window_height = $(window).height();
+                    var window_width = $(window).width();
+                    var maxHeight='600px';
+                    var _top='115px';
+                    var _width='60%';
+                    if(window_height<800)
+                    {
+                        maxHeight=window_height*0.7;
+                        _top=0;
+                        if(window_width<1080){
+                             _width='80%';  
+                        }else{
+                             _width='auto';  
+                        }
+                    }
+					
+					var id = $(this).data("id");
+					var url = "{:U('DesignNest/fundDetail')}";
+					
+					$.post(url, {id:id}, function(data) {
+						
+						var title = data.title;
+						var img = data.background_img;
+						var deadline = data.deadline;
+						var price = data.price;
+						var developer  = data.deadline;
+						
+						var num = $('#num').val();
+						if(num == '') num=1;
+						var all_price = parseInt(price)*parseInt(num);
+						
+						$('.order_title').text(title);
+						$('.order_h3').text(developer);
+						$('#price').text("$"+all_price);
+						$("#order_img").attr("src",img);
+						$('#design_id').val(id);
+						$('#ecprice').val(price);
+						$('#order').css('overflow', 'auto');
+						$('#order').css('maxHeight',maxHeight);
+						art.dialog({title: title, content: document.getElementById("order"),width:_width,top:_top,lock: true,
+							close: function () {
+								$('#num').val('');
+							}
+						}); 						
+					},"json");
+
+				});
+			
+				$("#check").click(function() {
+					var url    = "{:U('DesignNest/order')}";
+					var data   = $("#pform").serializeArray(); 
+					var rs     = 1;
+					$("input[type='text']").each(function(index, element) {
+						if (this.value == '' && (this.name != 'company' && this.name != 'phone')) {
+								rs = 0;
+								tip('Entry cannot be empty!');
+								return false;
+						}
+						if(this.name == 'email'){
+			
+							if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))){
+								rs = 0;
+								tip('Please enter a valid mailbox!');
+								return false;
+							}
+						}
+					});
+			
+					if(rs == 1){
+						$('#check').attr('disabled',"true");
+						$.post(url,data,function(data){
+							if(data.stauts == 1){
+								tip(data.msg);
+								window.location.reload();
+							}else{
+								tip(data.msg);
+								return false;
+							}
+						 },"json"); 
+					}else{
+						return false;
+					}
+					
+					return false;
+				});
+			});
+			
+
+			function tip(msg)
+			{  
+			    $('body').append('<div id="msg" style="width:60%;position: fixed;top:30px;right:20%;word-wrap: break-word;border-radius:3px; background-color:rgba(0,0,0,0.5);box-shadow: 0 3px 6px rgba(0, 0, 0, .175); display: none; text-align: center; line-height:48px; padding:10px; font-size: 36px; z-index: 9999; color:#fff;font-family: Microsoft YaHei;"></div>')    ;
+			    $("#msg").text(msg);
+			    $("#msg").fadeIn();
+			    setTimeout('$("#msg").fadeOut();$("#msg").remove();',2000);
+			}
+			
+			
+			function play_video(){document.getElementById("show_video").innerHTML=document.getElementById("video_url").value;
+				//"{$fund.videourl}";
+			}
+			
+			
+			
+			function comment_tip(result){
+				if(result==1){
+					$('#succ').css('overflow', 'auto');
+					$('#succ').css('maxHeight','600px');
+							art.dialog( {
+								title: '',
+								content: document.getElementById("succ"),
+								width: '500px',
+								top:'70%',
+								time:10
+								} );
+							//clear 
+							document.getElementById("nickname").value = ''; 
+							document.getElementById("comment_content").value=''; 
+							
+							$('#comment_list').load('/DesignNest/comment_list/design_id/'+"{$fund['id']}");
+				}
+				if(result==2){
+					$('#fail').css('overflow', 'auto');
+					$('#fail').css('maxHeight','600px');
+					document.getElementById('error_tip').innerHTML='The verification code you entered is incorrect.';
+					art.dialog( {
+						    title: '',
+								content: document.getElementById("fail"),
+								width: '500px',
+								top:'70%',
+								time:10
+								} );
+				}
+				
+				if(result==3){
+					$('#fail').css('overflow', 'auto');
+					$('#fail').css('maxHeight','600px');
+					document.getElementById('error_tip').innerHTML='Sorry, fail to submit comment, please try again.	';
+					art.dialog( {
+						    title: '',
+								content: document.getElementById("fail"),
+								width: '500px',
+								top:'70%',
+								time:10
+								} );
+				}
+			}
+			
+			function submit_comment(){
+				
+				//document.getElementById("comment_list").innerHTML = '<div style="width:200px;height:100px;"></div>';
+				
+				//check verify code first
+				//check nickname content verify_code is not empty
+				
+				//ajax submit, and refresh comment list
+				var data =  { 
+					nick_name: $("#nickname").attr("value"),////document.getElementById("nickname").value, 
+					content:  $("#comment_content").attr("value"),//document.getElementById("comment_content").value,
+					design_id:{$fund['id']},
+					verify_code: $("#verify_code").attr("value"),//document.getElementById("verify_code").value
+					};
+					
+
+				var url = "{:U('DesignNest/submit_comment')}";
+					$.post(url, data, function(data){
+						
+						comment_tip(data.status);	
+						/*
+						if(data.status==1){
+							comment_tip(1);	
+						}
+						if(data.status==2){
+							art.dialog( {
+							  	content:'wrong verify code !',
+							  	time:3,
+							  	} );
+						}
+						if(data.status==0){					
+							  art.dialog( {
+							  	content:'fail to submit!',
+							  	time:3,
+							  	} );							  
+						}
+						*/
+						$("#verify_code").attr("value","");//document.getElementById("verify_code").value='';
+				    resetVerifyCode();
+						
+					},"json");	
+					
+				
+			}
+			
+			
+			function resetVerifyCode(){
+				//alert('resetVerifyCode');
+				$("#verifyImage").attr("src","{:U('Home/Index/verify_big')}");//document.getElementById("verifyImage").src="{:U('Home/Index/verify_big')}";
+			}
+		</script>
+		
+		
+		
+	<style type="text/css">
+	.type{width:20px;height:20px;margin-left:10px;border:1px solid #DDD;}		
+	.layout_list {margin: 0 auto;}
+	.fullSlide {margin: 0 auto;overflow:hidden;}/**/
+	.bd{margin: 0 auto;}
+	.comment_input{margin-top:8px;padding-left:10px;height:50px;margin:0px auto;width:1068px;border:1px solid #CCC;border-radius:5px;
+		font-size:12px;color:#999999;}
+	.comment_text{margin-top:8px;padding:10px 10px;height:50px;margin:0px auto;width:1058px;height:108px;border:1px solid #CCC;border-radius:5px;
+		font-size:12px;color:#999999;}
+
+	.comment_blog_div{margin:0px auto;width:1080px;margin-top:5px;display:none;}
+	.comment_or_blog{float:left;padding:44px 10px 0px 10px;margin-left:20px;height:40px;font-weight:bold;font-size:20px;}/*border-bottom: 2px solid #09c;*/
+	</style>

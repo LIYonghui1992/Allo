@@ -1,0 +1,29 @@
+<include file="Home:nav"/>
+<div class="fmian">
+<div class="layout_list">
+  {$country['webshop']}
+  <if condition="$ctry['webshop'] eq 1">
+  <div class="shop_title">
+    <p>{$Think.lang.SHOP_SUPPLIERS}</p>
+  </div>
+  <div class="list_shop">
+    <ul class="clearfix">
+      <volist name="webshop" id="vo">
+      	<li><a href="{$vo.link}"><img src="{$vo.img}" width="296" height="167" /></a></li>
+      </volist>
+    </ul>
+  </div>
+  <else />
+  	<div class="shop_title">
+        <p>{$Think.lang.SHOP_NO}</p>
+    </div>
+  </if>
+<!-- <include file="Home:bottom"/> -->
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'Shop/index\')}">'+"{$Think.lang.SHOP}"+'</a> ';
+    		
+    } );
+</script>

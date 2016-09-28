@@ -1,0 +1,315 @@
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div class="design_main clearfix" style="margin-top:30px;">
+			<div class="design_l">
+				<div class="design_header">
+						<p>{$design_challenge.explanation}</p>
+						<h1>{$design.title}</h1>
+				</div>
+				<ul class="design_box">
+					<volist name="design_ideas" id="vo">
+						<li class="ideas{$vo.id}" data-id="{$vo.id}" data-title="{$vo.title}" data-num="{$vo.ll_num}">
+							<img src="{$vo.background_img}" width="100%" height="220" />
+							<h5><img src="../Public/image/eye.png" height="20"><span class="ll_num{$vo.id}">{$vo.ll_num}</span>&nbsp;&nbsp;&nbsp;&nbsp;<img src="../Public/image/ok.png" height="20"><span class="zan{$vo.id}">{$vo.zan}</span></h5>
+							<h4><strong>{$vo.title}</strong></h4>
+						</li>
+					</volist>
+				</ul>
+			</div>
+			<div class="design_r">
+				<h2>Fund list</h2>
+				<ul>
+					<volist name="fund_list" id="vo">
+						<li>
+							<img src="{$vo.background_img}" width="100%" class="desc" data-id="{$vo.id}">
+							<h2><strong>{$vo.title}</strong></h2>
+							<div style="border:1px solid #333333; float:left; width:88%;margin-top: 5px;"> <span style="display: block;background:#96c62f;text-align:left;height:5px;width:{$vo['pcs_ordered']/$vo['funding_goal']*100}%;"></span>
+                            </div>
+                            <if condition="$vo['pcs_ordered'] egt $vo['funding_goal']"><div style="color:#96c62f; font-size:10px; float:left; width:8%; margin-left:5px;margin-top: -4px;"><span><img src="../Public/image/end2.png" width="15px"></span></div></if>
+							<h1><span style="font-size: 16px;">$</span>&nbsp;{$vo.price}</h1>
+							<p> {$vo.funding_goal}&nbsp;pcs required</br>
+								    {$vo.pcs_ordered2} pcs ordered</br>
+								   <if condition="$vo['remaining'] elt 0">funding has passed<elseif condition="$vo['remaining'] eq 1" />1 day left<else />{$vo.remaining} days left</if></br>
+								
+								<!--${$vo.price} per piece</br>-->
+							</p>
+							<p>
+						   <input type="button" value="order" class="desc" data-id="{$vo.id}" style="background-color: rgb(8, 124, 193);padding: 3px 8px;color: #fff;margin-top: 5px;">
+							</p>
+						</li>
+					</volist>
+				</ul>
+			</div>
+		</div>
+		<div id="detail" style="text-align:justify;display:none;">
+        	
+        </div>
+        <div id="detail2" style="text-align:justify;display:none;">
+        	<div style='text-align:left; font-size:24px;' class="detail_title"></div>
+            <div style='float:right;margin-top: -38px;'><span id="detail_price2" style="margin-right: 20px; font-weight:bold;"></span><input type="button" value="order" id="detail_order2" class="order"> </div>
+			<h3 align="center"><img src='' width="60%" class="detail_img"></h3>			
+			<p class="detail_text"></p>
+        </div>
+		<div id="order" style="display:none;">
+			<h2 class="order_title"></h2>
+			<h3 class="order_h3"></h3>
+			<div class="order_l">
+				<img id="order_img" src=""> </div>
+			<div class="order_r">
+				<form action="" method="post" id="pform">
+                	<input type="hidden" id="ecprice" value="">
+					<p class="order_price"> <span id="price"></span>
+						<input name="num" id="num" value="1" placeholder="1" style="border:1px solid #000000; width:20px; margin-left:10px;" onChange="price($('#ecprice').val())">
+					</p>
+					<div class="order_con" style="margin-top:30px;"> 
+                        <h2>Order Details</h2>
+                        <div class="order_rl"> First Name*
+                            <br>
+                            <input type="text" style="border:1px solid #000000; width:170px;" name="first_name" id="first_name" value="">
+                        </div>
+                        <div class="order_rr"> Last Name*
+                            <br>
+                            <input type="text" style="border:1px solid #000000; width:170px;" name="last_name" id="last_name" value="">
+                        </div>
+                        <div>Company Name</div>
+                        <div><input type="text" name="company" id="company" value=""></div>
+                        <div>Address*</div>
+                        <div><input type="text" name="address" id="address" value=""></div>
+                        <div>Postcode / Zip *</div>
+                        <div><input type="text" name="zip" id="zip" value=""></div>
+                        <div>Town / City *</div>
+                        <div><input type="text" name="city" id="city" value=""></div>
+                        <div>Country*</div>
+                        <div><input type="text" name="ctry" id="ctry" value=""></div>
+                        <div class="order_rl"> Email Address *
+                            <br>
+                            <input type="text" style="border:1px solid #000000;width:170px;" name="email" id="email" value="">
+                        </div>
+                        <div class="order_rr"> Phone 
+                            <br>
+                            <input type="text" style="border:1px solid #000000; width:170px;" name="phone" id="phone" value="">
+                        </div>
+                        <br>
+                        <input type="hidden" name="design_id" id="design_id" value="">
+                        <button id="check" class="check">{$Think.lang.DOSUBMIT}</button>
+                    </div>
+				</form>
+			</div>
+		</div>
+	<!--	<include file="Home:bottom" /> -->
+		<script type="text/javascript">
+			function price(price){
+				var num = $('#num').val();
+				if(num == '') num=1;	
+				var all_price = parseInt(price)*parseInt(num);
+				$('#price').text("$"+all_price);
+			}
+			$(function(){
+				$(".design_box li").click(function() {
+					var id     = $(this).data("id");
+					var title  = $(this).data("title");
+					var ll_num  = $(this).data("num");
+					var url    = "{:U('Design/detail')}";
+					var html   = '';
+					$.post(url,{id:id,ll_num:ll_num},
+						function (data){         
+			   				if(data.stauts == 1) {
+			   					var window_height = $(window).height();
+                                var window_width = $(window).width();
+                                var maxHeight='600px';
+                                var _top='115px';
+                                var _width='60%';
+                                if(window_height<800)
+                                {
+                                    maxHeight=window_height*0.7;
+                                    _top=0;
+                                    if(window_width<1080){
+                                         _width='80%';  
+                                    }else{
+                                         _width='auto';  
+                                    }
+                                }
+								if(!data.zan)
+								{
+									data.zan=0;
+								}
+								html = "<h2><div style='float:left'>"+data.developer+"</div><div style='float:right'><img src='../Public/image/eye.png' height='20'><span>"+data.ll_num+"</span>&nbsp;&nbsp;&nbsp;&nbsp;<img src='../Public/image/ok.png' height='20' style='cursor: pointer' onclick='zan("+id+");'><span class='zan"+id+"'>"+data.zan+"</span></div></h2>"+
+
+									   "<br><br><h3><img src='"+data.expanded_img+"' width='100%'></h3>"+
+			
+									   "<p>"+data.idea_text+"</p>";
+							    $('#detail').html(html);
+								$('#detail').css('overflow', 'auto');
+								$('#detail').css('maxHeight',maxHeight);
+								$('.ideas'+id).data("num",data.ll_num);
+								$('.ll_num'+id).html(data.ll_num);
+								art.dialog({title: title, content: document.getElementById('detail'),width: _width,top:_top,lock:true,
+                                    close: function () {
+                                    $('#detail').html('');
+                                }}); 
+							}
+						}, 
+					"json");
+				});
+				
+				$(".desc").click(function() {					
+					var window_height = $(window).height();
+					var window_width = $(window).width();
+					var maxHeight='600px';
+                    var _top='115px';
+                    var _width='60%';
+                    if(window_height<800)
+                    {
+                        maxHeight=window_height*0.7;
+                        _top=0;
+                        if(window_width<1080){
+                             _width='80%';  
+                        }else{
+                             _width='auto';  
+                        }
+                    }
+
+					var id = $(this).data("id");
+					
+					var url = "{:U('Design/fundDetail')}";
+					$.post(url, {id:id}, function(data) {
+						var title = data.title;
+						var text = data.winner_text;
+						var developer = data.developer;
+						var img = data.expanded_img;
+						var deadline = data.deadline;
+						var price = data.price;
+						$('#detail_order2').data("id",id);
+						
+						$('.detail_title').html(title+"<br><span style='text-align: left;font-size: 16px;position: relative;top: -8px;'>"+developer+"</span>");
+						$('.detail_img').attr("src", img);
+						$('.detail_text').html(text);
+						$('#detail_price2').text("$"+price);
+						$('#detail2').css('overflow', 'auto');
+						$('#detail2').css('maxHeight',maxHeight);
+						art.dialog({
+							id: 'des',
+							title: title,
+							content: document.getElementById("detail2"),
+							width: _width,
+							top:_top,
+							lock: true,
+							fixed: true,
+						});
+					},"json");	
+                    
+				});
+			
+				$(".order").click(function() {
+					art.dialog.list['des'].close();
+					var window_height = $(window).height();
+                    var window_width = $(window).width();
+                    var maxHeight='600px';
+                    var _top='115px';
+                    var _width='60%';
+                    if(window_height<800)
+                    {
+                        maxHeight=window_height*0.7;
+                        _top=0;
+                        if(window_width<1080){
+                             _width='80%';  
+                        }else{
+                             _width='auto';  
+                        }
+                    }
+					
+					var id = $(this).data("id");
+					var url = "{:U('Design/fundDetail')}";
+					
+					$.post(url, {id:id}, function(data) {
+						
+						var title = data.title;
+						var img = data.background_img;
+						var deadline = data.deadline;
+						var price = data.price;
+						var developer  = data.deadline;
+						
+						var num = $('#num').val();
+						if(num == '') num=1;
+						var all_price = parseInt(price)*parseInt(num);
+						
+						$('.order_title').text(title);
+						$('.order_h3').text(developer);
+						$('#price').text("$"+all_price);
+						$("#order_img").attr("src",img);
+						$('#design_id').val(id);
+						$('#ecprice').val(price);
+						$('#order').css('overflow', 'auto');
+						$('#order').css('maxHeight',maxHeight);
+						art.dialog({title: title, content: document.getElementById("order"),width:_width,top:_top,lock: true,
+							close: function () {
+								$('#num').val('');
+							}
+						}); 						
+					},"json");
+
+				});
+			
+				$("#check").click(function() {
+					var url    = "{:U('Design/order')}";
+					var data   = $("#pform").serializeArray(); 
+					var rs     = 1;
+					$("input[type='text']").each(function(index, element) {
+						if (this.value == '' && (this.name != 'company' && this.name != 'phone')) {
+								rs = 0;
+								tip('Entry cannot be empty!');
+								return false;
+						}
+						if(this.name == 'email'){
+			
+							if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))){
+								rs = 0;
+								tip('Please enter a valid mailbox!');
+								return false;
+							}
+						}
+					});
+			
+					if(rs == 1){
+						$('#check').attr('disabled',"true");
+						$.post(url,data,function(data){
+							if(data.stauts == 1){
+								tip(data.msg);
+								window.location.reload();
+							}else{
+								tip(data.msg);
+								return false;
+							}
+						 },"json"); 
+					}else{
+						return false;
+					}
+					
+					return false;
+				});
+			});
+			
+			function zan(id){	
+				var id  = id;
+				var url = "{:U('Design/zan')}";
+				$.post(url,{id:id},
+					function (data){         
+						if(data.stauts == 1) {	
+							$('.zan'+id).html(data.zan);	
+							tip(data.msg);
+						}else{
+							tip(data.msg);
+						}
+					}, 
+				"json");
+			}
+			function tip(msg)
+			{  
+			    $('body').append('<div id="msg" style="width:60%;position: fixed;top:30px;right:20%;word-wrap: break-word;border-radius:3px; background-color:rgba(0,0,0,0.5);box-shadow: 0 3px 6px rgba(0, 0, 0, .175); display: none; text-align: center; line-height:48px; padding:10px; font-size: 36px; z-index: 9999; color:#fff;font-family: Microsoft YaHei;"></div>')    ;
+			    $("#msg").text(msg);
+			    $("#msg").fadeIn();
+			    setTimeout('$("#msg").fadeOut();$("#msg").remove();',2000);
+			}
+		</script>

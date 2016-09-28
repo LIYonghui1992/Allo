@@ -1,0 +1,197 @@
+
+<form name="myform" id="myform" action="<if condition="$action_name=='add'">
+  {:U($module_name.'/insert')}
+  <else />
+  {:U($module_name.'/update')}
+  </if>
+  " method="post">
+  <table cellpadding=0 cellspacing=0 class="table_form" width="100%">
+    <tr>
+      <td width="120"><font color="red">*</font>{:L(LANG_NAME)}</td>
+      <td><input type="text" id="name" name="name" value="{$vo.name}" class="input-text"  validate="required:true,cn_username:true, minlength:2, maxlength:20"/></td>
+    </tr>
+    <tr>
+      <td width="120"><font color="red">*</font>{:L(LANG_MARK)}</td>
+      <td><input type="text" id="mark" name="mark" value="{$vo.mark}" class="input-text"/></td>
+    </tr>
+    <tr>
+      <td>{:L(LANG_FLAG)}</td>
+      <td><input type="text" id="flag" name="flag" value="{$vo.flag}" class="input-text"/></td>
+    </tr>
+    <tr>
+      <td>{:L(STATUS)}</td>
+      <td>{:Form::radio(array('field'=>'status','options'=>array('1'=>L('yes'),'0'=>L('no'))),$vo['status'])}</td>
+    </tr>
+    <tr>
+      <td>语言标识参考</td>
+      <td><div>
+        <div>
+          <div>
+            <p style="background:white;"> ar&nbsp;阿拉伯文 </p>
+            <p style="background:white;"> ar-AE&nbsp;阿拉伯文(阿拉伯联合酋长国)&nbsp; </p>
+            <p style="background:white;"> ar-BH&nbsp;阿拉伯文(巴林)&nbsp; </p>
+            <p style="background:white;"> ar-DZ&nbsp;阿拉伯文&nbsp;(阿尔及利亚)&nbsp; </p>
+            <p style="background:white;"> ar-EG&nbsp;阿拉伯文&nbsp;(埃及)&nbsp; </p>
+            <p style="background:white;"> ar-IQ&nbsp;阿拉伯文&nbsp;(伊拉克)&nbsp; </p>
+            <p style="background:white;"> ar-JO&nbsp;阿拉伯文&nbsp;(约旦)&nbsp; </p>
+            <p style="background:white;"> ar-KW&nbsp;阿拉伯文&nbsp;(科威特)&nbsp; </p>
+            <p style="background:white;"> ar-LB&nbsp;阿拉伯文&nbsp;(黎巴嫩)&nbsp; </p>
+            <p style="background:white;"> ar-LY&nbsp;阿拉伯文&nbsp;(利比亚)&nbsp; </p>
+            <p style="background:white;"> ar-MA&nbsp;阿拉伯文&nbsp;(摩洛哥)&nbsp; </p>
+            <p style="background:white;"> ar-OM&nbsp;阿拉伯文&nbsp;(阿曼)&nbsp; </p>
+            <p style="background:white;"> ar-QA&nbsp;阿拉伯文&nbsp;(卡塔尔)&nbsp; </p>
+            <p style="background:white;"> ar-SA&nbsp;阿拉伯文(沙特阿拉伯)&nbsp; </p>
+            <p style="background:white;"> ar-SD&nbsp;阿拉伯文&nbsp;(苏丹)&nbsp; </p>
+            <p style="background:white;"> ar-SY&nbsp;阿拉伯文&nbsp;(叙利亚)&nbsp; </p>
+            <p style="background:white;"> ar-TN&nbsp;阿拉伯文&nbsp;(突尼斯)&nbsp; </p>
+            <p style="background:white;"> ar-YE&nbsp;阿拉伯文&nbsp;(也门)&nbsp;&nbsp; </p>
+            <p style="background:white;"> be&nbsp;白俄罗斯文&nbsp; </p>
+            <p style="background:white;"> be-BY&nbsp;白俄罗斯文&nbsp;(白俄罗斯)&nbsp; </p>
+            <p style="background:white;"> bg&nbsp;保加利亚文&nbsp; </p>
+            <p style="background:white;"> bg-BG&nbsp;保加利亚文&nbsp;(保加利亚)&nbsp;&nbsp; </p>
+            <p style="background:white;"> ca&nbsp;加泰罗尼亚文&nbsp; </p>
+            <p style="background:white;"> ca-ES&nbsp;加泰罗尼亚文(西班牙)&nbsp; </p>
+            <p style="background:white;"> ca-ES-EURO&nbsp;加泰罗尼亚文(西班牙,Euro)&nbsp; </p>
+            <p style="background:white;"> cs&nbsp;捷克文&nbsp; </p>
+            <p style="background:white;"> cs-CZ&nbsp;捷克文(捷克共和国)&nbsp;&nbsp; </p>
+            <p style="background:white;"> da&nbsp;丹麦文&nbsp; </p>
+            <p style="background:white;"> da-DK&nbsp;丹麦文&nbsp;(丹麦)&nbsp; </p>
+            <p style="background:white;"> de&nbsp;德文&nbsp; </p>
+            <p style="background:white;"> de-AT&nbsp;德文(奥地利)&nbsp; </p>
+            <p style="background:white;"> de-AT-EURO&nbsp;德文&nbsp;(奥地利,Euro)&nbsp; </p>
+            <p style="background:white;"> de-CH&nbsp;德文&nbsp;(瑞士)&nbsp; </p>
+            <p style="background:white;"> de-DE&nbsp;德文&nbsp;(德国)&nbsp; </p>
+            <p style="background:white;"> de-DE-EURO&nbsp;德文(德国,Euro)&nbsp; </p>
+            <p style="background:white;"> de-LU&nbsp;德文&nbsp;(卢森堡)&nbsp; </p>
+            <p style="background:white;"> de-LU-EURO&nbsp;德文(卢森堡,Euro)&nbsp; </p>
+            <p style="background:white;"> el&nbsp;希腊文&nbsp; </p>
+            <p style="background:white;"> el-GR&nbsp;希腊文(希腊)&nbsp; </p>
+            <p style="background:white;"> en&nbsp;英文&nbsp; </p>
+            <p style="background:white;"> en-US&nbsp;英文&nbsp;(美国)&nbsp; </p>
+            <p style="background:white;"> en-AU&nbsp;英文(澳大利亚)&nbsp; </p>
+            <p style="background:white;"> en-CA&nbsp;英文(加拿大)&nbsp; </p>
+            <p style="background:white;"> en-GB&nbsp;英文(英国)&nbsp; </p>
+            <p style="background:white;"> en-IE&nbsp;英文(爱尔兰)&nbsp; </p>
+            <p style="background:white;"> en-IE-EURO&nbsp;英文(爱尔兰,Euro)&nbsp; </p>
+            <p style="background:white;"> en-NZ&nbsp;英文(新西兰)&nbsp; </p>
+            <p style="background:white;"> en-US&nbsp;英文(美国)&nbsp; </p>
+            <p style="background:white;"> en-ZA&nbsp;英文(南非)&nbsp; </p>
+            <p style="background:white;"> es&nbsp;西班牙文&nbsp; </p>
+            <p style="background:white;"> es-BO&nbsp;西班牙文(玻利维亚)&nbsp; </p>
+            <p style="background:white;"> es-AR&nbsp;西班牙文(阿根廷)&nbsp; </p>
+            <p style="background:white;"> es-CL&nbsp;西班牙文(智利)&nbsp; </p>
+            <p style="background:white;"> es-CO&nbsp;西班牙文(哥伦比亚)&nbsp; </p>
+            <p style="background:white;"> es-CR&nbsp;西班牙文(哥斯达黎加)&nbsp; </p>
+            <p style="background:white;"> es-DO&nbsp;西班牙文&nbsp;(多米尼加共和国)&nbsp; </p>
+            <p style="background:white;"> es-EC&nbsp;西班牙文&nbsp;(厄瓜多尔)&nbsp; </p>
+            <p style="background:white;"> es-ES&nbsp;西班牙文(西班牙)&nbsp; </p>
+            <p style="background:white;"> es-ES-EURO&nbsp;西班牙文(西班牙,Euro)&nbsp; </p>
+            <p style="background:white;"> es-GT&nbsp;西班牙文&nbsp;(危地马拉)&nbsp; </p>
+            <p style="background:white;"> es-HN&nbsp;西班牙文(洪都拉斯)&nbsp; </p>
+            <p style="background:white;"> es-MX&nbsp;西班牙文&nbsp;(墨西哥)&nbsp; </p>
+            <p style="background:white;"> es-NI&nbsp;西班牙文(尼加拉瓜)&nbsp; </p>
+            <p style="background:white;"> es-PA&nbsp;西班牙文(巴拿马)&nbsp; </p>
+            <p style="background:white;"> es-PE&nbsp;西班牙文(秘鲁)&nbsp; </p>
+            <p style="background:white;"> es-PR&nbsp;西班牙文&nbsp;(波多黎哥)&nbsp; </p>
+            <p style="background:white;"> es-PY&nbsp;西班牙文&nbsp;(巴拉圭)&nbsp; </p>
+            <p style="background:white;"> es-SV&nbsp;西班牙文(萨尔瓦多)&nbsp; </p>
+            <p style="background:white;"> es-UY&nbsp;西班牙文&nbsp;(乌拉圭)&nbsp; </p>
+            <p style="background:white;"> es-VE&nbsp;西班牙文(委内瑞拉)&nbsp; </p>
+            <p style="background:white;"> et&nbsp;爱沙尼亚文 </p>
+            <p style="background:white;"> et-EE&nbsp;爱沙尼亚文&nbsp;(爱沙尼亚)&nbsp;&nbsp; </p>
+            <p style="background:white;"> fi&nbsp;芬兰文&nbsp; </p>
+            <p style="background:white;"> fi-FI&nbsp;芬兰文&nbsp;(芬兰)&nbsp; </p>
+            <p style="background:white;"> fi-FI-EURO&nbsp;芬兰文(芬兰,Euro)&nbsp; </p>
+            <p style="background:white;"> fr&nbsp;法文&nbsp; </p>
+            <p style="background:white;"> fr-BE&nbsp;法文(比利时)&nbsp; </p>
+            <p style="background:white;"> fr-BE-EURO&nbsp;法文(比利时,Euro)&nbsp; </p>
+            <p style="background:white;"> fr-CA&nbsp;法文&nbsp;(加拿大)&nbsp; </p>
+            <p style="background:white;"> fr-CH&nbsp;法文&nbsp;(瑞士)&nbsp; </p>
+            <p style="background:white;"> fr-FR&nbsp;法文(法国)&nbsp; </p>
+            <p style="background:white;"> fr-FR-EURO&nbsp;法文(法国,Euro)&nbsp; </p>
+            <p style="background:white;"> fr-LU&nbsp;法文(卢森堡)&nbsp; </p>
+            <p style="background:white;"> fr-LU-EURO&nbsp;法文(卢森堡,Euro)&nbsp;&nbsp; </p>
+            <p style="background:white;"> ga&nbsp;爱尔兰盖尔文？&nbsp; </p>
+            <p style="background:white;"> Ga-IE&nbsp;盖尔语（爱尔兰） </p>
+            <p style="background:white;"> hr&nbsp;克罗地亚文 </p>
+            <p style="background:white;"> hr-HR&nbsp;克罗地亚文(克罗地亚)&nbsp; </p>
+            <p style="background:white;"> hu&nbsp;匈牙利文&nbsp; </p>
+            <p style="background:white;"> hu-HU&nbsp;匈牙利文&nbsp;(匈牙利)&nbsp;&nbsp; </p>
+            <p style="background:white;"> is&nbsp;冰岛文 </p>
+            <p style="background:white;"> is-IS&nbsp;冰岛文&nbsp;(冰岛)&nbsp; </p>
+            <p style="background:white;"> it&nbsp;意大利文 </p>
+            <p style="background:white;"> it-CH&nbsp;意大利文(瑞士)&nbsp; </p>
+            <p style="background:white;"> it-IT&nbsp;意大利文(意大利)&nbsp; </p>
+            <p style="background:white;"> it-IT-EURO&nbsp;意大利文&nbsp;(意大利,Euro)&nbsp; </p>
+            <p style="background:white;"> iw&nbsp;希伯来文&nbsp; </p>
+            <p style="background:white;"> iw-IL&nbsp;希伯来文(以色列)&nbsp; </p>
+            <p style="background:white;"> ja&nbsp;日文 </p>
+            <p style="background:white;"> ja-JP&nbsp;日文(日本)&nbsp;&nbsp; </p>
+            <p style="background:white;"> kk&nbsp;哈萨克文&nbsp; </p>
+            <p style="background:white;"> kk-KZ(哈萨克斯坦)&nbsp; </p>
+            <p style="background:white;"> ko&nbsp;朝鲜文 </p>
+            <p style="background:white;"> ko-KR&nbsp;朝鲜文(南朝鲜)&nbsp; </p>
+            <p style="background:white;"> lt&nbsp;立陶宛文 </p>
+            <p style="background:white;"> lt-LT&nbsp;陶宛文(立陶宛)&nbsp; </p>
+            <p style="background:white;"> lv&nbsp;拉托维亚文(列托)&nbsp; </p>
+            <p style="background:white;"> lv-LV&nbsp;拉托维亚文(列托)&nbsp;(拉脱维亚)&nbsp; </p>
+            <p style="background:white;"> mk&nbsp;马其顿文 </p>
+            <p style="background:white;"> mk-MK&nbsp;马其顿文(马其顿王国)&nbsp; </p>
+            <p style="background:white;"> nb&nbsp;挪威语、伯克梅尔 </p>
+            <p style="background:white;"> nb-NO&nbsp;(挪威) </p>
+            <p style="background:white;"> nl&nbsp;荷兰文 </p>
+            <p style="background:white;"> nl-BE&nbsp;荷兰文(比利时)&nbsp; </p>
+            <p style="background:white;"> nl-BE-EURO&nbsp;荷兰文(比利时,Euro)&nbsp; </p>
+            <p style="background:white;"> nl-NL&nbsp;荷兰文(荷兰)&nbsp; </p>
+            <p style="background:white;"> nl-NL-EURO&nbsp;荷兰文&nbsp;(荷兰,Euro)&nbsp; </p>
+            <p style="background:white;"> no&nbsp;挪威文 </p>
+            <p style="background:white;"> no-NO&nbsp;挪威文&nbsp;(挪威)&nbsp; </p>
+            <p style="background:white;"> no-NO-NY&nbsp;挪威文&nbsp;(挪威,Nynorsk)&nbsp;&nbsp; </p>
+            <p style="background:white;"> pl&nbsp;波兰文&nbsp; </p>
+            <p style="background:white;"> pl-PL&nbsp;波兰文(波兰)&nbsp; </p>
+            <p style="background:white;"> pt&nbsp;葡萄牙文&nbsp; </p>
+            <p style="background:white;"> pt-BR&nbsp;葡萄牙文&nbsp;(巴西)&nbsp; </p>
+            <p style="background:white;"> pt-PT&nbsp;葡萄牙文(葡萄牙)&nbsp; </p>
+            <p style="background:white;"> pt-PT-EURO&nbsp;葡萄牙文(葡萄牙,Euro)&nbsp;&nbsp; </p>
+            <p style="background:white;"> ro&nbsp;罗马尼亚文&nbsp; </p>
+            <p style="background:white;"> ro-RO&nbsp;罗马尼亚文(罗马尼亚)&nbsp; </p>
+            <p style="background:white;"> ru&nbsp;俄文&nbsp; </p>
+            <p style="background:white;"> ru-RU&nbsp;俄文&nbsp;(俄罗斯)&nbsp;&nbsp; </p>
+            <p style="background:white;"> sh&nbsp;塞波尼斯-克罗地亚文&nbsp; </p>
+            <p style="background:white;"> sh-YU&nbsp;塞波尼斯-克罗地亚文&nbsp;(南斯拉夫)&nbsp; </p>
+            <p style="background:white;"> sk&nbsp;斯洛伐克文&nbsp; </p>
+            <p style="background:white;"> sk-SK&nbsp;斯洛伐克文(斯洛伐克)&nbsp; </p>
+            <p style="background:white;"> sl&nbsp;斯洛文尼亚文&nbsp; </p>
+            <p style="background:white;"> sl-SI&nbsp;斯洛文尼亚文&nbsp;(斯洛文尼亚)&nbsp; </p>
+            <p style="background:white;"> sq&nbsp;阿尔巴尼亚文&nbsp; </p>
+            <p style="background:white;"> sq-AL&nbsp;阿尔巴尼亚文(阿尔巴尼亚)&nbsp; </p>
+            <p style="background:white;"> sr&nbsp;塞尔维亚文 </p>
+            <p style="background:white;"> sr-YU&nbsp;塞尔维亚文(南斯拉夫)&nbsp; </p>
+            <p style="background:white;"> sv&nbsp;瑞典文&nbsp; </p>
+            <p style="background:white;"> sv-SE&nbsp;瑞典文&nbsp;(瑞典)&nbsp;&nbsp; </p>
+            <p style="background:white;"> th&nbsp;泰文 </p>
+            <p style="background:white;"> th-TH&nbsp;泰文&nbsp;(泰国)&nbsp; </p>
+            <p style="background:white;"> tr&nbsp;土耳其文&nbsp; </p>
+            <p style="background:white;"> tr-TR&nbsp;土耳其文(土耳其)&nbsp; </p>
+            <p style="background:white;"> uk&nbsp;乌克兰文 </p>
+            <p style="background:white;"> uk-UA&nbsp;乌克兰文&nbsp;(乌克兰)&nbsp;&nbsp; </p>
+            <p style="background:white;"> zh&nbsp;中文 </p>
+            <p style="background:white;"> zh-CN&nbsp;中文&nbsp;(中国)&nbsp; </p>
+            <p style="background:white;"> zh-HK&nbsp;中文&nbsp;(香港)&nbsp; </p>
+            <p style="background:white;"> zh-TW&nbsp;中文&nbsp;(台湾) </p>
+            <p class="MsoNormal"> <span>&nbsp;</span> </p>
+            <div> </div>
+          </div>
+        </div></td>
+    </tr>
+  </table>
+  <div  class="btn">
+    <if condition="$vo['id']!=''">
+      <input TYPE="hidden" name="id" value="{$vo.id}">
+    </if>
+    <INPUT TYPE="submit"  value="{:L('dosubmit')}" class="button" >
+    <input TYPE="reset"  value="{:L('cancel')}" class="button">
+  </div>
+</form>
+</div>
+</body></html>

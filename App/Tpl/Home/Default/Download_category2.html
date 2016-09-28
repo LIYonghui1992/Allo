@@ -1,0 +1,29 @@
+<include file="Home:nav"/>
+<div class="fmian">
+<div class="layout_list">
+
+<div class="download clearfix">
+  <ul>
+    <volist name="download_twos" id="vo">
+      <li> <a href="{:U('Download/download_file',array('downloadt_id'=>$vo['id']))}">
+        <div class="ipic"> <img src="{$vo['background_img']}" width="240px"> </div>
+        <p class="dtitle">{$vo.title}</p>
+        </a> </li>
+    </volist>
+  </ul>
+</div>
+{$page} <!-- <include file="Home:bottom"/> --> 
+
+<script type="text/javascript">
+			
+			$(document).ready(function()
+	   {		
+	   	document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" />'
+	   	+'<a href="{:U(\'Download/index\')}">'+"{$Think.lang.DOWNLOADS}"+'</a>' 
+	   	+'<img src="../Public/image/arrow_footer.png" />'
+	   	+'<a href="'+"/Download/category2/download_id/"+"{$_COOKIE['allocacoc_pathinfo_download_id']}"+'">'
+	   	
+	   	+"{$_COOKIE['allocacoc_pathinfo_download']}"+'</a>';
+		
+	} );
+</script>

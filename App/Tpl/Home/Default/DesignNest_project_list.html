@@ -1,0 +1,400 @@
+<!--[if lte IE 8]> 
+<style type="text/css">
+.design_main {
+	padding-bottom:30px !important;
+}
+</style>
+<![endif]-->
+<script type="text/javascript" charset="utf-8" src="../Public/js/script.js"></script>
+
+<include file="Home:DN_header" />
+<include file="Home:DNnav" />
+	
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div class="design_main ">
+			
+			<div  class="designtitle"  >  
+				<!--
+				<div style="width:300px;float:right;margin-right:5px;height:33px;border:1px solid #DDD;background-color:#FAFAFA;border-radius:25px;-moz-border-radius:25px;"> 
+    			<div style="float:right;margin:0px auto;margin-right:15px;margin-top:8px;border-left:1px solid #DDD;width:30px;">
+         	   	 <img src="../Public/image/search.png" style="float:right;" onclick="search();"/>
+         	</div>
+         	<div style="width:230px;float:left;margin-top:8px;"> 
+         	   	<input id="search_tag" type="text" style="background:transparent;width:230px;padding-left:15px;font-size:12px;color:#999;" 
+         	    value="<notempty name="keyword">{$keyword} <else/>Insert tag to find...</notempty>" 
+         	   onblur="if(value ==''){ value = 'Insert tag to find...';this.style.color='#999';}"
+         	    onfocus="if (value =='Insert tag to find...'){value ='';this.style.color='#333';}"
+         	    onkeydown="keyDown(event);" />
+         	</div>
+    		</div>  
+		 -->
+	      <span ><font class="title_1">Current Projects<br></font> </span>              
+	      <span ><font class="p-font2">An overview of the projects waiting for your support:</font> </span>                    
+      
+      </div>  
+      
+      
+      <div  class="designtitle db_line"  >  
+				
+				<div style="width:450px;float:right;margin-right:5px;height:33px;"> 
+         	<!--
+         	<div class="sort">
+         		<font class="p-font2"> score  </font>
+         	</div>
+         	
+         	<div class="sort">
+         		<a onclick="click_sort(2);">
+         		  <font class="p-font2"> price  </font>
+         		  <img class="sort_img" id="sort_img_1" style="width:15px; height:15px;" src="../Public/image/search.png"/>
+         		</a>         		
+         	</div>
+         	-->
+         	<div class="sort">
+         		<a onclick="click_sort(1);">
+         		  <font class="p-font2" id="sort_text_1"> date  </font>
+         		  <img class="sort_img" id="sort_img_1" style="width:14px; height:11px;margin-top:-2px;" src="../Public/image/sort_desc_grey.png"/>
+         		</a>
+         	</div>
+         	
+         	<div class="sort" style="width:80px;">
+         		<font class="p-font2">sort &nbsp;by &nbsp; &nbsp; | </font>
+         	</div>
+         	
+    		</div>  
+		
+ 
+      </div> 
+      
+      
+      <div class="list_design clearfix">
+      	<ul id="product_list">
+      		
+      		<volist name="fund_list" id="vo" key="k">
+      			<li>
+      				<div class="product">
+          			<div style="width:253px; height:195px;"> 
+                	 		<a href="{:U('DesignNest/detail',array('id'=>$vo['id']))}">
+                      <img src="{$vo.background_img}" style="width:253px; height:195px;" />
+                     </a>
+                </div>
+                	 	 
+                <div style="width:220px;height:65px;padding-left:15px;margin-top:10px;">                     	 
+                       <strong><font class="p-font">{$vo.title}</font></strong>                                              
+                        <font class="font_developer"><br>{$vo['developer']}</font>
+                </div>
+                     
+                <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;">                 	
+                     	<ul style="line-height:30px;">
+                     	 <font class="p-font3" style="font-size:14px;vertical-align:top;">{$vo.price|substr=0,1}</font>
+                       <font class="p-font3" style="vertical-align:top;" >{$vo.price|substr=1}</font>
+                       <font class="p-font3" style="font-size:20px;vertical-align:top;">{$vo.price_cent}</font>
+    					        </ul>                  	
+                </div>
+                                   
+                <div style="border:1px solid #DDD; border-radius:10px; width:88%;overflow:hidden;margin-left:15px;margin-top:15px;">
+                      <span class="span_target" style="width:{$vo['fake_order_qty']/$vo['funding_goal']*100}%;"></span>
+                </div>
+                
+                    
+                <div style="margin:0px auto; width:220px;height:20px;margin-top:3px;margin-right:10px;text-align:right;">
+                       
+                       <font class="pcs_font">{$vo['fake_order_qty']}/{$vo['funding_goal']} pcs ({$vo.price|substr=0,1}{$vo.target_money})</font>
+                       <font class="p-font2">required </font>
+                </div>
+                
+                <div style="margin:0px auto; width:180px;height:20px;margin-bottom:5px;margin-right:10px;text-align:right;">
+                       
+                       <font class="pcs_font">{$vo['dayleft']} days</font>
+                       <font class="p-font2"></font>
+                </div>
+                
+                <div class="list_order">
+                     	 <a href="javascript:godetail({$vo['id']});" >
+                        <font class="detail_link">Pre-order now</font> 
+                       </a>
+                </div>
+                
+          		</div>
+      			</li>
+      		</volist>
+      		
+      	</ul>
+      </div>
+      
+     
+      
+			
+		</div>
+	<!--	<include file="Home:bottom" /> -->
+	<input type="hidden" id="sort_type" value="{$sort_type}">
+	
+	<input type="hidden" id="searching" value="{$searching}">
+	<input type="hidden" id="keyword" value="{$keyword}">
+	<input type="hidden" id="count" value="{$count}">
+	<input type="hidden" id="curr_count" value="{$curr_count}">
+
+<div id="loading" style="width:32px;margin:0px auto;margin-top:30px;display:none;">
+	<img src="../Public/image/loading.gif">
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function()
+   {		//document.getElementById("logo").src="../Public/image/DN_logo.png";
+   	/*
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'DesignNest/index\')}">'+"{$Think.lang.DESIGN_CHALLENGE}"+'</a> ';
+    		*/
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+  	   	+'<a href="{:U(\'DesignNest/index\')}">'+"{$Think.lang.DESIGN_CHALLENGE}"+'</a>' 
+  	   	+'<img src="../Public/image/arrow_footer.png"/>'
+  	   	+'<a>Current Projects</a>';
+    		
+    		if(document.getElementById("sort_type").value!='')
+    		  document.getElementById("sort_text_1").style.color='#09c'; 
+    		
+    		//if not seraching
+    		if(document.getElementById("sort_type").value=='1'){
+    		  document.getElementById("sort_img_1").src = '../Public/image/sort_desc_blue.png';
+    		  document.getElementById("sort_img_1").style.marginTop='0px';
+    		}
+    		else{
+    			if(document.getElementById("sort_type").value!=''){
+    			  document.getElementById("sort_img_1").src = '../Public/image/sort_asc_blue.png';
+    			  document.getElementById("sort_img_1").style.marginTop='-2px';
+    			}
+    			else{
+    				document.getElementById("sort_img_1").src = '../Public/image/sort_desc_grey.png';
+    				document.getElementById("sort_img_1").style.marginTop='0px';
+    			}
+    		} 
+    } );
+</script>
+
+		
+<script type="text/javascript">
+			
+	function godetail(productid)
+	{
+		window.location = "/DesignNest/detail/id/"+productid;
+	}
+	
+	function click_sort(factor){
+		//alert(document.getElementById("sort_type").value);
+		if(document.getElementById("sort_type").value=='1')
+		  document.getElementById("sort_type").value = '0';
+		else{
+		    document.getElementById("sort_type").value = '1';
+		}  
+		
+		
+		
+		
+		
+		//alert("/DesignNest/project_list/sort/1/type/"+document.getElementById("sort_type").value);  
+		window.location = "/DesignNest/project_list/sort/1/type/"+document.getElementById("sort_type").value;
+		
+	}
+	
+	/*
+	function keyDown(e) {
+    var ev= window.event||e;
+  
+    //13是键盘上面固定的回车键
+    if (ev.keyCode == 13) {
+     search();
+    }
+  }	
+  
+  function search(){
+   	if(document.getElementById('search_tag').value=='' || document.getElementById('search_tag').value=='tag1,tag2...')
+   	{
+   		alert('please input at least one tag');return false;
+   	}
+   	
+   	// set all category not selected   	
+   	document.location="/DesignNest/project_list/search/1/keyword/"+document.getElementById('search_tag').value;
+   	
+  }	
+  */
+  
+  $(window).scroll(function(){
+     if ($(document).height() - $(this).scrollTop() - $(this).height()<100) {
+     	var temp1 = parseInt(document.getElementById("curr_count").value );
+     	var temp2 = parseInt(document.getElementById("count").value) ;
+
+	    if( temp1< temp2){
+        document.getElementById("loading").style.display="block";
+        ajax_load_data();
+      }
+     }
+  });
+   
+   
+   
+  function ajax_load_data()
+  {
+ 	  var url = "{:U('DesignNest/ajax_getprojectlist')}";
+ 	  var data;
+ 	  
+ 	  if(document.getElementById("sort_type").value=='')
+ 	    data = {keyword:document.getElementById("keyword").value,
+	  	          searching:document.getElementById("searching").value,
+	    		      curr_count:document.getElementById("curr_count").value
+	    		      };
+	  else
+	  	 data = {keyword:document.getElementById("keyword").value,
+	  	          searching:document.getElementById("searching").value,
+	    		      sort_type:document.getElementById("sort_type").value,
+	    		      curr_count:document.getElementById("curr_count").value
+	    		      };
+	  
+    document.getElementById("curr_count").value = 8+ parseInt(document.getElementById("curr_count").value);
+    
+	  $.post(url,data,function(data){
+           if(data.status == 1){			
+					  var files = data.filelist;
+					  var str = "";
+
+					  for(var i in files){
+					  	 var newNode = document.createElement("li");
+        		 	  newNode.style.listStyleType='none';
+        		 	  //newNode.style.height = '200px';
+        		 	  //newNode.style.width = '100%';
+            		newNode.innerHTML = '<div class="product">'+
+            		                       '<div style="width:253px; height:195px;">'+
+            		                         '<a href="/DesignNest/detail/id/'+files[i].id+'">'+
+            		                         '<img src="'+files[i].background_img+'" style="width:253px; height:195px;" />'+
+            		                         '</a>'+
+            		                        '</div>'+
+            		                        '<div style="width:220px;height:65px;padding-left:15px;margin-top:10px;">'+
+            		                          '<strong><font class="p-font">'+files[i].title+'</font></strong>'+
+            		                          '<font class="font_developer"><br>'+files[i].developer+'</font>'+
+            		                        '</div>'+
+            		                        '<div style="margin:0px auto; width:180px;height:30px;margin-left:15px;"> '+
+            		                          '<ul style="line-height:30px;">'+
+            		                            '<font class="p-font3" style="font-size:14px;vertical-align:top;">'+files[i].price.substr(0,1)+'</font>'+
+            		                            '<font class="p-font3" style="vertical-align:top;" >'+files[i].price.substr(1)+'</font>'+
+            		                            '<font class="p-font3" style="font-size:20px;vertical-align:top;">'+files[i].price_cent+'</font>'+
+            		                           '</ul>'+
+            		                          '</div>'+
+            		                          '<div style="border:1px solid #DDD; border-radius:10px; width:88%;overflow:hidden;margin-left:15px;margin-top:15px;">'+
+            		                            ' <span class="span_target" style="width:'+ 100*files[i].fake_order_qty/files[i].funding_goal+'%;"></span>'+
+            		                          '</div>'+
+            		                          ' <div style="margin:0px auto; width:220px;height:20px;margin-top:3px;margin-right:10px;text-align:right;">'+
+            		                          
+            		                            '<font class="pcs_font">'+files[i].fake_order_qty+'/'+files[i].funding_goal+' pcs ('+files[i].price.substr(0,1)+files[i].target_money+')</font>'+
+            		                            '<font class="p-font2">required </font>'+
+            		                          '</div>'+
+            		                          '<div style="margin:0px auto; width:180px;height:20px;margin-bottom:5px;margin-right:10px;text-align:right;">'+
+            		                            '<font class="pcs_font">'+files[i].dayleft+' days</font>'+
+            		                            '<font class="p-font2"></font>'+
+            		                          ' </div>'+
+            		                          '<div class="list_order">'+
+            		                             '<a href="javascript:godetail('+files[i].id+');" >'+
+            		                             '<font class="detail_link">Pre-order now</font> '+
+            		                             '</a>'+
+            		                            '</div>'+
+            		                       '</div>';
+            		
+            		
+            		
+            		var oldNode = document.getElementById("product_list");   		
+            		oldNode.appendChild(newNode); 
+					  }
+					  
+	         	
+ 			
+					 }else{
+					  //alert("no more file ");	
+													
+				   }
+				   
+				   document.getElementById("loading").style.display="none";
+	  },"json");   
+   }
+			
+</script>
+		
+		
+
+<style type="text/css">
+	.footer{background-color:#884697}
+	.footer .country {BACKGROUND-COLOR: #884697;}
+	.products{margin:0px auto;margin-left:2px;margin-right:2px;width:994px;height:360px;}	
+	/*.product {height: 350px;width: 220px;margin-right: 50px;border: 1px solid #DDD;}/*float: left;position: relative;*/ 
+	.product {height: 420px;width: 253px;border: 1px solid #DDD;}
+
+
+.designtitle {
+	margin: 0px auto;
+	width: 1080px;
+	height:40px;
+	margin-bottom:10px;
+	margin-top:30px;
+	text-align:left;
+}
+.db_line{
+	border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #CCC;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #CCC;
+  padding:5px 0px;
+  margin-bottom:30px;
+}
+
+#mid {
+	margin: 0px auto;
+	margin-top:5px;
+	width: 1048px;
+	height:360px;
+}
+
+.title_1{
+	font-weight:bold;font-size:18px;color:#333333;
+	}
+.p-font{
+	font-size:16px;
+	font-weight:bold;
+	color:#666666;
+	margin: 0px auto;	
+}
+.p-font2{
+	font-size:12px;
+	color:#666666;
+	margin:0 auto;
+}
+.pcs_font{
+	font-size:12px;
+	font-weight:bold;
+	color:#666666;
+	margin:0 auto;
+}
+.p-font3{
+	font-size:34px;	
+	margin:0 auto;
+}
+
+.font_developer{
+	font-size:12px;
+	color:#888888;
+}
+.sort{
+	float:right;
+	margin-left:20px;
+	margin-top:10px;
+	width:58px;
+	height:20px;
+	font-size:14px;
+	font-color:#CCC;
+}
+
+.span_target{display: block;background:#884697; height:8px;}
+.detail_link{font-size: 14px;font-weight: bold;color:#884697;} 
+.list_order{margin:0px auto; width:162px;height:27px;text-align:center;line-height:23px;
+	          border:1px solid #884697; border-radius:20px;overflow:hidden;
+}
+</style>

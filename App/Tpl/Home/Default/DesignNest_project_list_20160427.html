@@ -1,0 +1,294 @@
+<!--[if lte IE 8]> 
+<style type="text/css">
+.design_main {
+	padding-bottom:30px !important;
+}
+</style>
+<![endif]-->
+<script type="text/javascript" charset="utf-8" src="../Public/js/script.js"></script>
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div class="design_main ">
+			
+			<div  class="designtitle"  >  
+				
+				<div style="width:300px;float:right;margin-right:5px;height:33px;border:1px solid #DDD;background-color:#FAFAFA;border-radius:25px;-moz-border-radius:25px;"> 
+    			<div style="float:right;margin:0px auto;margin-right:15px;margin-top:8px;border-left:1px solid #DDD;width:30px;">
+         	   	 <img src="../Public/image/search.png" style="float:right;" onclick="search();"/>
+         	</div>
+         	<div style="width:230px;float:left;margin-top:8px;"> 
+         	   	<input id="search_tag" type="text" style="background:transparent;width:230px;padding-left:15px;font-size:12px;color:#999;" 
+         	    value="<notempty name="keyword">{$keyword} <else/>Insert tag to find...</notempty>" 
+         	   onblur="if(value ==''){ value = 'Insert tag to find...';this.style.color='#999';}"
+         	    onfocus="if (value =='Insert tag to find...'){value ='';this.style.color='#333';}"
+         	    onkeydown="keyDown(event);" />
+         	</div>
+    		</div>  
+		
+	      <span ><font class="title_1">Current Projects<br></font> </span>              
+	      <span ><font class="p-font2">An overview of the projects waiting for your support:</font> </span>                    
+      
+      </div>  
+      
+      
+      <div  class="designtitle db_line"  >  
+				
+				<div style="width:450px;float:right;margin-right:5px;height:33px;"> 
+         	<!--
+         	<div class="sort">
+         		<font class="p-font2"> score  </font>
+         	</div>
+         	
+         	<div class="sort">
+         		<a onclick="click_sort(2);">
+         		  <font class="p-font2"> price  </font>
+         		  <img class="sort_img" id="sort_img_1" style="width:15px; height:15px;" src="../Public/image/search.png"/>
+         		</a>         		
+         	</div>
+         	-->
+         	<div class="sort">
+         		<a onclick="click_sort(1);">
+         		  <font class="p-font2" id="sort_text_1"> date  </font>
+         		  <img class="sort_img" id="sort_img_1" style="width:14px; height:11px;margin-top:-2px;" src="../Public/image/sort_desc_grey.png"/>
+         		</a>
+         	</div>
+         	
+         	<div class="sort" style="width:80px;">
+         		<font class="p-font2">sort &nbsp;by &nbsp; &nbsp; | </font>
+         	</div>
+         	
+    		</div>  
+		
+ 
+      </div> 
+      
+      
+      <div class="list_design clearfix">
+      	<ul>
+      		
+      		<volist name="fund_list" id="vo" key="k">
+      			<li>
+      				<div class="product">
+          			<div style="width:253px; height:195px;"> 
+                	 		<a href="{:U('DesignNest/detail',array('id'=>$vo['id']))}">
+                      <img src="{$vo.background_img}" style="width:253px; height:195px;" />
+                     </a>
+                </div>
+                	 	 
+                <div style="width:220px;height:65px;padding-left:15px;margin-top:10px;">                     	 
+                       <strong><font class="p-font">{$vo.title}</font></strong>                                              
+                        <font class="font_developer"><br>{$vo['developer']}</font>
+                </div>
+                     
+                <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;">                 	
+                     	<ul style="line-height:30px;">
+                     	 <font class="p-font3" style="font-size:14px;vertical-align:top;">{$vo.price|substr=0,1}</font>
+                       <font class="p-font3" style="vertical-align:top;" >{$vo.price|substr=1}</font>
+                       <font class="p-font3" style="font-size:20px;vertical-align:top;">{$vo.price_cent}</font>
+    					        </ul>                  	
+                </div>
+                                   
+                    
+                <div style="border:1px solid #DDD; border-radius:10px; width:88%;overflow:hidden;margin-left:15px;margin-top:15px;">
+                      <span style="display: block;background:#15869f; 
+                      height:8px;width:{$vo['pcs_ordered']/$vo['funding_goal']*100}%;"></span>
+                </div>
+                    
+                <div style="margin:0px auto; width:180px;height:20px;margin-top:3px;margin-right:10px;text-align:right;">
+                       
+                       <font class="pcs_font">{$vo['pcs_ordered']}/{$vo['funding_goal']}</font>
+                       <font class="p-font2"> pcs required </font>
+                </div>
+                
+                <div style="margin:0px auto; width:180px;height:20px;margin-bottom:5px;margin-right:10px;text-align:right;">
+                       
+                       <font class="pcs_font">{$vo['dayleft']} days</font>
+                       <font class="p-font2"></font>
+                </div>
+                     
+                <div style="margin:0px auto; width:162px;height:27px;text-align:center;background-color:transparent;
+                     	background-image:url(../Public/image/index.4.1.png);line-height:23px;">
+                     	 <a href="javascript:godetail({$vo['id']});" >
+                        <font style="font-size: 14px;font-weight: bold;color:#15869f;">Pre-order now</font> 
+                       </a>
+                </div>
+          		</div>
+      			</li>
+      		</volist>
+      		
+      	</ul>
+      </div>
+      
+     
+      
+			
+		</div>
+	<!--	<include file="Home:bottom" /> -->
+	<input type="hidden" id="sort_type" value="{$sort_type}">
+
+  <notempty name="page">
+	  <div class="page">
+				{$page}
+	  </div>
+	</notempty>	
+
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'DesignNest/index\')}">'+"{$Think.lang.DESIGN_CHALLENGE}"+'</a> ';
+    		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+  	   	+'<a href="{:U(\'DesignNest/index\')}">'+"{$Think.lang.DESIGN_CHALLENGE}"+'</a>' 
+  	   	+'<img src="../Public/image/arrow_footer.png"/>'
+  	   	+'<a>Current Projects</a>';
+    		
+    		if(document.getElementById("sort_type").value!='')
+    		  document.getElementById("sort_text_1").style.color='#09c'; 
+    		
+    		//if not seraching
+    		if(document.getElementById("sort_type").value=='1'){
+    		  document.getElementById("sort_img_1").src = '../Public/image/sort_desc_blue.png';
+    		  document.getElementById("sort_img_1").style.marginTop='0px';
+    		}
+    		else{
+    			if(document.getElementById("sort_type").value!=''){
+    			  document.getElementById("sort_img_1").src = '../Public/image/sort_asc_blue.png';
+    			  document.getElementById("sort_img_1").style.marginTop='-2px';
+    			}
+    			else{
+    				document.getElementById("sort_img_1").src = '../Public/image/sort_desc_grey.png';
+    				document.getElementById("sort_img_1").style.marginTop='0px';
+    			}
+    		} 
+    } );
+</script>
+
+		
+<script type="text/javascript">
+			
+	function godetail(productid)
+	{
+		window.location = "/DesignNest/detail/id/"+productid;
+	}
+	
+	function click_sort(factor){
+		//alert(document.getElementById("sort_type").value);
+		if(document.getElementById("sort_type").value=='1')
+		  document.getElementById("sort_type").value = '0';
+		else{
+		    document.getElementById("sort_type").value = '1';
+		}  
+		
+		
+		
+		
+		
+		//alert("/DesignNest/project_list/sort/1/type/"+document.getElementById("sort_type").value);  
+		window.location = "/DesignNest/project_list/sort/1/type/"+document.getElementById("sort_type").value;
+		
+	}
+	
+	
+	function keyDown(e) {
+    var ev= window.event||e;
+  
+    //13是键盘上面固定的回车键
+    if (ev.keyCode == 13) {
+     search();
+    }
+  }	
+  
+  function search(){
+   	if(document.getElementById('search_tag').value=='' || document.getElementById('search_tag').value=='tag1,tag2...')
+   	{
+   		alert('please input at least one tag');return false;
+   	}
+   	
+   	// set all category not selected   	
+   	document.location="/DesignNest/project_list/search/1/keyword/"+document.getElementById('search_tag').value;
+   	
+  }	
+			
+</script>
+		
+		
+
+<style type="text/css">
+	.products{margin:0px auto;margin-left:2px;margin-right:2px;width:994px;height:360px;}	
+	/*.product {height: 350px;width: 220px;margin-right: 50px;border: 1px solid #DDD;}/*float: left;position: relative;*/ 
+	.product {height: 420px;width: 253px;border: 1px solid #DDD;}
+
+
+.designtitle {
+	margin: 0px auto;
+	width: 1080px;
+	height:40px;
+	margin-bottom:10px;
+	margin-top:30px;
+	text-align:left;
+}
+.db_line{
+	border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #CCC;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #CCC;
+  padding:5px 0px;
+  margin-bottom:30px;
+}
+
+#mid {
+	margin: 0px auto;
+	margin-top:5px;
+	width: 1048px;
+	height:360px;
+}
+
+.title_1{
+	font-weight:bold;font-size:18px;color:#333333;
+	}
+.p-font{
+	font-family:'Century Gothic';
+	font-size:16px;
+	font-weight:bold;
+	color:#666666;
+	margin: 0px auto;	
+}
+.p-font2{
+	font-family:'Century Gothic';
+	font-size:14px;
+	color:#666666;
+	margin:0 auto;
+}
+.pcs_font{
+	font-family:'Century Gothic';
+	font-size:14px;
+	font-weight:bold;
+	color:#666666;
+	margin:0 auto;
+}
+.p-font3{
+	font-family:'Century Gothic';
+	font-size:34px;	
+	margin:0 auto;
+}
+
+.font_developer{
+	font-size:12px;
+	color:#888888;
+}
+.sort{
+	float:right;
+	margin-left:20px;
+	margin-top:10px;
+	width:58px;
+	height:20px;
+	font-size:14px;
+	font-color:#CCC;
+}
+
+</style>

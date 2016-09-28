@@ -1,0 +1,180 @@
+<div style="width:100%;clear:both; ">
+	<div style="float:right;">
+    <input type="button" class="button" name="dosubmit" value="Add" onclick="add_param();">
+  </div>
+  
+  <div style="width:70%;float:left;">
+  	<span>Product Title:{$product['title']} </span>
+  </div>
+</div>
+
+
+<table  class="search_table" width="100%">
+  <tr>
+    <td class="search">
+    	<form action="{:U($module_name.'/index')}" method="get">
+        <input type="hidden" name="g" value="{$Think.GROUP_NAME}" />
+        <input type="hidden" name="m" value="{$Think.MODULE_NAME}" />
+        <input type="hidden" name="a" value="{$Think.ACTION_NAME}" />
+        <input type="hidden" id="menuid" name="menuid" value="{$_GET['menuid']}"/>        
+      </form>
+    </td>
+  </tr>
+</table>
+
+<form name="myform" id="myform" action="" method="post">
+  <div class="table-list">
+  <table width="100%" cellspacing="0">
+    <thead>
+      <tr>
+        <th width="30"><input type="checkbox" value="" id="check_box" onclick="selectall('ids[]');"></th>
+        <th width="40">{:L('listorder')}</th>
+        <th width="40">ID</th>
+        <th>Param</th>
+        <th>Value</th>
+        <th>Type</th>
+        
+        <th width="60">{:L('status')}</th>
+              
+        <th width="60">{:L('username')}</th>
+        <th >{:L('manage')}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <volist name="param_list" id="vo" key="k">
+        <tr>
+          <td  width="30" align="center"><input class="inputcheckbox " name="ids[]" value="{$vo['id']}" type="checkbox" ></td>
+          <td width="40" align='center'><input name='listorders[{$vo.id}]' type='text' size='3' value='{$vo.listorder}' class='input-text-c'></td>
+          <td align="center">{$vo['id']}</td>
+          <td align="center">{$vo['param']}</td>
+          <td align="center">{$vo['value']}</td>
+          <td align="center">{$type[$vo['type']]}</td>
+          
+          <td align="center"><if condition="$vo['status'] eq 1"><font color="green">{:L('isshenhe')}</font><else/><a href="{:U($module_name.'/status',array(id=>$vo['id'],status=>1))}"><font color="red">{:L('noshenhe')}</font></a></if></td>
+          
+          <td align="center">{$vo['username']}</td>
+          
+          <td  align="center">
+          	<a href="{:U($module_name.'/edit',array(id=>$vo['id']))}">{:L('edit')}</a> | <a href="javascript:confirm_delete('{:U($module_name.'/delete',array(id=>$vo['id']))}')">{:L('delete')}</a>
+          </td>
+        </tr>
+      </volist>
+    </tbody>
+  </table>
+  <div class="btn">
+    <input  type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="myform.action='{:U($module_name.'/deleteall')}';return confirm_deleteall()"/>
+    <input  type="button" class="button" name="dosubmit" value="<?php echo L('listorder')?>" onclick="myform.action='{:U($module_name.'/listorder')}';$('#myform').submit();" />
+    <input  type="button" class="button" name="dosubmit" value="<?php echo L('status_ok')?>" onclick="myform.action='{:U($module_name.'/statusallok')}';$('#myform').submit();" />
+  </div>
+</form>
+</div>
+<div id="pages" class="page">{$page}</div>
+
+
+<input type="hidden" id="product_id" value="{$product_id}" />
+
+
+<div id="param_div" style="display:none;">
+	<div style="margin:0px auto;margin-top:30px;">
+		<font style="font-family:'Century Gothic';font-size:10px;font-weight:bold;color:#09C;"> param </font>
+    <input type="text" id="param_title" size=40 />    
+	</div>
+	
+	<div style="margin:0px auto;margin-top:30px;">
+		<font style="font-family:'Century Gothic';font-size:10px;font-weight:bold;color:#09C;"> value </font>
+    <input type="text" id="param_value" size=40 />    
+	</div>
+	
+	<div style="margin:0px auto;margin-top:30px;">
+		<font style="font-family:'Century Gothic';font-size:10px;font-weight:bold;color:#09C;"> type </font>
+    <select id="param_type" >
+	    <option value="0">Product Info</option>
+	    <option value="1">Shipping Info</option>        
+	   </select>
+	</div>
+	
+	<div style="margin:0px auto;margin-top:30px;">
+		<font style="font-family:'Century Gothic';font-size:10px;font-weight:bold;color:#09C;"> status </font>
+		<select id="status" >
+	    <option value="1">approved</option>
+	    <option value="0">not approved</option>
+	    
+	   </select>   
+	</div>
+	
+	<div style="margin:0px auto;margin-top:30px;">
+		<input type="button" class="button"  value="Submit"  onclick="save_param()";/>
+	</div>
+	
+</div>
+
+<script>
+
+$("#catid").attr("value",'{$catid}');
+
+function confirm_deleteall(){
+
+	art.dialog.confirm("{:L('real_delete')}", function(){ $('#myform').submit();});
+
+}
+
+
+
+function add_param(){
+	
+	document.getElementById("param_title").value = '';
+	document.getElementById("param_value").value = '';
+				
+	  var window_height = $(window).height();
+		if(window_height<800)
+		{
+			maxHeight=window_height*0.7;
+			_top=0;
+			_width='80%';
+		}else{
+			maxHeight='600px';
+			_top='115px';
+			_width='60%';
+		}
+		
+		art.dialog({
+							id: 'des',
+							title: 'Add Param',
+							content: document.getElementById("param_div"),
+							width: _width,
+							top:_top,
+							lock: true							
+						}
+						
+        );
+}
+
+
+function save_param(){
+	
+	//var url = "{:U(Pricelist/save_params)}" ;var url = "{:U(Design_order.'/sendmail')}" ;
+	var url = "{:U(Product_param.'/save_params')}" ;
+  	
+	var data =  { 
+		product_id: document.getElementById("product_id").value ,		
+		value: document.getElementById("param_value").value,
+		title:document.getElementById("param_title").value,
+		type:document.getElementById("param_type").value,
+		status:document.getElementById("status").value
+		};
+
+	  $.post(url,data,function(data){
+			if(data.status != 1){							
+				alert(data.msg);
+			}
+			else
+			{
+				window.art.dialog({id:'des'}).close();
+				 window.location.reload();
+			}
+	},"json"); 
+	
+	
+}
+
+</script>

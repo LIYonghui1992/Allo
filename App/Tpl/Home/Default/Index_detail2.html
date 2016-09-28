@@ -1,0 +1,232 @@
+<div class="fmian">
+	<div class="layout_list">
+	<div class="fullSlide" style="width:1280px;margin: 0 auto;height: 770px;background: rgba(255, 255, 255, 0);">
+		<div class="bd" style="height: 620px;">
+			<ul>
+				<notempty name="banners[0]">
+					<volist name="banners" id="vo">
+						<li _src="url({$vo})"></li>
+					</volist>
+					<else />
+					<li _src="url(../Public/image/banner201.jpg)"></li>
+					<li _src="url(../Public/image/banner201.jpg)"></li>
+					<li _src="url(../Public/image/banner201.jpg)"></li>
+					<li _src="url(../Public/image/banner201.jpg)"></li>
+				</notempty>
+			</ul>
+		</div>
+		<div class="top">
+			<a href="{:U('Index/index')}">
+				<div class="logo">
+					<a href="{:U('Index/index')}">
+						<img src="../Public/image/logo.png" width="100%" />
+					</a>
+				</div>
+			</a>
+			<div class="nav">
+				<ul>
+					<li><a href="{:U('Product/index')}" class="<if condition=" $module_name eq 'Product' ">a1
+
+          <else />
+
+          a
+
+          </if>
+
+          ">{$Think.lang.PRODUCTS}</a>
+					</li>
+					<li><a href="{:U('Shop/index')}" class="<if condition=" $module_name eq 'Shop' ">a1
+
+          <else />
+
+          a
+
+          </if>
+
+          ">{$Think.lang.SHOP}</a>
+					</li>
+					<li><a href="{:U('Design/index')}" class="<if condition=" $module_name eq 'Design' ">a1
+
+          <else />
+
+          a
+
+          </if>
+
+          ">{$Think.lang.DESIGN_CHALLENGE}</a>
+					</li>
+					<li><a href="{:U('News/index')}" class="<if condition=" $module_name eq 'News' ">a1
+
+          <else />
+
+          a
+
+          </if>
+
+          ">{$Think.lang.NEWS}</a>
+					</li>
+					<li><a href="{:U('Blog/index')}" class="<if condition=" $module_name eq 'Blog' ">a1
+
+          <else />
+
+          a
+
+          </if>
+
+          ">{$Think.lang.BLOG}</a>
+					</li>
+					<li><a href="{:U('Download/index')}" class="<if condition=" $module_name eq 'Download' ">a1
+
+          <else />
+
+          a
+
+          </if>
+
+          ">{$Think.lang.DOWNLOADS}</a>
+					</li>
+					<li><a href="{:U('About/index')}" class="<if condition=" $module_name eq 'About' ">a1
+
+          <else />
+
+          a
+
+          </if>
+
+          ">{$Think.lang.ABOUT_US}</a>
+					</li>
+					<li><a href="{:U('Contact/index')}" class="<if condition=" $module_name eq 'Contact' ">a1
+
+          <else />
+
+          a
+
+          </if>
+
+          ">{$Think.lang.CONTACT}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="hd">
+			<ul>
+				<li></li>
+			</ul>
+		</div>
+	</div>
+	<div class="video2">
+		<div class="content"> {$Think.lang.VIDEO_URL} </div>
+	</div>
+    <include file="Home:bottom" />
+		<script type="text/javascript">
+			$(".fullSlide").slide({
+				titCell: ".hd ul",
+				mainCell: ".bd ul",
+				effect: "fold",
+				autoPlay: true,
+				autoPage: true,
+				trigger: "click",
+				startFun: function(i) {
+					var curLi = $(".fullSlide .bd li").eq(i);
+					if (!!curLi.attr("_src")) {
+						curLi.css("background-image", curLi.attr("_src")).removeAttr("_src")
+					}
+				}
+			});
+			$(function() {
+				var imglist = "{$imglist}";
+				var strs = new Array(); //定义一数组 
+				strs = imglist.split(","); //字符分割
+				$(".fullSlide .hd li").each(function(index) {
+					$(this).css("backgroundImage", "url(" + strs[index] + ")").css('backgroundSize', '100%');
+				});
+			})
+		</script>
+		<style type="text/css">
+			.fullSlide .hd {
+			
+				width:100%;
+			
+				position:absolute;
+			
+				z-index:1;
+			
+				bottom:0;
+			
+				left:0;
+			
+				height:150px;
+			
+				line-height:30px;
+			
+				background:rgb(228,228,229)
+			
+			}
+			
+			.fullSlide .hd ul {
+			
+				text-align:center;
+			
+			}
+			
+			.fullSlide .hd ul li {
+			
+				cursor:pointer;
+			
+				display:inline-block;
+			
+				*display:inline;
+			
+				zoom:1;
+			
+				width:180px;
+			
+				height:90px;
+			
+				margin:25px 10px;
+			
+				overflow:hidden;
+			
+				filter:alpha(opacity=50);
+			
+				opacity:0.5;
+			
+				line-height:999px;
+			
+			}
+			
+			.fullSlide .hd ul .on {
+			
+				opacity:1;
+				
+				background-color:#000000;
+			
+			}
+			
+			.fullSlide .bd li {
+				
+				width: 100% !important;
+				
+				height: 620px;
+				
+				overflow: hidden;
+				
+				text-align: center;
+			}
+			
+			.bd ul li{
+				
+				background-size: 100%; 
+				
+				background: no-repeat;
+				
+				height: 620px; 
+				
+				background-repeat:no-repeat;
+				
+			}
+			
+			.video2{  width:1080px ; margin:10px auto}
+			
+			.video2>.content{ width:900px ; margin:10px auto;text-align: center;}
+		</style>

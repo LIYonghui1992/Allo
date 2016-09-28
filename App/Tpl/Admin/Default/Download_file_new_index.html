@@ -1,0 +1,366 @@
+<style>
+	.title_selected{font-size:14px;color:#09C;}
+	.title{font-size:12px;color:#333;}
+</style>
+
+<div style="width:100%;height:100%;min-height:780px;">
+  <div id="tree" style="width:20%;height:100%;float:left;border-right:1px solid #EEE;min-height:600px;">
+  	
+  	<!-- {$tree} -->
+  	<ul>
+  	  <volist name="tree" id="vo"  >
+  	  	<li>
+  	  		<if condition="$vo['level'] eq 2">----</if>
+  	  		<if condition="$vo['level'] eq 1">--</if>
+  	  		 <a href="javascript:change_category({$vo['id']})">
+  	  		 	<font id="title_{$vo['id']}" <if condition="$current_id eq $vo['id']">class="title_selected"<else/> class="title"</if>>{$vo['title']}</font>
+  	  		 </a>
+  	  		 <if condition="$vo['level'] neq 2">
+  	  		   <input type="button" value="add" onclick="add_child({$vo['id']},{$vo['level']},'{$vo['layer']}')"/>
+  	  		 </if>
+  	  		 <input type="button" value="edit" onclick="edit_category({$vo['id']},'{$vo['title']}',{$vo['status']},'{$vo['img_size']}',{$vo['listorder']})"/>
+  	  		 <input type="button" value="del" onclick="del_category({$vo['id']})"/>
+  	  	</li>
+   		
+		  </volist>
+  	</ul>
+  </div>
+  
+  <div style="width:70%;height:100%;float:left;margin-left:20px;min-height:600px;">
+  	<form id="uploadfile" action={:U('Download_file_new/add_file')} method="post" enctype="multipart/form-data">
+    	<div style="width:100%;height:60px;margin-top:20px;">
+    		title <input type="text" id="file_title" name="file_title" class="file_input"/>
+    		
+    		background img 
+    		<!-- <input type="text" id="file_img" class="file_input"/> -->
+    		<input type="file" id="file_img_upload" name="file_img_upload"  accept=".jpg,.png,.gif,.bmp"/>
+    		
+    		file <!--<input type="text" id="file_file" class="file_input"/>-->
+    		<input type="file" id="file_file_upload" name="file_file_upload"/>
+    		<br/>
+    		tags <input type="text" id="tags" name="tags" value="tag1,tag2..." color="#999"
+    		onfocus="if (value =='tag1,tag2...'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='tag1,tag2...';this.style.color='#999'}" />
+    		
+    		listorder <input type="text" id="file_listorder" name="file_listorder" class="file_input"/>
+    		<input id="add_file_button" type="button" value="add file" onclick="add_file();"/>	
+    		
+    		
+    	</div>
+    	<input type="hidden" id="current_id" name="current_id" value="{$current_id}"/>
+  	</form>
+  	
+  	
+  	
+  	<!-- search -->
+  	<table  class="search_table" width="100%">
+    <tr>
+    <td class="search">
+    	<form action="{:U($module_name.'/index')}" method="get">
+        <input type="hidden" name="g" value="{$Think.GROUP_NAME}" />
+        <input type="hidden" name="m" value="{$Think.MODULE_NAME}" />
+        <input type="hidden" name="a" value="{$Think.ACTION_NAME}" />
+        <input id="title" type="text" size="14" class="input-text" name="keyword" value="{$Think.get.keyword}" />
+        <select name="searchtype">
+          <if condition="$fields['name']"><option value="title" 
+            <eq  name="searchtype" value='name'>selected="selected"</eq>
+            >{:L('name')}
+            </option>
+          </if>
+          <if condition="$fields['title']"><option value="title" 
+            <eq name="searchtype" value='title'>selected="selected"</eq>
+            >{:L('title')}
+            </option>
+          </if>
+          
+          <if condition="$fields['keywords']"><option value="keywords" 
+            <eq  name="searchtype" value='keywords' >selected="selected"</eq>
+            >{:L('keywords')}
+            </option>
+          </if>
+          <option value="title" 
+          <eq name="searchtype" value='title'>selected="selected"</eq>
+          >Title
+
+          </option>
+        </select>
+
+        <select name="listRows">
+          <option value="15" 
+          <if condition="$listRows ==5">selected="selected"</if>
+          >15{:L('listRows')}
+          </option>
+          <option value="20" 
+          <if condition="$listRows ==20">selected="selected"</if>
+          >20{:L('listRows')}
+          </option>
+          <option value="50" 
+          <if condition="$listRows ==50">selected="selected"</if>
+          >50{:L('listRows')}
+          </option>
+          <option value="100" 
+          <if condition="$listRows ==100">selected="selected"</if>
+          >100{:L('listRows')}
+          </option>
+        </select>
+        <input type="hidden" id="menuid" name="menuid" value="{$_GET['menuid']}"/>
+        <input type="submit" value="{:L('chaxun')}"  class="button" />
+        <input type="reset" value="{:L('reset')}" class="button"  />
+         <input type="hidden" id="category_id" name="category_id" value="{$current_id}"/>
+      </form>
+      </td>
+  </tr>
+</table>
+  	
+  	<form name="myform" id="myform" action="" method="post">
+      <div style="width:100%;" class="table-list">
+        <table width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th width="30"><input type="checkbox" value="" id="check_box" onclick="selectall('ids[]');"></th>
+              <th width="40">{:L('listorder')}</th>
+              <th width="40">ID</th>
+              <th>title</th>
+              <th>tags</th>        
+              <th width="60">{:L('username')}</th>
+              <th width="72">{:L('manage')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <volist name="filelist" id="vo" key="k">
+              <tr>
+                <td  width="30" align="center"><input class="inputcheckbox " name="ids[]" value="{$vo['id']}" type="checkbox" ></td>
+                <td width="40" align='center'><input name='listorders[{$vo.id}]' type='text' size='3' value='{$vo.listorder}' class='input-text-c'></td>
+                <td align="center">{$vo['id']}</td>
+                <td align="center">{$vo['title']}</td>
+                <td align="center">{$vo['tags']}</td>
+                <td align="center">{$vo['username']}</td>
+                <td align="center"><a href="{:U($module_name.'/edit',array(id=>$vo['id']))}">{:L('edit')}</a> | <a href="javascript:confirm_delete('{:U($module_name.'/delete',array(id=>$vo['id']))}')">{:L('delete')}</a></td>
+              </tr>
+            </volist>
+          </tbody>
+        </table>
+        <div class="btn">
+          <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="myform.action='{:U($module_name.'/deleteall')}';return confirm_deleteall()"/>
+          <input  type="button" class="button" name="dosubmit" value="<?php echo L('listorder')?>" onclick="myform.action='{:U($module_name.'/listorder')}';$('#myform').submit();" />
+          <input  type="button" class="button" name="dosubmit" value="<?php echo L('status_ok')?>" onclick="myform.action='{:U($module_name.'/statusallok')}';$('#myform').submit();" />
+        </div>
+      
+        <div id="pages" class="page">{$page}</div>
+      </div>
+      
+      <input type="hidden" id="current_category_id" name="current_category_id" value="{$current_id}"/>
+    </form>
+  </div>
+  
+  
+  
+  
+
+</div>
+
+
+
+<div id="add_dialog" style="width:500px;margin:0px auto;display:none;">
+	<ul>
+		<li> category name:<input type="text" id="title" width="400px"/> </li>
+		<li> listorder :<input type="text" id="listorder" width="400px"/> </li>
+		<li> img size :<input type="text" id="imgsize" width="400px"/> </li>
+		<li> status :<select id="status" width="400px"> <option value="1">approve</option> <option value="0">not approve</option></select> </li>
+	</ul>
+	<input id="submit_add_button" type="button" value="add" onclick="add_category();"/>	
+</div>
+
+<div id="edit_dialog" style="width:500px;margin:0px auto;display:none;">
+	<ul>
+		<li> category name:<input type="text" id="edit_title" width="400px"/> </li>
+		<li> listorder :<input type="text" id="edit_listorder" width="400px"/> </li>
+		<li> img size :<input type="text" id="edit_imgsize" width="400px"/> </li>
+		<li> status :<select id="edit_status" width="400px"> <option value="1">approve</option> <option value="0">not approve</option></select> </li>
+	</ul>
+	<input id="submit_edit_button" type="button" value="update" onclick="edit_submit();"/>	
+</div>
+
+
+<style type="text/css">
+	.file_input{width:150px;margin-right:10px;margin-left:5px;}
+</style>
+<script>
+
+var parent_id;
+var parent_level;
+var parent_level;
+var category_id;
+
+$("#nav  ul").hide();
+
+function confirm_deleteall(){
+
+	art.dialog.confirm("{:L('real_delete')}", function(){ $('#myform').submit();});
+
+}
+
+
+function change_category(eleid)
+{
+	document.getElementById("current_id").value = eleid;
+	document.getElementById("current_category_id").value = eleid;
+	document.getElementById("category_id").value = eleid;
+	document.forms["myform"].submit();
+	
+}
+
+
+function add_file()
+{
+	document.getElementById("add_file_button").disabled=true;
+	
+	$("#uploadfile").ajaxSubmit({
+    dataType:  'json',
+    
+    success: function(data) { 
+    	if(data.status==0){
+    		alert(data.msg);
+    	}
+    	if(data.status==1){
+			alert('added');
+			location.reload();
+    	}	
+    	
+    	document.getElementById("add_file_button").disabled=false;
+    				
+    },
+    error:function(xhr){
+    				alert(xhr.responseText);
+    				document.getElementById("add_file_button").disabled=false;
+    		}
+    });
+		 
+}
+
+
+
+function add_child(category_id,category_level,category_layer)
+{
+	 parent_id = category_id;
+   parent_level = category_level;
+   parent_layer = category_layer;
+	 
+	 document.getElementById("title").value='';
+	 document.getElementById("imgsize").value='';
+	 document.getElementById("listorder").value='';
+	 document.getElementById("submit_add_button").value='add';
+	 
+	 art.dialog({
+			title: 'Add Category',
+			content: document.getElementById("add_dialog"),
+			lock:true,
+			width: '520px',
+			top:'10px;',
+			//style:'succeed noClose',
+			//okVal: 'OK',
+			//ok:function(){
+				//window.location = '/Design/index'; 
+			//}
+	 });
+}
+
+
+function add_category()
+{
+	 var url = "{:U('Download_file_new/add_category')}";
+	 
+	 var data =  { 
+		 title: document.getElementById("title").value, 
+		 level: 1+parseInt(parent_level),
+		 layer: parent_layer+"",
+		 status: document.getElementById("status").value,
+		 parent_id: parent_id,
+		 img_size:document.getElementById("imgsize").value,
+		 listorder:document.getElementById("listorder").value	
+	};
+		
+	document.getElementById("submit_add_button").value='processing';
+
+	$.post(url,data,function(data){
+
+				if(data.status == 1){			
+					alert("succ to add,need refresh");					
+					
+				}else{
+					alert("fail to add");												
+				}
+			},"json"); 
+}
+
+function edit_category(categoryid,category_title,status,img_size,listorder)
+{
+	 category_id = categoryid;
+	 document.getElementById("edit_title").value = category_title;
+	 document.getElementById("edit_imgsize").value = img_size;
+	 document.getElementById("edit_listorder").value = listorder;
+	 document.getElementById("submit_edit_button").value='update';
+	 var t = document.getElementById("edit_status")
+   for(i=0;i<t.length;i++){
+     if(status==t.options[i].value){  
+        t.options[i].selected=true;
+        break;  
+     }  
+   }
+   
+   art.dialog({
+			title: 'Edit Category',
+			content: document.getElementById("edit_dialog"),
+			lock:true,
+			width: '520px',
+			top:'10px;',
+	 });  
+	
+}
+
+function edit_submit()
+{
+	 var url = "{:U('Download_file_new/update_category')}";
+	 
+	 var data =  { 
+	 	 category_id:category_id,
+		 title: document.getElementById("edit_title").value, 
+		 status: document.getElementById("edit_status").value,
+		 img_size:document.getElementById("edit_imgsize").value,
+		 listorder:document.getElementById("edit_listorder").value	
+	 };
+		
+	 document.getElementById("submit_edit_button").value='processing';
+
+	$.post(url,data,function(data){
+
+				if(data.status == 1){			
+					alert("updated,need refresh");					
+					
+				}else{
+					alert("fail to update");												
+				}
+			},"json"); 
+}
+
+
+function del_category(category_id)
+{
+	 var url = "{:U('Download_file_new/del_category')}";
+	 var data =  { 
+		 category_id: category_id
+		 };
+		 
+	$.post(url,data,function(data){
+		if(data.status == 1){			
+			alert("succ to add");					
+			
+		}else{
+			alert("fail to add");												
+		}
+	},"json"); 
+	
+	
+	
+}
+
+</script>

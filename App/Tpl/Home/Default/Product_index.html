@@ -1,0 +1,117 @@
+<style>
+.ipicc img{
+	width:100%;
+}
+.goto{width:70px;float:right;height:25px;background-color:#fafafa;text-align:center;margin-right:30px;}
+
+.goto_font{font-size:16px;color:#888;line-height:16px;}
+
+.type_div{width:525px;height:127px;background-color:#fafafa;text-align:center;}
+
+.type_font_selected{font-size:26px;font-weight: bold;color:#09c;line-height:110px;}
+.type_font{font-size:26px;color:#666;line-height:110px;}
+
+.type_font_selected_dn{font-size:26px;font-weight: bold;color:#884697;line-height:110px;}
+</style>
+
+
+
+<include file="Home:nav"/>
+<div class="fmian">
+<div class="layout_list">
+
+<div class="list clearfix" style="margin-top:30px;">
+	<a href="{:U('Product/index')}">
+	<if condition="$product_type eq 0">
+		<div class="type_div" style="float:left;background:url(../Public/image/allocacoc_category_selected.png)">
+	<else/>
+		<div class="type_div" style="float:left;background:url(../Public/image/allocacoc_category.png)">
+  </if>
+		
+		<div style="height:80px;width:100%;text-align:center;">
+			<if condition="$product_type eq 0">
+  			<font class="type_font_selected">Allocacoc Products</font>
+  	  <else/>
+  	  	<font class="type_font">Allocacoc Products</font>
+  	  </if>	
+		</div>
+			
+		
+			<div class="goto">
+				<font class="goto_font">go to > </font>
+			</div>			
+		
+	</div>
+	</a>
+	
+    	
+  <a href="{:U('Product/index',array('product_type'=>1))}">  	
+  <if condition="$product_type eq 0">
+		<div class="type_div" style="float:right;background:url(../Public/image/designnest_category.png)">
+	<else/>
+		<div class="type_div" style="float:right;background:url(../Public/image/designnest_category_selected.png)">
+  </if>
+  
+	
+		<div style="height:80px;width:100%;text-align:center;">
+  		<if condition="$product_type eq 0">
+  			<font class="type_font">DesignNest Products</font>
+  	  <else/>
+  	  	<font class="type_font_selected_dn">DesignNest Products</font>
+  	  </if>
+	  </div>
+		
+			<div class="goto">
+				<font class="goto_font">go to > </font>
+			</div>			
+		
+	</div>
+	</a>
+	
+</div>
+
+
+<div class="list clearfix">
+  <ul>
+       <volist name="product_groups" id="vo"> 
+       <li>
+          <a href="{:U('Product/lists',array('product_group_id'=>$vo['id']))}">
+            <div class="ipicc">
+            	<div style="width:250px;height:187px;margin-bottom:10px;margin:0px auto;"> 
+            		<img src="{$vo['img']}" style="width:250px;height:187px;">
+            	</div>
+            	<div style="width:250px;height:40px;margin:0px auto;"> 
+            	  <p style="font-size:16px;" >{$vo.title}</p>
+            	</div>
+            </div>
+            <!-- <p class="ltitle">{$vo.title}</p> 
+            <font class="ltitle">{$vo.title}</font> -->
+
+          </a>
+       </li>
+     </volist>
+     <!--
+     <volist name="product_groups" id="vo"> 
+       <li>
+          <a href="{:U('Product/lists',array('product_group_id'=>$vo['id']))}">
+            <div class="ipicc">
+            	<img src="{$vo['img']}">
+            </div>
+            <p class="ltitle">{$vo.title}</p>
+          </a>
+       </li>
+     </volist>
+     -->
+  </ul>
+  {$page}
+</div>
+<!-- <include file="Home:bottom"/> -->
+
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" />'
+    		+'<a href="{:U(\'Product/index\')}">'+"{$Think.lang.PRODUCTS}"+'</a> ';
+    		
+    } );
+</script>

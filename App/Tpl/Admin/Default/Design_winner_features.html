@@ -1,0 +1,206 @@
+<table  class="search_table" width="100%">
+  <tr>
+  	<td>
+  		design title:{$design_winner['title']}<br/>
+  		designer:{$design_winner['developer']}
+  	</td>
+  </tr>
+</table>
+
+
+<form id="feature" action="{:U('Design_winner/add_feature')}"  method='post' enctype='multipart/form-data'>
+  <table class="search_table" width="100%">
+  	<tr> <td width="30">feature title</td> <td> <input type="text" id="title" name="title"/></td> </tr>
+  	<tr> <td width="30">feature img</td> 
+  		   <td>
+  		   	<input name="file_name" id="file_name" type="text"	readonly="readonly"/>
+  		   	 <input type="file" id="feature_img" name="feature_img" value="upload img" style="display:none;"/>
+  		   	 <input type="button" value="upload img" id="select_file"/>
+  		 	 </td> 
+  	</tr>
+  	<tr> <td width="30">feature text</td> <td> <textarea id="feature_text" name="feature_text"></textarea></td>  </tr>
+  	<tr> <td><input type="button" value="add feature" onclick="javascript:add_feature();"/> </td> </tr>
+  </table>
+  <input type="hidden" id="design_id" name="design_id" value="{$design_winner['id']}"/>
+</form>
+
+
+				 	
+<form name="myform" id="myform" action="" method="post">
+  <div class="table-list">
+  <table width="100%" cellspacing="0">
+    <thead>
+      <tr>
+        <th width="30"><input type="checkbox" value="" id="check_box" onclick="selectall('ids[]');"></th>
+        <th width="40">{:L('listorder')}</th>
+        <th width="40">ID</th>
+        <th width="80">Title</th>
+        <th width="80">img</th>
+        <th width="80">text</th>
+        <th width="60">{:L('username')}</th>
+        <th width="100">{:L('manage')}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <volist name="design_features" id="vo" key="k">
+        <tr>
+          <td  width="30" align="center"><input class="inputcheckbox " name="ids[]" value="{$vo['id']}" type="checkbox" ></td>
+          <td width="40" align='center'><input name='listorders[{$vo.id}]' type='text' size='3' value='{$vo.listorder}' class='input-text-c'></td>
+          <td align="center">{$vo['id']}</td>
+          <td align="center">{$vo['title']} </td> 
+          <td align="center"><img src="{$vo['img']}" style="width:100px;height:30px;"> </td> 
+          <td align="center">{$vo['text']} </td>                     
+          <td align="center">{$vo['username']}</td>
+          <td align="center">
+          	<a href="javascript:detail('{$vo['title']}','{$vo['text']}','{$vo['img']}')">detail</a> |  
+          	<a href="{:U('Design_feature/edit',array(id=>$vo['id']))}">{:L('edit')}</a> |  
+          	<a href="javascript:confirm_delete('{:U(design_feature.'/delete',array(id=>$vo['id']))}')">{:L('delete')}</a>
+          </td>
+        </tr>
+      </volist>
+    </tbody>
+  </table>
+ 
+  <div class="btn">
+    <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="myform.action='{:U(design_feature.'/deleteall')}';return confirm_deleteall()"/>
+    <input  type="button" class="button" name="dosubmit" value="<?php echo L('listorder')?>" onclick="myform.action='{:U(design_feature.'/listorder')}';$('#myform').submit();" />
+    <input  type="button" class="button" name="dosubmit" value="<?php echo L('status_ok')?>" onclick="myform.action='{:U(design_feature.'/statusallok')}';$('#myform').submit();" />
+  </div>
+  
+  <input type="hidden" id="design_id" name="design_id" value="{$design_winner['id']}"/>
+  
+</form>
+</div>
+
+
+  
+<script>
+
+function add_feature()
+{
+	   		$("#feature").ajaxSubmit({
+    			dataType:  'json',
+    			
+    			success: function(data) {
+    				if(data.status==0){
+    					alert(data.msg);
+    				}
+    				if(data.status==1){
+    					//alert(data.name);
+    					/*
+    					document.getElementById("project_concept").value = data.name;
+    					document.getElementById("project_concept").style.color='#333';	 
+    					document.getElementById("concept_pic").src = "http://127.0.0.1/design_pics/"+data.pic;
+    					document.getElementById("concept_pic").style.visibility = "visible";
+    				*/
+    				$('#myform').submit();
+    				}	
+    				
+    			},
+    			error:function(xhr){
+    				alert(xhr.responseText);
+    			}
+    		});
+}
+
+function detail(ftitle,ftext,imgpath)
+{
+	var window_height = $(window).height();
+	var window_width = $(window).width();
+	var maxHeight='600px';
+  var _top='115px';
+  var _width='60%';
+  if(window_height<800)
+  {
+      maxHeight=window_height*0.7;
+      _top=0;
+      if(window_width<1080){
+           _width='80%';  
+      }else{
+           _width='auto';  
+      }
+  }
+                    
+	 art.dialog({
+    title: ftitle,
+    width: _width,
+		top:_top,
+    content: '<img src=" '+imgpath+  '"/>' + '<p>'+ ftext + '</p>',
+   });
+}
+
+
+$("#catid").attr("value",'{$catid}');
+
+$("#select_file").click(function(){
+	$("#feature_img").click();
+	});
+$("#feature_img").change(function(){
+	//alert(document.getElementById("feature_img").value);
+	document.getElementById("file_name").value = document.getElementById("feature_img").value;
+	});
+
+var price_id;
+function confirm_deleteall(){
+
+	art.dialog.confirm("{:L('real_delete')}", function(){ $('#myform').submit();});
+
+}
+
+function send()
+{
+	var url = "{:U(Design_order.'/sendmail')}" ;
+	
+	var data =  { 
+		priceid: price_id,		
+		content: document.getElementById("content").value,
+		title:document.getElementById("title").value
+		};
+
+	  $.post(url,data,function(data){
+	  	//art.dialog.list['mail'].close();
+	  	//art.dialog({ id: 'mail' }).close();
+	  	//window.art.dialog({ id: 'mail' }).close();
+	  	//window.parent.window.art.dialog({ id: 'mail' }).close();
+			if(data.stauts != 1){							
+				alert(data.msg);
+				return false;
+			}
+			else
+			{
+				alert("secceed");
+			}
+	},"json"); 
+					
+}
+
+function sendmail(typeid)
+{
+	price_id = typeid;
+	var window_height = $(window).height();
+	if(window_height<800)
+	{
+		maxHeight=window_height*0.7;
+		_top=0;
+		_width='80%';
+	}else{
+		maxHeight='600px';
+		_top='115px';
+		_width='60%';
+	}
+	$('#mail').css('overflow', 'auto');
+	$('#mail').css('maxHeight',maxHeight);
+									
+	art.dialog({
+							id: 'mail',
+							title: 'Send Email',
+							content: document.getElementById("mail"),
+							width: _width,
+							top:_top,
+							lock: true,
+							
+						}
+						);
+}
+
+</script>

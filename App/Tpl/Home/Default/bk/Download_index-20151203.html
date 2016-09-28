@@ -1,0 +1,23 @@
+<include file="Home:nav"/>
+<div class="fmian">
+<div class="layout_list">
+
+<div class="download clearfix">
+  <ul>
+    <volist name="downloads" id="vo">
+      <li> <a href="{:U('Download/category2',array('download_id'=>$vo['id']))}">
+        <div class="ipic"> <img src="{$vo['background_img']}" width="240px"></div>
+        <p class="dtitle">{$vo.title}</p>
+        </a> </li>
+    </volist>
+  </ul>
+</div>
+{$page} <!-- <include file="Home:bottom"/> --> 
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" style="margin:3px 2px 0px 0px;"/>'
+    		+'<a href="{:U(\'Download/index\')}">'+"{$Think.lang.DOWNLOADS}"+'</a> ';
+    		
+    } );
+</script>

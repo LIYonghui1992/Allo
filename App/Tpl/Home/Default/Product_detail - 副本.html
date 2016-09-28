@@ -1,0 +1,111 @@
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list" id="layout_list">
+		
+		<div class="main clearfix">
+			<div class="product_l">
+				<img src="{$product['product_socket_img']}">
+			</div>
+			<div class="product_r">
+				<div class="product_rt">
+					<h1>{$product['title']}</h1>
+					<h3>{$product['color']}</h3> <!-- Type {$product_model['title']} &nbsp;&nbsp;-->
+					<h2><div style="font-size:16px;margin-bottom:20px;">{$product['product_slogan']}</div>
+		        	<div id="price">
+		            	<if condition="$pricelist[0]['price'] neq ''">
+		            	<span style="font-size:20px" id="price1">{$pricelist[0]['price']}</span>
+		            	 </if>
+						<span id="availability" style="margin-left: 15px;">
+							<if condition="$pricelist[0]['availability'] eq 1">
+								{$Think.lang.RECOMMENDED_RETAIL_PRICE}
+		             		<else />
+		             			{$Think.lang.NOT_AVALIABLE_YET}</if>
+		            	</span>
+		            </div>
+		            <if condition="$pricelist[0]['price'] neq ''">
+		                <if condition="$sel eq 1">
+		            	<select style="background-color:#aaa;height:25px;margin-top: 5px;" id="pricelist">
+		                    <volist name="pricelist" id="vo">
+		                        <option value="{$vo['id']}">{$versions[$vo['id']]['title']}</option>
+		                    </volist>
+		                </select>
+		                </if>
+		            </if>
+        		</h2>
+	  		</div>
+	   </div>
+	</div>
+	<div class="main clearfix">
+			<div class="product_b">
+				<if condition="$product['content'] neq ''">
+					<div class="product_bcl">
+						<img src="../Public/image/product/icon-01.png" width="100%">
+					</div>
+					<div class="product_bcr">{$product['content']}</div>
+				</if>
+				<if condition="$product['idea'] neq ''">
+					<div class="product_bcl">
+						<img src="../Public/image/product/icon-02.png" width="100%">
+					</div>
+					<div class="product_bcr">{$product['idea']}</div>
+				</if>
+
+				<if condition="$product['features'] neq ''">
+					<div class="product_bcl">
+						<img src="../Public/image/product/icon-03.png" width="100%">
+					</div>
+					<div class="product_bcr">{$product['features']}</div>
+				</if>
+				<if condition="$product['special'] neq ''">
+					<div class="product_bcl">
+						<img src="../Public/image/product/icon-04.png" width="100%">
+					</div>
+					<div class="product_bcr">{$product['special']}</div>
+				</if>
+			</div>
+		</div>
+
+		<if condition="$product_technical['img'] neq ''">
+			<div class="main clearfix">
+				<div class="product_techncal">
+					<img src="{$product_technical['img']}">
+				</div>
+			</div>
+		</if>
+		<!-- <include file="Home:bottom" /> -->
+		<script type="text/javascript">
+			
+			$(document).ready(function()
+	   {		
+	   	document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" />'
+	   	+'<a href="{:U(\'Product/index\')}">'+"{$Think.lang.PRODUCTS}"+'</a>' 
+	   	+'<img src="../Public/image/arrow_footer.png" />'
+	   	+'<a href="'+"/Product/lists/product_group_id/"+"{$_COOKIE['allocacoc_pathinfo_group_id']}"+'">'	   	
+	   	+"{$_COOKIE['allocacoc_pathinfo_group']}"+'</a> '
+	   	+'<img src="../Public/image/arrow_footer.png" />'
+	   	+'<a>'+"{$_COOKIE['allocacoc_pathinfo_prd']}"+'</a>';
+		
+	} );
+	
+
+			$(function() {
+				$("#pricelist").change(function() {
+					var id = $("#pricelist").find("option:selected").val();
+					var url = "{:U('Product/pricelist')}";
+					$.post(url, {
+							id: id
+						},
+						function(data) {
+							if (data.stauts == 1) {
+								$('#price1').text(data.price);
+								if (data.availability == 1) {
+									$('#availability').text('{$Think.lang.RECOMMENDED_RETAIL_PRICE}');
+								} else {
+									$('#availability').text('{$Think.lang.NOT_AVALIABLE_YET}');
+								}
+							}
+						},
+						"json");
+				});
+			});
+		</script>

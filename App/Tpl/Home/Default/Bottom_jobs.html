@@ -1,0 +1,126 @@
+<style>
+	.download li {
+		width: 440px;
+		float: left;
+		text-align: center;
+		margin: 20px 50px;
+		display: inline;
+		position: relative;
+		overflow: hidden;
+	}
+	.ipic {
+		overflow: hidden;
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 420px;
+	}
+	.download ul{margin-top:20px;}
+	.office_title{font-size:20px;font-weight:bold;color:#2089a1;}
+	.title_slash{float:left;margin-left:5px;margin-top:13px;height:1px;width:865px;background-color:#EFEFEF;overflow:hidden;}
+</style>
+
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div style="height:35px;width:100%;"></div>
+		<volist name="offices" id="vo">
+			<notempty name="vo['jobs']">
+				<div class="download clearfix">
+					<div style="margin:0px auto;width:960px;" class="clearfix">
+						<div style="float:left;width:90px;"><font class="office_title"> {$vo['title']} </font></div>
+						
+						<div class="title_slash"></div>
+						
+					</div>
+					
+					
+    			<ul>
+    				<volist name="vo['jobs']" id="job">
+    					<li>
+    						<a href="javascript:void(0);" data-title="{$job.title}" data-id="{$job.id}" class="lists">
+    						<div class="ipic">
+    							<img src="{$job['img']}">
+    						</div>
+    						<p class="dtitle">
+    							{$job.title}
+    						</p> 
+    						</a>
+    						<div id="html{$job.id}" style="display: none">
+    							<img src="{$job.expanded_img}" width="100%">
+    							<p>{$job.contact}</p>
+    						</div>
+    					</li>
+    				</volist>
+    			</ul>
+    		</div>
+			</notempty>
+		</volist>
+			
+		<div class="download clearfix">
+			<ul>
+				<volist name="jobs" id="vo">
+					<li>
+						<a href="javascript:void(0);" data-title="{$vo.title}" data-id="{$vo.id}" class="lists">
+						<div class="ipic">
+							<img src="{$vo['img']}">
+						</div>
+						<p class="dtitle">
+							{$vo.title}
+						</p> 
+						</a>
+						<div id="html{$vo.id}" style="display: none">
+							<img src="{$vo.expanded_img}" width="100%">
+							<p>{$vo.contact}</p>
+						</div>
+					</li>
+				</volist>
+			</ul>
+		</div>
+	<!--	<include file="Home:bottom" /> -->
+		<script type="text/javascript">
+			
+			
+			$(document).ready(function()
+    	{		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" />'
+    		+'<a href="{:U(\'Product/index\')}">'+"{$Think.lang.JOBS}"+'</a>';
+    		
+    	} );
+			
+			$(function() {
+				$(".lists").click(function() {
+					var title = $(this).data("title");
+					var id = $(this).data("id");
+					var window_height = $(window).height();
+					var window_width = $(window).width();
+                    if(window_height<800)
+                    {
+                        maxHeight=window_height*0.7;
+                        _top=0;
+                        if(window_width<1080){
+                          _width='80%';  
+                        }else{
+                          _width='auto';  
+                        }
+                        
+                    }else{
+                        maxHeight='600px';
+                        _top='115px';
+                        _width='60%';
+                    }
+                    $("#html"+id).css('maxHeight',maxHeight);
+                    $("#html"+id).css('overflow', 'auto');
+                    art.dialog({
+                        title: title,
+                        content: document.getElementById('html'+id),
+                        width: _width,
+                        top:_top,
+                        lock:true,
+                        fixed: true,
+                    });
+				});
+			});
+</script>
+

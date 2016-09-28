@@ -1,0 +1,26 @@
+<include file="Home:nav"/>
+<div class="fmian">
+
+<div class="layout_list">
+
+  
+
+  <div class="about_content">
+    
+    <br> 
+    
+    <p style="color: #4c4c4c;">{$disclaimer.textbox}</p><br />
+        
+  </div>
+
+<!--  <include file="Home:bottom"/> -->
+
+<script type="text/javascript">
+	
+	$(document).ready(function()
+	{		
+		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" />'
+		+'<a href="{:U(\'Product/index\')}">'+"{$Think.lang.DISCLAIMER}"+'</a>';
+		
+	} );
+</script>

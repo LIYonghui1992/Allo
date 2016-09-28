@@ -1,0 +1,149 @@
+<style>
+	
+.layout_list {
+	float: left;
+}
+.fullSlide {
+	float: left;
+}/**/
+.bottom {
+	float: left;
+	width:100%;
+}
+.bd{
+	margin: 0 auto;
+}
+
+</style>
+<include file="Home:nav"/>
+	
+<div class="fmian">
+<div class="layout_list">
+
+<div class="list1">
+  <ul>
+    <volist name="products" id="vo">
+      <li> 
+        <a href="{:U('Product/detail',array('id'=>$vo['id'],'product_group_id'=>$vo['product_group_id']))}">
+        <div class="ipicc1"> <img src="{$vo['product_socket_img']}"> </div>
+        <div class="ipicc2"> 
+         <div class="info">
+          <p class="ltitle">{$vo.title}</p>
+          <p style="color:#999;">{$vo.color}</p> 
+          <!-- <p>Type {$product_model.title}</p> -->
+          <p class="pric">
+            <span>
+            <if condition="$vo['prices'][0]['price'] neq ''">{$vo['prices'][0]['price']}</if>
+            </span>
+            <if condition="$vo['prices'][0]['availability'] eq 1">{$Think.lang.RECOMMENDED_RETAIL_PRICE}
+              <else />
+              {$Think.lang.NOT_AVALIABLE_YET}</if>
+          </p>
+          <p><font style="font-size:14px;color:#aaa;line-height:15px;">more info </font> 
+          	<img src="../Public/image/arrow.png" style="width:5px;height:6px;"/>
+          </p>
+         </div> 
+        </div>
+        </a> 
+       </li>
+    </volist>
+  </ul>
+</div>
+<notempty name="product_group">
+  <div class="list2">
+    <ul>
+    	<notempty name="product_group.video_url_one">
+    		<li>{$product_group.video_url_one|stripslashes} </li>
+    	</notempty>
+    	<notempty name="product_group.video_url_two">
+    		<li>{$product_group.video_url_two|stripslashes} </li>
+    	</notempty>
+    	<notempty name="product_group.video_url_three">
+    		<li>{$product_group.video_url_three|stripslashes} </li>
+    	</notempty>
+    	<notempty name="product_group.video_url_four">
+    		<li>{$product_group.video_url_four|stripslashes} </li>
+    	</notempty>
+    	<!--
+      <li>{$product_group.video_url_one|stripslashes} </li>
+      <li>{$product_group.video_url_two|stripslashes} </li>
+      <li>{$product_group.video_url_three|stripslashes} </li>
+      <li>{$product_group.video_url_four|stripslashes} </li>
+      -->
+    </ul>
+  </div>
+</notempty>
+<notempty name="problem_img">
+  <div class="picslide">
+    <div class="bd flexslider" id="problem_img">
+      <ul class="slides">
+        <volist name="problem_img" id="vo">
+          <li><img src="{$vo}" width="100%"></li>
+        </volist>
+      </ul>
+    </div>
+  </div>
+</notempty>
+<notempty name="feature_img">
+  <div class="picslide">
+    <div class="bd flexslider" id="feature_img">
+      <ul class="slides">
+        <volist name="feature_img" id="vo">
+          <li><img src="{$vo}" width="100%"></li>
+        </volist>
+      </ul>
+    </div>
+  </div>
+</notempty>
+<link type="text/css"  href="../Public/flexslider/flexslider.css" rel="stylesheet"  />
+<script type="text/javascript" src="../Public/flexslider/jquery.flexslider-min.js"></script>
+<script type="text/javascript">
+	
+	$(document).ready(function()
+	{		
+		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" />'
+		+'<a href="{:U(\'Product/index\')}">'+"{$Think.lang.PRODUCTS}"+'</a>'
+		+ '<img src="../Public/image/arrow_footer.png" />' 
+		+'<a>'+"{$_COOKIE['allocacoc_pathinfo_group']}"+'</a>';
+		
+	} );
+	
+$(function(){
+	if($(".flexslider").width()<=1280)
+	{
+	   $(".flexslider").width(1080);
+	}
+	$("#problem_img").flexslider({
+	    animation:"slide",
+	    slideshowSpeed: 5000,
+	    pauseOnHover:true,
+	    pauseOnAction:false,
+	    controlNav:false,
+	});
+	$("#feature_img").flexslider({
+	    animation:"slide",
+	    slideshowSpeed: 5000,
+	    reverse:true,
+	    pauseOnHover:true,
+        pauseOnAction:false,
+        controlNav:false,
+	});
+})
+</script>
+<notempty name="scenarios">
+  <div class="list3" style="width:1080px;margin:0px auto;">
+    <ul>
+      <volist name="scenarios" id="vo">
+        <li>
+          <div class="list3l"><img src="{$vo.img}"></div>
+          <div class="list3r">
+            <h1>{$vo.title}</h1>
+            <p>{$vo.text}</p>
+          </div>
+        </li>
+      </volist>
+    </ul>
+  </div>
+</notempty>
+<div style="width:100%;height:2px;"></div>
+<!-- <include file="Home:bottom"/> -->

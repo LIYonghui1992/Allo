@@ -1,0 +1,90 @@
+<if condition="ACTION_NAME neq 'comment_list'  && ACTION_NAME neq 'blog_list' && MODULE_NAME neq 'Design' ">
+</div>
+
+</div>
+</if>
+
+<if condition=" ACTION_NAME eq 'detail' && MODULE_NAME eq 'Design' ">
+	<else/>
+</div>
+
+</div>
+</if>
+
+
+<?php
+
+if(ACTION_NAME!='designyear' || MODULE_NAME !='Design'){
+?>
+<include file="Home:bottom" />
+
+<div class="footer" style="width:100%;">
+    <div class="facebook">
+        <a href="http://{$Linkedin_link}"> <img src="../Public/image/linkin.png"  /> </a>
+    </div>
+    <div class="facebook">
+        <a href="http://{$Facebook_link}"> <img src="../Public/image/facebook.png"  /> </a>
+    </div>
+    <div class="facebook">
+        <a href="http://{$Instagram_link}"> <img src="../Public/image/instgram.png"  /> </a>
+    </div>
+    <div class="home">
+        <a href="/"> <img src="../Public/image/home.png"  style="float:left;"/> </a>
+         <div id="pathguide" style="color:#FFF;font-size:14px;float:left;margin-left:10px;width:90%;height:100%;">
+         	 <a href="/">home</a>
+         </div>
+         
+    </div>
+    <div class="bottom-logo">
+        <img src="../Public/image/bottom_logo_small.png" />
+    </div>
+     <select id="country" class="country">
+        <volist name="country" id="vo">
+
+            <if condition="$vo['lang']['id'] neq ''">
+
+                <option value="{$vo['lang']['mark']}-{$vo['id']}" <if condition="$vo['id'] eq $country_id">selected</if>>{$vo.title}</option>
+
+            </if>
+        </volist>
+    </select>
+</div>
+
+<?php 
+}
+?>
+
+
+
+
+
+
+
+<script type="text/javascript">
+$(function() {
+    $("#country").change(function() {
+        var val = $("#country").find("option:selected").val();
+        var strs = new Array();
+        strs = val.split("-");
+        var l = strs[0];
+        var id = strs[1];
+        window.location.href = "/index.php?l=" + l + "&country_id=" + id + "&second=1";
+    });
+    auto_bottom();
+}); 
+</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-18667435-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+    var ga = document.createElement('script');
+    ga.type = 'text/javascript';
+    ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ga, s);
+})(); 
+</script>
+</body>
+</html>

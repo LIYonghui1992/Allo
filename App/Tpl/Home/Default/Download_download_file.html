@@ -1,0 +1,104 @@
+<style>
+.download_file {
+	z-index: 2;
+	position: absolute;
+	width: 800px;
+	float: right;
+	padding: 10px;
+	margin-top: 20px;
+	margin-left: 300px;
+	top: 2px;
+	background-color: rgba(0,0,0,.8);
+	display: none;
+}
+.listpic {
+	width: 400px;
+	height: 488px;
+	size: 100%;
+	margin-left: 200px;
+}
+.listpic img {
+	width: 100%;
+}
+.downfile{
+	float:right;
+	dispaly:block;
+	width:100%;
+	text-align:center;
+	margin-top: 15px;
+}
+</style>
+<include file="Home:nav"/>
+<div class="fmian">
+<div class="layout_list">
+
+<div class="download clearfix">
+  <ul>
+    <volist name="download_files" id="vo">
+      <li> <a href="javascript:void();" data-file="{$vo.file}" data-title="{$vo.title}" data-bgimg="{$vo.background_img}" class="lists">
+        <div class="ipic"><img src="{$vo['background_img']}" width="240px"> </div>
+        <p class="dtitle">{$vo.title}</p>
+        </a> </li>
+    </volist>
+  </ul>
+</div>
+{$page}
+<div id="detail" style="text-align:center"></div>
+<!-- <include file="Home:bottom"/> -->
+<script type="text/javascript">
+
+	$(document).ready(function()
+	   {		
+	   	document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+	   	+'<a href="{:U(\'Download/index\')}">'+"{$Think.lang.DOWNLOADS}"+'</a>'
+	   	+'<img src="../Public/image/arrow_footer.png"/>' 
+	   	+'<a href="'+"/Download/category2/download_id/"+"{$_COOKIE['allocacoc_pathinfo_download_id']}"+'" >  '
+	   	+"{$_COOKIE['allocacoc_pathinfo_download']}"+'</a>'
+	   	+'<img src="../Public/image/arrow_footer.png"/>'
+	   	+"{$_COOKIE['allocacoc_pathinfo_download2']}";
+		
+	} );
+	
+$(function(){
+
+	$(".lists").click(function() {
+
+		var file  = $(this).data("file");
+
+		var title = $(this).data("title");
+		
+		var bgimg = $(this).data("bgimg");
+
+		var html  = '';
+
+		var strs = file.split('.');
+
+		if(strs[1] == 'jpg' || strs[1] == 'jpeg' || strs[1] == 'gif' || strs[1] == 'png'){
+
+			html = "<img src="+file+" width='100%'>"+
+
+				   "<a href="+file+" class='downfile'><img src='../Public/image/download/dl.png' alt='down'></a>";
+
+		}else{
+
+			html = "<img src="+bgimg+" width='60%'><br><br>"+
+
+				   "<a href="+file+" class='downfile'><img src='../Public/image/download/dl.png' alt='down'></a>";
+
+		}
+
+		$('#detail').html(html);
+
+		art.dialog({title: title, content: document.getElementById('detail') , lock: true,fixed: true,
+
+		close: function () {
+
+        	$('#detail').html('');
+
+    	}}); 
+
+	});
+
+});
+
+</script>

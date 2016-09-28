@@ -1,0 +1,37 @@
+<include file="Home:DNnav"/>
+<div class="fmian">
+
+<div class="layout_list">
+
+  
+
+  <div class="about_content">
+    
+    <br> 
+    
+    <p style="color: #4c4c4c;">{$disclaimer}</p><br />
+        
+  </div>
+
+<!--  <include file="Home:bottom"/> -->
+
+<script type="text/javascript">
+	
+	$(document).ready(function()
+	{		/*
+		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" />'
+		+'<a href="{:U(\'Product/index\')}">'+"{$Think.lang.DISCLAIMER}"+'</a>';
+		*/
+		
+		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+  	   	+'<a href="{:U(\'DesignNest/index\')}">'+"{$Think.lang.DESIGN_CHALLENGE}"+'</a>' 
+  	   	+'<img src="../Public/image/arrow_footer.png"/>'
+  	   	+'<a href="{:U(\'Product/index\')}">'+"{$Think.lang.DISCLAIMER}"+'</a>';
+  	   	
+	} );
+</script>
+
+<style type="text/css">
+.footer{background-color:#884697}
+.footer .country {BACKGROUND-COLOR: #884697;}
+</style>

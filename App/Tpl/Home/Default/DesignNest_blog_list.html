@@ -1,0 +1,102 @@
+<html>
+		
+	<head>
+	</head>
+	
+	
+	<body style="width:100%;" onload="auto_bottom();" onresize="auto_bottom();">		
+		
+		<div style="width:100%;height:20px;"></div>	
+		
+		<ul style="margin:0px auto;width:1080px;">
+			<li style="float:left;width:320px;">
+				<ul>			            
+          <volist name="blog_list" id="blog" key="k">
+      		<li class="left_li" id="left_li_{$k}"  <if condition="$k eq 1"> style='background-color:#FFF;'</if> >    			
+      			<div class="title_div"  <if condition="$k eq 1"> style='border-top:1px solid #DDD;'</if> onclick="detail_blog({$k},'{$blog.expanded_image}','{$blog.article_text|nl2br}')">
+      				<div id="tip_{$k}" class="tip" style="<if condition="$k eq 1"> display:block;</if>">
+      					<font style="font-size:24px;"> > </font>
+      				</div>
+    					<p style="line-height:20px;margin-bottom:5px;margin-top:5px;padding:0px 20px;"> 
+    						<font style="font-size:20px;color:#444;font-weight:bold;">{$blog.title}</font>  					
+    					</p>
+    					
+    					<p style="line-height:14px;margin-top:5px;padding:0px 20px;font-size:14px;">
+    							{$blog.createtime|date="Y.m.d",###}									
+    					</p>					
+    				
+    				</div>
+      		</li>                               
+    	    </volist>	
+    	    
+    	    <if condition="$one_page neq 1">
+    	    	<li>
+    	    		<div class='title_div'>
+    	    		<if condition="$last_page neq 1">
+    	    			<div style="float:right;margin-right:50px;width:20px;" onclick="javascript:load_blog({$page_count});"> 
+    	    				>|
+    	    			</div>
+    	    			<div style="float:right;margin-right:10px;width:20px;" onclick="javascript:load_blog({$curr_page+1});">
+    	    				> 
+    	    			</div>
+    	    		</if>
+    	    		
+    	    		<if condition="$first_page neq 1">
+    	    			<div style="float:left;margin-left:50px;width:20px;" onclick="javascript:load_blog(1);">
+    	    				|<
+    	    			</div>
+    	    			<div style="float:left;margin-left:10px;width:20px;" onclick="javascript:load_blog({$curr_page-1});">
+    	    				< 
+    	    			</div>
+    	    			
+    	    		</if>
+    	    		</div>
+    	    	</li>
+    	    </if>
+    	  </ul>
+				
+			</li>
+			
+			<li style="float:left;width:350px;margin-left:5px;"> 
+				<notempty name="blog_list">
+  			<img id="blog_pic" src="{$blog_list[0].expanded_image}" style="width:100%;height:100%;">
+		    </notempty>
+			</li>
+			
+			<li style="float:left;width:350px;">  
+				<notempty name="blog_list">
+  			  <p id="blog_text" style="line-height:24px;margin-top:5px;font-size:14px;">
+							{$blog_list[0].article_text|nl2br}									
+					</p>
+		    </notempty>
+			</li>
+			<li style="clear:both;"></li>
+		</ul>
+		
+		
+		<div style="width:100%;height:10px;"></div>
+	</body>
+	
+</html>         
+
+
+<style type="text/css">
+  .title_div{width:300px;height:40px;padding:10px 10px;border-bottom:1px solid #DDD;}
+  .tip{width:10%;height:40px;padding:0px 10px;float:right;display:none;}
+</style>
+
+<script type="text/javascript">	
+	function detail_blog(blog_id,blog_image,blog_content){
+		//alert(blog_content);
+		 $(".left_li").css("background-color", "");
+		 $("#left_li_"+blog_id).css("background-color", "#FFF");
+		 
+		 $(".tip").css("display","none");
+		 $("#tip_"+blog_id).css("display","block");
+		 
+		 //$("#blog_pic").css("src",blog_image);
+		 document.getElementById("blog_pic").src= blog_image;
+		 document.getElementById("blog_text").innerHTML = blog_content;
+
+	}
+</script>

@@ -1,0 +1,427 @@
+<!--[if lte IE 8]> 
+<style type="text/css">
+.design_main {
+	padding-bottom:30px !important;
+}
+</style>
+<![endif]-->
+<script type="text/javascript" charset="utf-8" src="../Public/js/script.js"></script>
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list">
+		
+		<div class="design_main ">
+			
+			<div class="designtitle" >
+  				 {$design_challenge.title}
+  		</div>
+  		
+  		<div id="header-all">
+        <div id="h-vedio">
+          {$design_challenge.demovideo}
+        </div>
+        
+        <div id="explan">
+          <div id="explan-text">
+            {$design_challenge.explanation} 
+          </div>
+          
+          <div class="b-more">
+          	<a href="javascript:findmore({$design_challenge['id']});">
+          		<font class="more">find out more</font> 
+          	</a>
+             
+          </div>  
+          <div class="b-more" style="margin-left:50px;">
+          	<a href="{:U('DesignNest/submit_design')}">
+          		<font class="more">submit your design</font> 
+          	</a>
+             
+          </div>       
+         
+        </div>  <!-- explan -->
+                
+        
+      </div>  <!-- end header-all -->
+      
+
+			<div  class="designtitle"  >  
+				<div style="float:right;width:175px;height:20px;">
+					<a href="{:U('DesignNest/project_list')}">
+						<font style="font-size:16px;color:#888;"> see more projects &nbsp; </font>
+						<img src="../Public/image/go_list.png"/>
+					</a>
+					
+				</div>     
+	      <span><font style="font-weight:bold;font-size:18px;color:#333333;">Current Projects<br></font> </span>              
+	       <span><font style="font-size:14px;color:#666666;">An overview of the projects waiting for your support:</font> </span>                    
+      </div>  
+      
+      <div class="list_design clearfix">
+      	<ul>
+      		
+      		<volist name="fund_list" id="vo" key="k">
+      			<li>
+      				<div class="product">
+          			<div style="width:253px; height:195px;"> 
+                	 		<a href="{:U('DesignNest/detail',array('id'=>$vo['id']))}">
+                      <img src="{$vo.background_img}" style="width:253px; height:195px;" />
+                     </a>
+                </div>
+                	 	 
+                <div style="width:220px;height:65px;padding-left:15px;margin-top:10px;">                     	 
+                       <strong><font class="p-font">{$vo.title}</font></strong>                                              
+                        <font class="font_developer"><br>{$vo['developer']}</font>
+                </div>
+                     
+                <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;">                 	
+                     	<ul style="line-height:30px;">
+                     		<font class="p-font3" style="font-size:14px;vertical-align:top;">{$vo.price|substr=0,1}</font>
+                        <font class="p-font3" style="vertical-align:top;" >{$vo.price|substr=1}</font>
+                        <font class="p-font3" style="font-size:20px;vertical-align:top;">{$vo.price_cent}</font>
+                  
+    					        </ul>                  	
+                </div>
+                                   
+                    
+                <div style="border:1px solid #DDD; border-radius:10px; width:88%;overflow:hidden;margin-left:15px;margin-top:15px;">
+                      <span style="display: block;background:#15869f; 
+                      height:8px;width:{$vo['pcs_ordered']/$vo['funding_goal']*100}%;"></span>
+                </div>
+                    
+                <div style="margin:0px auto; width:180px;height:20px;margin-top:3px;margin-right:10px;text-align:right;">
+                       
+                       <font class="pcs_font">{$vo['pcs_ordered']}/{$vo['funding_goal']}</font>
+                       <font class="p-font2"> pcs required </font>
+                </div>
+                
+                <div style="margin:0px auto; width:180px;height:20px;margin-bottom:5px;margin-right:10px;text-align:right;">
+                       
+                       <font class="pcs_font">{$vo['dayleft']} days</font>
+                       
+                </div>
+                     
+                <div style="margin:0px auto; width:162px;height:27px;text-align:center;background-color:transparent;
+                     	background-image:url(../Public/image/index.4.1.png);line-height:23px;">
+                     	 <a href="javascript:godetail({$vo['id']});" >
+                        <font style="font-size: 14px;font-weight: bold;color:#15869f;">Pre-order now</font> 
+                       </a>
+                </div>
+          		</div>
+      			</li>
+      		</volist>
+      		
+      	</ul>
+      </div>
+      
+     
+      
+			
+		</div>
+	<!--	<include file="Home:bottom" /> -->
+	
+	
+
+<script type="text/javascript" src="../Public/flexslider/jquery.flexslider-min.js"></script>
+<link type="text/css"  href="/slidertest/flexslider/flexslider.css" rel="stylesheet"  />
+
+
+<script type="text/javascript">
+  $(document).ready(function()
+   {		
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'DesignNest/index\')}">'+"{$Think.lang.DESIGN_CHALLENGE}"+'</a> ';
+    		
+    } );
+</script>
+
+		
+		<script type="text/javascript">
+			
+			var pastyear = {$years[0]};
+			var truepage = {$currpage-1};
+			var pastpage = 0;
+			//var pastpagecount = {$pastpagecount};
+			
+			function yearturn(yearid)
+			{
+				var url = "{:U('DesignNest/pastyearProducts')}";
+				$.post(url,{yearid:yearid,pastyear:pastyear},function(data)
+				{
+					if(data.status==1)
+					{
+						pastpage = 0;
+						pastyear = data.pastyear;
+						
+						var oImg = document.getElementsByTagName('img');
+    				for (var i = 0; i < oImg.length; i++) 
+    				{
+    					if(oImg[i].className =='yearimg')
+    					{
+    					  if (oImg[i].id ==  ('yearimg'+pastyear) ) 
+    					    oImg[i].style.visibility="visible";
+    					  else 
+    					  	oImg[i].style.visibility="hidden";    					  	
+    				  }
+    				}
+    				
+    				var oImg = document.getElementsByTagName('font');
+    				for (var i = 0; i < oImg.length; i++) 
+    				{
+    					if(oImg[i].className =='yearname')
+    					{
+    					  if (oImg[i].id ==  ('year'+pastyear) ) 
+    					  {
+    					  	oImg[i].style.fontSize="20px";
+    					  	oImg[i].style.color="#09C";
+    					  }
+    					  else 
+    					  {
+    					  	oImg[i].style.fontSize="12px";
+    					  	oImg[i].style.color="#000";
+    					  }    					
+    				  }   				  
+    				  
+    				}
+    				
+    				$('#b-right').innerHTML='';
+    				
+    				$('#b-right').load('/DesignNest/designyear/pastyear/'+pastyear);
+    				auto_bottom();
+    				
+					}
+				},"json");
+			}
+			
+			
+			
+			
+			
+			function findmore(chanid)
+			{
+				window.location = "/DesignNest/more/id/"+chanid;
+			}
+			
+			function godetail(productid)
+			{
+				window.location = "/DesignNest/detail/id/"+productid;
+			}
+			
+			
+			$(function() {
+				$('#mid').flexslider({
+        	selector: ".products > .product",
+          animation: "slide",
+          minItems: 4,
+          maxItems: 4,
+          move:4,
+          slideshow: false,
+          itemWidth: 220,
+          itemMargin: 50,
+        });
+        
+        
+      
+  
+  
+  
+				DD_belatedPNG.fix('.design_year li');
+				//var k=parseInt($('.design_font_on').data('k')/4);
+				//$(".picScroll").slide({mainCell:".bd ul",autoPage:true,effect:"left",autoPlay:false,scroll:4,vis:4,pnLoop: false,defaultIndex:k});
+				$('#b-right').load('/DesignNest/designyear/');
+				auto_bottom();
+				//$('#pastFrame').src =  	'/Design/designyear/';
+				//$('#pastFrame').src =  	'www.baidu.com';
+			});
+			
+			function price(price){
+				var num = $('#num').val();
+				if(num == '') num=1;
+				var all_price = parseInt(price)*parseInt(num);
+				$('#price').text("$"+all_price);
+			}
+			
+			
+			
+			
+			
+			function tip(msg) {
+				$('body').append('<div id="msg" style="width:60%;position: fixed;top:30px;right:20%;word-wrap: break-word;border-radius:3px; background-color:rgba(0,0,0,0.5);box-shadow: 0 3px 6px rgba(0, 0, 0, .175); display: none; text-align: center; line-height:48px; padding:10px; font-size: 36px; z-index: 9999; color:#fff;font-family: Microsoft YaHei;"></div>');
+				$("#msg").text(msg);
+				$("#msg").fadeIn();
+				setTimeout('$("#msg").fadeOut();$("#msg").remove();', 2000);
+			}
+		</script>
+		
+		
+
+<style type="text/css">
+	.flexslider{width:1008;height:360px;margin:1px auto;padding:1px;}	
+	.flex-viewport{padding-left:5px;padding-right:5px;}
+	.products{margin:0px auto;margin-left:2px;margin-right:2px;width:994px;height:360px;}	
+	/*.product {height: 350px;width: 220px;margin-right: 50px;border: 1px solid #DDD;}/*float: left;position: relative;*/ 
+	.product {height: 420px;width: 253px;border: 1px solid #DDD;}
+/*
+.flexslider2{width:902;height:360px;margin:1px auto;padding:1px;}
+.pastproducts{margin:0px auto;margin-left:20px;margin-right:20px;width:902px;height:350px;}
+.pastproduct {height: 300px;width: 212px;margin-right: 10px;
+   border: 1px solid #CCC;background-color: #FFF;}/*float: left;position: relative;*/
+
+
+.designtitle {
+	margin: 0px auto;
+	width: 1080px;
+	height:40px;
+
+	margin-bottom:10px;
+	margin-top:30px;
+	text-align:left;
+}
+
+#b-bottom {
+	margin: 0px auto;
+	margin-top:20px;
+	width: 1080px;
+	height:350px;
+}
+#b-left {
+	float: left;
+	height: 380px;
+	width: 130px;
+}
+#b-right {
+	height: 350px;
+	width: 902px;
+	margin-left: 130px;
+}
+#header-all {
+	margin: 0px auto;
+	width: 1080px;
+	height: 394px;
+	margin-top:0px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CCC;
+}
+#mid {
+	margin: 0px auto;
+	margin-top:5px;
+	width: 1048px;
+	height:360px;
+}
+
+
+.step-img{
+	width:30px;height:98px; 
+	padding-top:110px;
+}
+#bottom {
+	background-color: #f3f3f3;
+	padding-top:20px;
+	height: 520px;
+	width: 100%;
+	margin-top: 40px;
+}
+
+#left-img {
+	height: 350px;
+	float: left;
+	width: 30px;
+}
+#right-img {
+	height: 350px;
+	float: right;
+	width: 30px;
+}
+.b-more {
+	margin-top: 20px;
+	margin-left: 3px;
+	height: 42px;
+	width: 195px;
+	background-image: url(../Public/image/product1.1.png);
+	background-color: transparent;
+	text-align:center;
+	line-height:42px;
+	float:left;
+}
+.more {
+	font-size: 16px;
+	font-weight: bold;
+	color: #15869f;
+
+}
+#explan {
+	padding: 5px;
+	text-align:justify;
+	margin-left: 592px;
+	height: 380px;
+}
+#b-left-left {
+	float: left;
+	height: 393px;
+	width: 50px;
+	padding-left: 40px;
+}
+#b-left-right {
+	height: 393px;
+	width: 150px;
+	margin-left: 5px;
+	padding-left: 20px;
+}
+.step-img-2 {
+	height: 7px;
+	width: 15px;
+	margin-top: 10px;
+	padding-left: 5px;
+}
+
+.b-year {
+	height: 28px;
+	width: 100px;
+	margin-top: 18px;
+	float: top;
+	position: relative;
+}
+
+#h-vedio {
+	margin: 0px;
+	float: left;
+	width: 562px;
+}
+
+.p-font{
+	font-family:'Century Gothic';
+	font-size:16px;
+	font-weight:bold;
+	color:#666666;
+	margin: 0px auto;	
+}
+.p-font2{
+	font-family:'Century Gothic';
+	font-size:14px;
+	color:#666666;
+	margin:0 auto;
+}
+.pcs_font{
+	font-family:'Century Gothic';
+	font-size:14px;
+	font-weight:bold;
+	color:#666666;
+	margin:0 auto;
+}
+.p-font3{
+	font-family:'Century Gothic';
+	font-size:34px;
+	
+	margin:0 auto;
+}
+.font_developer{
+	font-size:12px;
+	color:#888888;
+}
+/*
+.bottom{height:100px;background-color:#CCC;margin-bottom:37px;margin-top:0px;position:relative;z-index:99;[
+ margin-bottom:0 !important;];[
+ bottom:37px !important;];}
+*/
+</style>

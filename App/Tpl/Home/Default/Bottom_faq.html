@@ -1,0 +1,23 @@
+<include file="Home:nav"/>
+<div class="fmian">
+
+<div class="layout_list">
+
+  
+
+  <div class="about_content">
+
+    <h1>{$Think.lang.FAQ}</h1><br />
+
+    <volist name="faqs" id="vo">
+
+        <h2 style="font-size: 20px;color: black;">{$vo.question}</h2>
+
+        <p style="color: #4c4c4c;">{$vo.answer}</p><br />
+
+	</volist>
+
+  </div>
+
+<!--  <include file="Home:bottom"/> -->
+

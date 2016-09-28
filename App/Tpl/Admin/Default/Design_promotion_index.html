@@ -1,0 +1,149 @@
+<table  class="search_table" width="100%">
+  <tr>
+  	<td>
+  	{$challenge['title']}<br/>
+  	</td>
+  </tr>
+</table>
+
+<form id="feature" action="{:U('Design_promotion/add')}"  method='post' enctype='multipart/form-data'>
+  <table class="search_table" width="100%">
+  	<tr> <td width="30"> title</td> <td> <input type="text" id="title" name="title"/></td> </tr>
+  	<tr> <td width="30"> img</td> 
+  		   <td>
+  		   	<input name="file_name" id="file_name" type="text"	readonly="readonly"/>
+  		   	 <input type="file" id="feature_img" name="feature_img" value="upload img" style="display:none;"/>
+  		   	 <input type="button" value="upload img" id="select_file"/>
+  		 	 </td> 
+  	</tr>
+  	<tr> <td width="30"> link</td> <td> <textarea id="feature_text" name="feature_text"></textarea></td>  </tr>
+  	<tr> <td><input type="button" value="add promotion" onclick="javascript:add_promotion();"/> </td> </tr>
+  </table>
+  <input type="hidden" id="challenge_id" name="challenge_id" value="{$challenge['id']}"/>
+</form>
+
+				 	
+<form name="myform" id="myform" action="" method="post">
+  <div class="table-list">
+  <table width="100%" cellspacing="0">
+    <thead>
+      <tr>
+        <th width="30"><input type="checkbox" value="" id="check_box" onclick="selectall('ids[]');"></th>
+        <th width="40">{:L('listorder')}</th>
+        <th width="40">ID</th>
+        <th width="80">Title</th>
+        <th width="80">img</th>
+        <th width="80">link</th>
+        <th width="60">{:L('status')}</th>
+        <th width="60">{:L('username')}</th>
+        <th width="100">{:L('manage')}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <volist name="promotion_list" id="vo" key="k">
+        <tr>
+          <td  width="30" align="center"><input class="inputcheckbox " name="ids[]" value="{$vo['id']}" type="checkbox" ></td>
+          <td width="40" align='center'><input name='listorders[{$vo.id}]' type='text' size='3' value='{$vo.listorder}' class='input-text-c'></td>
+          <td align="center">{$vo['id']}</td>
+          <td align="center">{$vo['title']} </td> 
+          <td align="center"><img src="{$vo['img']}" style="width:100px;height:30px;"> </td> 
+          <td align="center">{$vo['link']} </td>   
+          <td align="center"><if condition="$vo['status'] eq 1"><font color="green">{:L('isshenhe')}</font><else/><a href="{:U($module_name.'/status',array(id=>$vo['id'],status=>1))}"><font color="red">{:L('noshenhe')}</font></a></if></td>
+                  
+          <td align="center">{$vo['username']}</td>
+          <td align="center">
+          	<a href="{:U('Design_promotion/edit',array(id=>$vo['id']))}">{:L('edit')}</a> |  
+          	<a href="javascript:confirm_delete('{:U(design_promotion.'/delete',array(id=>$vo['id']))}')">{:L('delete')}</a>
+          </td>
+        </tr>
+      </volist>
+    </tbody>
+  </table>
+ 
+  <div class="btn">
+    <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="myform.action='{:U(design_feature.'/deleteall')}';return confirm_deleteall()"/>
+    <input  type="button" class="button" name="dosubmit" value="<?php echo L('listorder')?>" onclick="myform.action='{:U(design_feature.'/listorder')}';$('#myform').submit();" />
+    <input  type="button" class="button" name="dosubmit" value="<?php echo L('status_ok')?>" onclick="myform.action='{:U(design_feature.'/statusallok')}';$('#myform').submit();" />
+  </div>
+  
+  <input type="hidden" id="design_id" name="design_id" value="{$design_winner['id']}"/>
+  
+</form>
+</div>
+
+
+  
+<script>
+
+function add_promotion()
+{
+	   		$("#feature").ajaxSubmit({
+    			dataType:  'json',
+    			
+    			success: function(data) {
+    				if(data.status==0){
+    					alert(data.msg);
+    				}
+    				if(data.status==1){
+    					$('#myform').submit();
+    				}	
+    				
+    			},
+    			error:function(xhr){
+    				alert(xhr.responseText);
+    			}
+    		});
+}
+
+
+
+
+
+function detail(ftitle,ftext,imgpath)
+{
+	var window_height = $(window).height();
+	var window_width = $(window).width();
+	var maxHeight='600px';
+  var _top='115px';
+  var _width='60%';
+  if(window_height<800)
+  {
+      maxHeight=window_height*0.7;
+      _top=0;
+      if(window_width<1080){
+           _width='80%';  
+      }else{
+           _width='auto';  
+      }
+  }
+                    
+	 art.dialog({
+    title: ftitle,
+    width: _width,
+		top:_top,
+    content: '<img src=" '+imgpath+  '"/>' + '<p>'+ ftext + '</p>',
+   });
+}
+
+
+$("#catid").attr("value",'{$catid}');
+
+$("#select_file").click(function(){
+	$("#feature_img").click();
+	});
+$("#feature_img").change(function(){
+	//alert(document.getElementById("feature_img").value);
+	document.getElementById("file_name").value = document.getElementById("feature_img").value;
+	});
+
+var price_id;
+function confirm_deleteall(){
+
+	art.dialog.confirm("{:L('real_delete')}", function(){ $('#myform').submit();});
+
+}
+
+
+
+
+</script>

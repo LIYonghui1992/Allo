@@ -1,0 +1,273 @@
+<style>
+	.picScroll .prev,
+	.picScroll .next {
+		position: absolute;
+		top: 60px;
+	}
+</style>
+<div class="fmian">
+	<div class="layout_list">
+		<include file="Home:nav" />
+		<div class="design_main clearfix">
+			<div class="picScroll">
+				<div class="tempWrap">
+					<ul class="design_year clearfix">
+						<volist name="years" id="vo">
+							<li style="background: url({$vo['img']}) no-repeat; background-size:100%">
+								<a href="{:U('Design/index',array('get_year'=>$vo['title']))}">
+									<div class="design_up"> 
+										<span class="<if condition=" $vo[ 'title'] eq $get_year ">design_font_on<else />design_font</if>">{$vo['title']}</span>
+									</div>
+								</a>
+							</li>
+						</volist>
+					</ul>
+				</div>
+				<a class="prev"></a>
+				<a class="next"></a>
+			</div>
+			<div class="design_l">
+				<div class="design_header">
+						<p>{$design_challenge.explanation}</p>
+				</div>
+				<ul class="design_box">
+					<volist name="each_designs" id="vo">
+						<li>
+							<a href="{:U('Design/lists',array('design_id'=>$vo['id']))}">
+								<img src="{$vo.img}" width="100%" height="220" />
+								<h4><strong>{$vo.title}</strong></h4>
+							</a>
+						</li>
+					</volist>
+				</ul>
+			</div>
+			<div class="design_r">
+				<h2>Fund list</h2>
+				<ul>
+					<volist name="fund_list" id="vo">
+						<li>
+							<img src="{$vo.background_img}" width="100%" class="desc" data-id="{$vo.id}" data-title="{$vo.title}" data-img="{$vo.expanded_img}" data-text="{$vo.winner_text}" data-developer="{$vo.developer}" data-deadline="{$vo.deadline|date='Y-m-d',###}" data-funding="{$vo.funding_goal}" data-ordered="{$vo.pcs_ordered}"  data-price="{$vo.price}" data-backgroundimg="{$vo.background_img}">
+							<h2><strong>{$vo.title}</strong></h2>
+							<div style="border:1px solid #96c62f; float:left; width:88%;"> <span style="display: block;background:#96c62f;text-align:left;height:10px; width:{$vo['pcs_ordered']/$vo['funding_goal']*100}%;"></span>
+                            </div>
+                            <!--<font style="font-size:12px;">{$vo['pcs_ordered']/$vo['funding_goal']*100}%</font>-->
+                            <if condition="$vo['pcs_ordered'] egt $vo['funding_goal']"><div style="color:#96c62f; font-size:10px; float:left; width:8%; margin-left:5px;margin-top: -8px;"><span><img src="../Public/image/iconfont-gou.png"></span></div></if>
+							<h1>${$vo.price}</h1>
+							<p>{$vo.funding_goal}&nbsp;pcs required</br>
+								    {$vo.pcs_ordered2} pcs ordered</br>
+								   <if condition="$vo['remaining'] elt 0">funding has passed<elseif condition="$vo['remaining'] eq 1" />1 day left<else />{$vo.remaining} days left</if></br>
+								<!--${$vo.price} per piece</br>-->
+							</p>
+							<p>
+							<input type="button" value="order" class="desc" data-id="{$vo.id}" data-title="{$vo.title}" data-img="{$vo.expanded_img}" data-text="{$vo.winner_text}" data-developer="{$vo.developer}" data-deadline="{$vo.deadline|date='Y-m-d',###}" data-funding="{$vo.funding_goal}" data-ordered="{$vo.pcs_ordered}"  data-price="{$vo.price}" data-backgroundimg="{$vo.background_img}" style="background-color: rgb(8, 124, 193);
+padding: 3px 8px;
+color: white;
+margin-top: 5px;">
+							</p>
+						</li>
+					</volist>
+				</ul>
+			</div>
+		</div>
+		<div id="detail" style="text-align:center;display: none;">
+        	<div style='text-align:left; font-size:24px;' class="detail_title"></div>
+            <div style='float:right;margin-top: -38px;'><span id="detail_price" style="margin-right: 20px; font-weight:bold;"></span><input type="button" value="order" id="detail_order" data-deadline="{$vo.deadline|date='Y-m-d',###}" data-price="{$vo.price}" data-img="{$vo.background_img}" class="order"> </div>
+			<h3 align="center"><img src='' width="60%" class="detail_img"></h3>			
+			<p class="detail_text"></p>
+        </div>
+		<div id="order" style="display:none;">
+			<h2 class="order_title"></h2>
+			<h3 class="order_h3"></h3>
+			<div class="order_l">
+				<img id="order_img" src=""> </div>
+			<div class="order_r">
+				<form action="" method="post" id="pform">
+                    <input type="hidden" id="ecprice" value="">
+					<p class="order_price"> <span id="price"></span>
+						<input name="num" id="num" value="" placeholder="1" style="border:1px solid #000000; width:20px; margin-left:10px;" onChange="price($('#ecprice').val())">
+					</p>
+					<div style="margin-top:30px;"> Billing Details
+						<br> Country*
+						<br>
+						<input type="text" name="ctry" id="ctry" value="">
+						<br>
+						<div class="order_rl"> First Name*
+							<br>
+							<input type="text" style="border:1px solid #000000; width:170px;" name="first_name" id="first_name" value="">
+						</div>
+						<div class="order_rr"> Last Name*
+							<br>
+							<input type="text" style="border:1px solid #000000; width:170px;" name="last_name" id="last_name" value="">
+						</div>
+						<br> Company Name
+						<br>
+						<input type="text" name="company" id="company" value="">
+						<br> Address*
+						<br>
+						<input type="text" name="address" id="address" value="">
+						<br> Postcode / Zip *
+						<br>
+						<input type="text" name="zip" id="zip" value="">
+						<br> Town / City *
+						<br>
+						<input type="text" name="city" id="city" value="">
+						<br>
+						<div class="order_rl"> Email Address *
+							<br>
+							<input type="text" style="border:1px solid #000000;width:170px;" name="email" id="email" value="">
+						</div>
+						<div class="order_rr"> Phone 
+							<br>
+							<input type="text" style="border:1px solid #000000; width:170px;" name="phone" id="phone" value="">
+						</div>
+					</div>
+					<input type="hidden" name="design_id" id="design_id" value="">
+					<button id="check" class="check">{$Think.lang.DOSUBMIT}</button>
+				</form>
+			</div>
+		</div>
+		<include file="Home:bottom" />
+		<script type="text/javascript">
+			jQuery(".picScroll").slide({
+				mainCell: "ul",
+				autoPlay: false,
+				effect: "left",
+				vis: 4,
+				scroll: 1,
+				autoPage: true,
+				pnLoop: false
+			});
+		</script>
+		<script type="text/javascript">
+			function price(price){
+				var num = $('#num').val();
+				if(num == '') num=1;
+				var all_price = parseInt(price)*parseInt(num);
+				$('#price').text("$"+all_price);
+			}
+			$(function() {
+				$(".tempWrap").css("width", "1080px");
+				$(".desc").click(function() {
+					var window_height = $(window).height();
+					if(window_height<800)
+					{
+						maxHeight=window_height*0.7;
+						_top=0;
+						_width='80%';
+					}else{
+						maxHeight='600px';
+						_top='115px';
+						_width='60%';
+					}
+					var id = $(this).data("id");
+					var title = $(this).data("title");
+					var text = $(this).data("text");
+					var developer = $(this).data("developer");
+					var img = $(this).data("img");
+					var deadline = $(this).data("deadline");
+					var price = $(this).data("price");
+					var backgroundimg = $(this).data("backgroundimg");
+					$('#detail_order').data("id",id);
+					$('#detail_order').data("title",title);
+					$('#detail_order').data("img",backgroundimg);
+					$('#detail_order').data("deadline",deadline);
+					$('#detail_order').data("price",price);
+					$('.detail_title').html(title+"<br><span style='text-align: left;font-size: 16px;position: relative;top: -8px;'>"+developer);
+					$('.detail_img').attr("src", img);
+					$('.detail_text').text(text);
+					$('#detail_price').text("$"+price);
+					$('#detail').css('overflow', 'auto');
+					$('#detail').css('maxHeight',maxHeight);
+					art.dialog({
+						id: 'des',
+						title: title,
+						content: document.getElementById("detail"),
+						width: _width,
+						top:_top,
+						lock: true,
+					});
+				});
+				$(".order").click(function() {
+					var window_height = $(window).height();
+					if(window_height<800)
+					{
+						maxHeight=window_height*0.7;
+						_top=0;
+						_width='80%';
+					}else{
+						maxHeight='600px';
+						_top='115px';
+						_width='60%';
+					}
+					art.dialog.list['des'].close();
+					var id = $(this).data("id");
+					var title = $(this).data("title");
+					var deadline = $(this).data("deadline");
+					var price = $(this).data("price");
+					var img = $(this).data("img");
+					var num = $('#num').val();
+					if(num == '') num=1;
+					var all_price = parseInt(price)*parseInt(num);
+					$('.order_title').text(title);
+					$('.order_h3').text(deadline);
+					$('#price').text(price);
+					$("#order_img").attr("src", img);
+					$('#design_id').val(id);
+					$('#price').text("$"+all_price);
+					$('#ecprice').val(price);
+					$('#order').css('overflow', 'auto');
+					$('#order').css('maxHeight',maxHeight);
+					art.dialog({
+						title: title,
+						content: document.getElementById("order"),
+						width: _width,
+						top:_top,
+						lock: true,
+						close: function () {
+			        		$('#num').val('');
+						}
+					});
+				});
+				$("#check").click(function() {
+					var url = "{:U('Design/order')}";
+					var data = $("#pform").serializeArray();
+					var rs = 1;
+					/*var pcs_ordered = $('.order').data("ordered");
+					var funding_goal = $('.order').data("funding");
+					if (parseInt(funding_goal) - parseInt(pcs_ordered) <= 0) {
+						rs = 0;
+						tip('The quota is full!');
+						return false;
+					}*/
+					$("input[type='text']").each(function(index, element) {
+						if (this.value == '' && (this.name != 'company' && this.name != 'phone')) {
+								rs = 0;
+								tip('Entry cannot be empty!');
+								return false;
+						}
+						if (this.name == 'email') {
+							if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))) {
+								rs = 0;
+								tip('Please enter a valid mailbox!');
+								return false;
+							}
+						}
+					});
+					if (rs == 1) {
+						$.post(url, data, function(data) {
+							tip(data.msg);
+							window.location.reload();
+						}, "json");
+					} else {
+						return false;
+					}
+				});
+			});
+
+			function tip(msg) {
+				$('body').append('<div id="msg" style="width:60%;position: fixed;top:30px;right:20%;word-wrap: break-word;border-radius:3px; background-color:rgba(0,0,0,0.5);box-shadow: 0 3px 6px rgba(0, 0, 0, .175); display: none; text-align: center; line-height:48px; padding:10px; font-size: 36px; z-index: 9999; color:#fff;font-family: Microsoft YaHei;"></div>');
+				$("#msg").text(msg);
+				$("#msg").fadeIn();
+				setTimeout('$("#msg").fadeOut();$("#msg").remove();', 2000);
+			}
+		</script>

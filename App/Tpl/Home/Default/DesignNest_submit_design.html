@@ -1,0 +1,684 @@
+<include file="Home:DN_header" />
+<include file="Home:DNnav" />
+<div class="fmian" >
+	<div class="layout_list" >
+ 
+		<div class="design_main" style="margin-top:30px;">
+			
+			<!-- display:none; -->
+			<div id="msgbox" style="display:none;margin:0px auto;width:1080px;height:50px;margin-top:20px;border:1px solid #e60012;
+				background-color:#fff4f9;">
+				<div style="width:23px;height:23px;margin-top:15px;margin-left:10px;float:left;">
+					<img src="../Public/image/error.jpg" style="width:23px;height:23px;"/>
+				</div>
+				<div style="height:23px;margin-top:17px;margin-left:15px;float:left;">
+					<font id="msg" style="font-size:12px;font-weight:bold;color:#e60012;"></font>
+				</div>
+				
+			</div>
+			
+			<div id="shipping-2" style="margin:0px auto;width:1080px;height:600px;margin-top:10px;"> 
+				
+				<div class="shipping-div" style="margin-top:15px;">
+					<font style="font-size:14px;font-weight:bold;font-color:#666666;">Your idea</font>
+				</div>
+				
+				<div class="shipping-div"> 
+					<div class="shipping-field" style="padding-top:8px;"><font class="item_font" >Project title*</font></div>
+					<input name="project_title" id="project_title" type="text" class="shipping-input"  value="your project title"  
+					onfocus="if (value =='your project title'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='your project title';this.style.color='#999'}"/>
+				</div>
+				
+				
+				<div class="shipping-div"> 
+					<div class="shipping-field" style="padding-top:8px;"><font class="item_font">Name*</font></div>
+					<input name="firstname" id="firstname"  type="text" class="shipping-input" style="width:238px;" value="first name"
+					 onfocus="if (value =='first name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='first name';this.style.color='#999'}" />
+					<input name="lastname" type="text" id="lastname" class="shipping-input" style="width:238px; margin-left:10px;" value="last name" 
+					onfocus="if (value =='last name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='last name';this.style.color='#999'}"/>
+				</div>
+				
+				
+				<div class="shipping-div">
+					<div class="shipping-field" style="padding-top:8px;"><font class="item_font" >e-mail*</font></div>
+					<input name="email" id="email" type="text" class="shipping-input"  value="your e-mail address" 
+					onfocus="if (value =='your e-mail address'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='your e-mail address';this.style.color='#999'}"/>
+				</div>
+				
+			
+				<div class="shipping-div">
+					<div class="shipping-field" style="padding-top:8px;"><font class="item_font" >Country*</font></div>
+					<input name="countrylist" id="countrylist" type="text" class="shipping-input"  value="your country" 
+					onfocus="if (value =='your country'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='your country';this.style.color='#999'}"/>
+				
+					<!--
+						<select id="countrylist" class="shipping-input" style="width:512px;" > 
+						  <option value="-1">Choose your country</option>
+						  
+						   <volist name="country_list" id="vo"  >
+						   	<option value="{$vo.title}">{$vo.title}</option>
+						   </volist>
+					  </select>
+		      -->
+				</div>
+				
+				<div class="shipping-div">
+					<div class="shipping-field"><font class="item_font" >Product image*</font></div>
+					<!--
+					<input name="product_image" id="product_image" type="text" class="shipping-input" 
+					 <empty name="_COOKIE['allocacoc_product_picname']">value="Uploading your product image(840*640px)" style="width:350px;float:left;" <else/> value={$_COOKIE['allocacoc_product_picname']} style="width:350px;float:left;color:#333;" </empty> readonly="readonly"/>
+					-->
+					<input name="product_image" id="product_image" type="text" class="shipping-input" value="Upload your product image(840*640px)" style="width:350px;float:left;"  readonly="readonly"/>
+					<form id="uploadimg" action={:U('DesignNest/submit_product_pic')}  method="post" enctype="multipart/form-data">
+					  <input type="file" id="choosefile5" name="choosefile5" style="display:none;" onchange="javascript:change_product_pic();"/>
+					</form>
+					<input type="button" class="choose_file" value="choose your file" onclick="javascript:$('#choosefile5').click();"/>
+				</div>
+				
+				<div class="shipping-div" style="height:280px;">	
+					<div style="height:30px;width:400px;margin-left:80px;">White background preferred</div>			
+					<div class="shipping-input" style="height:213px;width:280px;margin-left:80px;padding-left:0px;">
+					  <div style="height:213px;width:280px;position:relative; "> <!-- border:2px dashed #FFF; -->
+							<img id="product_pic" <notempty name="_COOKIE['allocacoc_technical']">src="/design_pics/{$_COOKIE['allocacoc_technical']}" </notempty> style="border:0 #FFF;width:100%;height:100%;<empty name="_COOKIE['allocacoc_technical']">visibility:hidden;</empty>"/>
+						  <div id="pic_tip" style="position: absolute; z-index: 1;bottom:95px;height:20px;width:120px;left:90px;font-size:16px;color:#878787;">840 X 640 px</div>
+						  <!--
+						  <empty name="_COOKIE['allocacoc_technical']"></empty> -->
+						</div>						
+					</div>
+				</div>
+		</div>
+		
+	</div> <!-- design main-->
+	
+	<div style="width:100%;height:30px;padding:25px 0px;border-top:1px solid #DDD;border-bottom:1px solid #DDD;"> 
+		 <div style="width:1080px;margin:0px auto;color:#999;padding-left:20px;" >
+				<div class="shipping-field"><font class="item_font" >Video URL</font></div>
+				<input name="video_url" id="video_url" type="text" class="shipping-input" 
+				 value=""  style="width:350px;float:left;color:#333;" />
+			</div>
+				
+	</div>
+	
+	<!-- slider -->
+	<div style="width:100%;padding:25px 0px 10px 0px;overflow:auto;"> 
+		 <div style="width:1080px;margin:0px auto;color:#999;" >
+				<div class="shipping-div" style="margin-top:30px;height:300px;width:100%;margin-bottom:30px;">			
+					<div class="shipping-field"><font class="item_font" >Product slider*</font></div>
+					<div class="shipping-input" style="height:300px;width:900px;margin-left:80px;padding-left:0px;">
+						<div style="height:300px;width:900px;position:relative;"> <!-- border:2px dashed #FFF;" -->
+							<img id="slider_demo" style="height:300px;width:900px;visibility:hidden;"/>
+							<div id="slider_tip" style="position: absolute; z-index: 1;bottom:130px;height:20px;width:130px;left:390px;font-size:16px;color:#878787;">1080 X 456 px</div>
+						</div>
+					</div>
+				</div>
+				
+			
+				
+				<div class="shipping-div" style="height:auto;padding-left:80px;">
+					<ul style="width:570px;height:auto;"  id="sliders">
+						<li style="height:40px;list-style-type:none;">
+  						<div style="width:50px;float:left;color:#999;padding-top:8px;"><font class="item_font" >slider1</font></div>
+  						<input name="slider_filename_1" id="slider_filename_1" type="text" class="shipping-input" 
+  					   value="Upload your image" style="width:350px;float:left;"  readonly="readonly"/>
+  					  <input type="file" onchange="javascript:change_slider(this.id);" id="slider_file_1" name="slider_file_1" style="display:none;"/>
+  					  <input type="button" class="choose_file" id="slider_button_1" name="slider_button_1" value="choose your file" onclick="javascript:choose_file(this.id);"/> 
+					  </li>
+					</ul>
+					
+				</div>
+				
+			</div>
+				
+	</div>
+	
+	<div style="width:100%;height:1px;"></div>
+	
+	<!-- feature -->
+	<div style="width:100%;height:auto;padding:0px 0px 25px 0px;min-height:350px;"> 
+		 <div style="width:1080px;margin:0px auto;color:#999;" >
+		 	
+		 	 <div  style="margin-left:10px;margin-top:10px;height:174px;width:100%;">			
+					<div class="shipping-field">
+						<font class="item_font" >Product feature*</font>
+						<!-- <p style="font-size:12px;color:#aaa;padding-top:5px;">( Please submit at least three features of your <br/> design. )</p> -->
+					</div>
+					<div  style="height:174px;width:900px;margin-left:80px;" >
+						
+						<div style="height:144px;width:236px;float:left;position:relative;border:1px solid #CCC;background-color:#EEE;">
+						  <img class="feature_pic" id="feature_pic_1" style="display:none;"/>
+						  <div id="feature_pic_1_tip" style="position: absolute; z-index: 1;bottom:60px;height:20px;width:130px;left:70px;font-size:16px;color:#878787;">236 X 144 px</div>
+						 </div>
+						 <!--
+						 <img class="feature_pic" id="feature_pic_1" />-->
+						 <textarea class="feature_text" id="feature_text_1"></textarea>
+						 <input name="feature_filename_1" id="feature_filename_1" type="text" class="shipping-input" 
+  					   value="Upload your image" style="width:140px;float:left;margin-top:7px"  readonly="readonly"/>
+  					  <input type="file" onchange="javascript:change_feature(this.id);"  id="feature_file_1" name="feature_file_1" style="display:none;"/>
+  					  <input type="button" class="choose_file" style="width:83px;margin-top:7px;margin-left:3px;padding-left:3px;" id="feature_button_1" name="feature_button_1" value="choose file" onclick="javascript:feature_choose_file(this.id);"/> 
+					</div>
+				</div>
+				
+				
+				
+						
+						
+						
+				<div  style="height:auto;padding-left:80px;width:900px;margin-left:10px;">
+					<ul style="width:100%;height:auto;margin-top:30px;"  id="features">
+						
+						<li style="list-style-type:none;height:200px;width:100%;">
+							<div style="height:144px;width:236px;float:left;position:relative;border:1px solid #CCC;background-color:#EEE;"> 	
+								<img class="feature_pic" id="feature_pic_2" style="display:none;"/>
+								<div id="feature_pic_2_tip" style="position: absolute; z-index: 1;bottom:60px;height:20px;width:130px;left:70px;font-size:16px;color:#878787;">236 X 144 px</div>
+							</div>
+							<textarea class="feature_text" id="feature_text_2"></textarea>
+							<input name="feature_filename_2" id="feature_filename_2" type="text" class="shipping-input" value="Upload your image" style="width:140px;float:left;margin-top:7px;"  readonly="readonly"/>
+							<input type="file" onchange="javascript:change_feature(this.id);"  id="feature_file_2" name="feature_file_2" style="display:none;"/>
+							<input type="button" class="choose_file" style="width:83px;margin-top:7px;margin-left:3px;padding-left:3px;" id="feature_button_2" name="feature_button_2" value="choose file" onclick="javascript:feature_choose_file(this.id);"/> 
+						</li>
+						
+						<li style="list-style-type:none;height:200px;width:100%;">
+							<div style="height:144px;width:236px;float:left;position:relative;border:1px solid #CCC;background-color:#EEE;"> 	
+								<img class="feature_pic" id="feature_pic_3" style="display:none;"/>
+								<div id="feature_pic_3_tip" style="position: absolute; z-index: 1;bottom:60px;height:20px;width:130px;left:70px;font-size:16px;color:#878787;">236 X 144 px</div>
+							</div>
+							<textarea class="feature_text" id="feature_text_3"></textarea>
+							<input name="feature_filename_3" id="feature_filename_3" type="text" class="shipping-input" value="Upload your image" style="width:140px;float:left;margin-top:7px;"  readonly="readonly"/>
+							<input type="file" onchange="javascript:change_feature(this.id);"  id="feature_file_3" name="feature_file_3" style="display:none;"/>
+							<input type="button" class="choose_file" style="width:83px;margin-top:7px;margin-left:3px;padding-left:3px;" id="feature_button_3" name="feature_button_3" value="choose file" onclick="javascript:feature_choose_file(this.id);"/> 
+						</li>
+         
+    	
+					</ul>
+					
+					<div style="width:236px; height:109px;background-color:#EEE;margin-top:30px;padding-top:35px;" >
+					 <div style="width:40px;height:20px;margin:0px auto;">
+					 	<a href="javascript:add_feature();">
+					 	<font style="color:#999;font-size:60px;">+</font> 
+					 	</a>
+					 	</div>
+					</div>
+					
+				</div>
+  		
+	    </div>
+			
+			
+	</div>
+	
+		<div style="width:990px;margin:0px auto; height:20px;padding-left:90px;margin-bottom:10px;">
+				
+				<font style="font-size:12px;color:#999;" > * required field </font>	 
+			</div>
+  
+  <div style="width:100%;height:30px;padding:25px 0px;border-top:1px solid #DDD;"> 
+		 <div style="width:1080px;margin:0px auto;color:#999;" >
+				<div class="do_submit">
+  		    <a href="javascript:submit1();" id="buttonhref"> 
+  		  	 <font style="font-size:16px;color:#FFF;line-height:50px;" id="buttontip"> submit your idea</font>
+  		    </a> 		
+        </div>
+			</div>
+				
+	</div>
+
+
+	<!--	<include file="Home:bottom" /> -->
+
+
+	
+
+	<script type="text/javascript">
+ 	$(document).ready(function()
+   {		//document.getElementById("logo").src="../Public/image/DN_logo.png";
+    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a href="{:U(\'DesignNest/index\')}">'+"{$Think.lang.DESIGN_CHALLENGE}"+'</a>'
+    		+'<img src="../Public/image/arrow_footer.png"/>'
+    		+'<a>submit your design</a>';
+    		
+    } );
+    
+    
+    function closeart(dialogid)
+		{
+			window.top.art.dialog({id:dialogid}).close();
+		}
+		
+    function loading(){
+    	art.dialog({
+							id: 'des',
+							title: 'uploading...',
+							content: '<img src="../Public/image/loading.gif" />',
+							width: '200px',
+							top:'50%',
+							lock: true,
+							cancel: false
+							 }  );
+						}
+    
+    function change_product_pic()
+    {
+    	 loading();
+    	//product_img    	
+    	$("#uploadimg").ajaxSubmit({
+    			dataType:  'json',
+    			
+    			success: function(data) { 
+    				closeart('des');
+    				if(data.status==0){
+    					alert(data.msg);
+    				}
+    				if(data.status==1){
+    					//alert(data.name);
+    					document.getElementById("product_image").value = data.name;
+    					document.getElementById("product_image").style.color='#333';	 
+    					document.getElementById("product_pic").src = data.pic;//"http://127.0.0.1/design_pics/"+data.pic;
+    					document.getElementById("product_pic").style.visibility = "visible";
+    					document.getElementById("pic_tip").style.display="none";
+    				}	
+    				
+    			},
+    			error:function(xhr){
+    				closeart('des');
+    				alert(xhr.responseText);
+    			}
+    		});
+
+    }
+    
+    
+    var slidercount = 1;
+    var featurecount = 3;
+    function change_slider(tempid){
+					//alert(tempid.substring(12));
+					loading();
+					var eleid = tempid.substring(12); 
+					if(slidercount==eleid)
+				  {				  	    					 	  
+				 	  var filenameid = "slider_filename_"+slidercount;
+				 	  var fileid = "slider_file_"+slidercount;
+				 	  
+				 	  $("#"+fileid).wrap("<form id='myupload"+slidercount+"' action=\"{:U('DesignNest/submit_designidea_pic')}\"  method='post' enctype='multipart/form-data'></form>");
+				 	  $("#myupload"+slidercount).ajaxSubmit({
+				 	  	dataType:  'json',
+				 	  	success: function(data) {
+				 	  		closeart('des');
+				 	  		if(data.status!=1){
+				 	  			alert(data.msg);
+				 	  		}
+				 	  		if(data.status==1){
+        					document.getElementById(filenameid).value = data.name;
+        					document.getElementById(filenameid).style.color='#333';	 
+        					document.getElementById("slider_demo").src = data.pic;
+        					document.getElementById("slider_demo").style.visibility = "visible";
+        					document.getElementById("slider_tip").style.display="none";
+        					
+        					nextid = slidercount+1;			  
+      				 	  var newNode = document.createElement("li");
+      				 	  newNode.style.listStyleType='none';
+      				 	  newNode.style.height = '40px';
+              		newNode.innerHTML ='<div style="width:50px;float:left;"><font class="item_font" >slider'+nextid+'</font></div>'
+              		+'<input name="slider_filename_'+nextid+'" id="slider_filename_'+nextid+'" type="text" class="shipping-input" '
+              		+' value="Upload your image" style="width:350px;float:left;"  readonly="readonly"/>'
+              		+' <input type="file" id="slider_file_'+nextid+'" name="slider_file_'+nextid+'" onchange="javascript:change_slider(this.id);" style="display:none;"/>'
+              		+' <input type="button" class="choose_file" id="slider_button_'+nextid+'" name="slider_button_'+nextid+'" value="choose your file" onclick="javascript:choose_file(this.id);"/> ';
+              		var oldNode = document.getElementById("sliders");   		
+              		oldNode.appendChild(newNode); 
+              		slidercount ++;  			
+    				    }	
+    				
+    			    },
+    			    error:function(xhr){
+    			    	closeart('des');
+    				    alert(xhr.responseText);
+    			    }
+    		    });
+				 				 	
+				  }
+				  else//修改其他的图片
+        	{ 
+        		
+        		var filenameid = "slider_filename_"+eleid;
+				 	  var fileid = "slider_file_"+eleid;
+				 	  
+				 	  $("#myupload"+eleid).ajaxSubmit({
+				 	  	dataType:  'json',
+				 	  	success: function(data) {
+				 	  		closeart('des');
+				 	  		if(data.status!=1){
+				 	  			alert(data.msg);
+				 	  		}
+				 	  		if(data.status==1){
+        					document.getElementById(filenameid).value = data.name;
+        					document.getElementById(filenameid).style.color='#333';	 
+        					document.getElementById("slider_demo").src = data.pic;
+        					document.getElementById("slider_demo").style.visibility = "visible";  			
+    				    }	
+    				
+    			    },
+    			    error:function(xhr){
+    			    	closeart('des');
+    				    alert(xhr.responseText);
+    			    }
+    		    });
+    		    
+    		   
+        	}
+		}
+		
+		function change_feature(tempid){			
+			loading();
+			
+			var haspic = 0;
+			var eleid = tempid.substring(13);
+			 var currentSrc = document.getElementById("feature_pic_"+eleid).src;
+			 
+			if($("#feature_pic_"+eleid).attr("src"))
+			  haspic = 1;
+			
+			//if(!currentSrc)alert('no pic');
+			//if(document.getElementById("feature_pic_"+eleid).src=="" || document.getElementById("feature_pic_"+eleid).src=="undefined")
+			//if(featurecount==eleid)
+			if(haspic==0)
+		  {	 	  
+		 	  var filenameid = "feature_filename_"+eleid;
+		 	  var fileid = "feature_file_"+eleid;
+		 	  //var divid = "feature_div_"+featurecount;
+		 	  
+		 	  $("#"+fileid).wrap("<form id='featureupload"+eleid+"' action=\"{:U('DesignNest/submit_designidea_feature')}\"  method='post' enctype='multipart/form-data'></form>");
+		 	  $("#featureupload"+eleid).ajaxSubmit({
+		 	  	dataType:  'json',
+		 	  	success: function(data) {
+		 	  		closeart('des');
+		 	  		if(data.status!=1){
+		 	  			alert(data.msg);
+		 	  		}
+		 	  		if(data.status==1){
+    					document.getElementById(filenameid).value = data.name;
+    					document.getElementById(filenameid).style.color='#333';	 
+    					document.getElementById("feature_pic_"+eleid).src = data.pic;//"http://127.0.0.1/"
+    					document.getElementById("feature_pic_"+eleid).style.display="block";
+    					document.getElementById("feature_pic_"+eleid+"_tip").style.display="none";
+
+    					
+				    }	
+				
+			    },
+			    error:function(xhr){
+			    	closeart('des');
+				    alert(xhr.responseText);
+			    }
+		    });
+		 				 	
+		  }
+		  else//修改其他的图片
+    	{     		
+    		var filenameid = "feature_filename_"+eleid;
+		 	  var fileid = "feature_file_"+eleid;
+		 	  
+		 	  $("#featureupload"+eleid).ajaxSubmit({
+		 	  	dataType:  'json',
+		 	  	success: function(data) {
+		 	  		closeart('des');
+		 	  		if(data.status!=1){
+		 	  			alert(data.msg);
+		 	  		}
+		 	  		if(data.status==1){
+    					document.getElementById(filenameid).value = data.name;
+    					document.getElementById(filenameid).style.color='#333';	 
+    					document.getElementById("feature_pic_"+eleid).src = data.pic;
+ 			
+				    }	
+				
+			    },
+			    error:function(xhr){
+			    	closeart('des');
+				    alert(xhr.responseText);
+			    }
+		    });
+		    
+		   
+    	}
+		}
+		
+			
+			function choose_file(fileid)
+			{ 
+				curr_id = fileid.substring(14);
+				document.getElementById("slider_file_"+curr_id).click();  
+			}
+			
+			function feature_choose_file(fileid)
+			{ 
+				curr_id = fileid.substring(15);
+				document.getElementById("feature_file_"+curr_id).click();  
+			}
+			
+			
+			function submit1()
+			{
+				//check feature count, feature_pic_
+				var feature_count = 0;
+				$(".feature_pic").each(function(){
+					if($(this).attr("src")!='undefined' && $(this).attr("src")!='' )
+					feature_count += 1;
+				}
+				);
+				if(feature_count < 3)
+				alert('need at least 3 features');
+				
+				
+				//alert(getFeatureText());return false;
+				//hide error msg first
+				document.getElementById("msg").innerHTML ='';
+				document.getElementById("msgbox").style.display="none"; 
+					 
+				//check general input				
+				if(!check_general_input())
+				{
+					scrollTo(400,300);
+					 return false;
+				}
+				
+				var url = "{:U('DesignNest/submit_designidea')}";
+				
+				var data =  { 
+					project_title: document.getElementById("project_title").value, 
+					firstname: document.getElementById("firstname").value,
+					lastname: document.getElementById("lastname").value,
+					email: document.getElementById("email").value,
+					countryid: document.getElementById("countrylist").value,
+					//product_image ,in cookie
+					video_url:document.getElementById("video_url").value,
+					//slider,in cookie
+					//feature, pic in cookie, text, need processing
+					feature_text_list:getFeatureText(),
+					};
+					
+					
+					document.getElementById("buttonhref").href='#';
+					document.getElementById("buttontip").innerHTML='processing';
+
+				$.post(url,data,function(data){
+
+							if(data.status == 1){							
+
+								//alert('succ');
+								
+								var window_height = $(window).height();
+      					if(window_height<800)
+      					{
+      						maxHeight=window_height*0.7;
+      						_top=0;
+      						_width='80%';
+      					}else{
+      						maxHeight='600px';
+      						_top='115px';
+      						_width='60%';
+      					}
+					
+								art.dialog({
+									title: 'Congratulations!',
+									content: 'already submit',
+									 lock:true,
+									 width: _width,
+									 top:_top,
+									 style:'succeed noClose',
+									 okVal: 'OK',
+									 ok:function(){
+										window.location = '/DesignNest/index'; 
+										}
+							 } );
+								
+							}else{
+								document.getElementById("buttonhref").href='javascript:submit1();';
+								document.getElementById("buttontip").innerHTML='submit your idea';
+								document.getElementById("msg").innerHTML = data.msg;
+								document.getElementById("msgbox").style.display="block"; 
+								scrollTo(400,300); //alert(data.msg);													
+							}
+						},"json"); 
+						
+			}
+			
+			
+			function check_general_input()
+			{
+				
+				if(document.getElementById("project_title").value=='' || document.getElementById("project_title").value== 'your project title')
+				{
+					 document.getElementById("msg").innerHTML ='project title cannot be empty!';
+					 document.getElementById("msgbox").style.display="block"; 
+					 return false;
+				}
+				if(document.getElementById("firstname").value=='' || document.getElementById("firstname").value== 'first name')
+				{
+					 document.getElementById("msg").innerHTML ='first name cannot be empty!';
+					 document.getElementById("msgbox").style.display="block"; 
+					 return false;
+				}
+				if(document.getElementById("lastname").value=='' || document.getElementById("lastname").value== 'last name')
+				{
+					 document.getElementById("msg").innerHTML ='last name cannot be empty!';
+					 document.getElementById("msgbox").style.display="block"; 
+					 return false;
+				}
+				if(document.getElementById("email").value=='' || document.getElementById("email").value== 'your e-mail address')
+				{
+					 document.getElementById("msg").innerHTML ='your e-mail address cannot be empty!';
+					 document.getElementById("msgbox").style.display="block"; 
+					 return false;
+				}
+				
+				if(document.getElementById("countrylist").value=='' || document.getElementById("countrylist").value== 'your country')
+				{
+					 document.getElementById("msg").innerHTML ='your country cannot be empty!';
+					 document.getElementById("msgbox").style.display="block"; 
+					 return false;
+				}
+				if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(document.getElementById("email").value))) {
+								document.getElementById("msg").innerHTML = 'Please enter a valid mailbox!';
+								document.getElementById("msgbox").style.display="block"; 
+								return false;
+				}
+				/*			
+				if(document.getElementById("countrylist").value==-1)
+				{ 
+					document.getElementById("msg").innerHTML = 'Please choose your country!';
+					document.getElementById("msgbox").style.display="block"; 
+					return false;
+				}
+				*/
+				if(document.getElementById("product_image").value=='' || document.getElementById("product_image").value== 'Upload close-up of key features')
+				{
+					 document.getElementById("msg").innerHTML ='product image cannot be empty!';
+					 document.getElementById("msgbox").style.display="block"; 
+					 return false;
+				}
+				
+				//check slider
+				if(slidercount<=1)
+				{
+					 document.getElementById("msg").innerHTML ='slider cannot be empty!';
+					 document.getElementById("msgbox").style.display="block"; 
+					 return false;
+				}
+				//check feature
+				if(featurecount<=1 && document.getElementById("feature_pic_1").src=='')
+				{
+					 document.getElementById("msg").innerHTML ='feature cannot be empty!';
+					 document.getElementById("msgbox").style.display="block"; 
+					 return false;
+				}
+				
+				return true;
+			}
+			
+			function getFeatureText()
+			{
+				var list='';
+				var oFeature = document.getElementsByTagName('textarea');
+				for (var i = 0; i < oFeature.length; i++) 
+				{
+					if(oFeature[i].className =='feature_text')
+					{
+						//if(oFeature[i].value=='')
+						  list = list + oFeature[i].value + ',';
+					}
+					//alert(oFeature[i].value);
+				}
+				
+				return list;
+			}
+			
+			function add_feature()
+			{
+				nextid = featurecount + 1;
+				
+				
+				var newNode = document.createElement("li");
+		 	  newNode.style.listStyleType='none';
+		 	  newNode.style.height = '200px';
+		 	  newNode.style.width = '100%';
+    		newNode.innerHTML = '<div style="height:144px;width:236px;float:left;position:relative;border:1px solid #CCC;background-color:#EEE;">'
+    		+'<img class="feature_pic" id="feature_pic_'+ nextid +'" style="display:none;"/>'
+    		+' <div id="feature_pic_'+ nextid +'_tip" style="position: absolute; z-index: 1;bottom:60px;height:20px;width:130px;left:70px;font-size:16px;color:#878787;">236 X 144 px</div>'
+    		+'</div>'
+    		//'<img class="feature_pic" id="feature_pic_'+ nextid +'"/>'
+    		+'<textarea class="feature_text" id="feature_text_' +nextid+ '"></textarea>'
+    		+'<input name="feature_filename_'+nextid+'" id="feature_filename_'+nextid+'" type="text" class="shipping-input" '
+  			+	' value="Upload your image" style="width:140px;float:left;margin-top:7px;"  readonly="readonly"/>'
+    		+'<input type="file" onchange="javascript:change_feature(this.id);" id="feature_file_'+nextid+'" name="feature_file_'+nextid+'" style="display:none;"/>'
+    		+' <input type="button" class="choose_file" style="width:83px;margin-top:7px;margin-left:3px;padding-left:3px;" id="feature_button_'+nextid+'" name="feature_button_'+nextid+'" value="choose file" onclick="javascript:feature_choose_file(this.id);"/> ';
+    		
+    		var oldNode = document.getElementById("features");   		
+    		oldNode.appendChild(newNode); 
+    		
+    		
+    		featurecount ++;  	
+    					
+			}
+		</script>
+		
+			
+					
+		
+		<style type="text/css">		
+		.footer{background-color:#884697}
+		.footer .country {BACKGROUND-COLOR: #884697;}
+		.shipping-div{float:left;margin-left:10px;width:600px;padding-top:5px;margin-bottom:5px;color:#999;height:40px;}
+		.shipping-field{width:80px;float:left;}
+		.shipping-input{padding-left:10px;height:30px;margin:0px auto;width:500px;margin-left:0px;border:1px solid #CCC;
+			font-size:12px;color:#999999;background-color:#EEE;}
+		
+		.choose_file{padding-left:5px;height:32px;margin:0px auto;width:140px;margin-left:10px;border:1px solid #CCC;
+			font-size:12px;float:left;color:#FFF;background:#884697;}
+		.item_font{font-size:12px;min-width:50px;		}
+		.feature_text{padding:10px;border:1px solid #CCC;background-color:#EEE;width:620px;float:left;margin-left:20px;height:124px;}
+		.feature_pic{border:0 #FFF;width:236px;height:144px;float:left;}
+		.do_submit{height:50px;width:265px;text-align:center;margin-left:80px;
+			         border:1px solid #884697; border-radius:30px;overflow:hidden;
+			         background-color:#884697;
+		}
+		</style>
+		

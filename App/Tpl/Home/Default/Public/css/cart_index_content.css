@@ -1,0 +1,166 @@
+
+#cart_list{
+
+    margin:0 auto;
+    padding:0;
+    /*background:red;*/
+    /*width:800px;*/
+    width:900px;
+    /*height:700px;*/
+
+}
+.order{
+    float:left;
+    margin:0;
+    padding:0;
+    width:100%;
+    /*height:120px;*/
+    background:#CCC;
+}
+
+.address{
+    float:left;
+    /*width:200px;*/
+    width:20%;
+    /*height:120px;*/
+
+}
+.address li{
+    margin:0;
+    padding:0;
+    line-height: 15px;
+}
+.address .address_des{
+    height:20px;
+}
+.product_list{
+    float:right;
+    background: whitesmoke;
+    /*width:600px;*/
+    width:80%;
+    /*height:120px;*/
+
+}
+.suborder{
+    float:right;
+    background: whitesmoke;
+    width:100%;
+    /*height:120px;*/
+}
+
+.checkbox{
+    float:left;
+    width:40px;
+    /*background:red;*/
+    height:120px;
+    line-height:120px;
+    text-align:center;
+}
+.image{
+    float:left;
+    width:100px;
+    height:120px;
+    /*padding:22px 0;*/
+    line-height:120px;
+}
+.product_info{
+    float:left;
+    width:45%;
+    /*height:120px;*/
+    /*background:red;*/
+}
+
+.product_title{
+    float:left;
+    /*width:85px;*/
+    /*width:60%;*/
+    height:60px;
+    line-height:60px;
+    padding-left:19px;
+    position:relative;
+    top:15px;
+    /*background:yellow;*/
+
+}
+.h{
+    clear:both;
+    height:1px;
+    width:100%;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+}
+.t{
+    margin-left:3px;
+    padding:0;
+    position:relative;
+    top:38px;
+    float:left;
+    width:1px;
+    background:black;
+    height:15px;
+
+}
+.product_type{
+    padding-left:5px;
+    float:left;
+    /*width:80px;*/
+    /*width:20%;*/
+    height:60px;
+    line-height:60px;
+    position:relative;
+    top:15px;
+    /*background:yellow;*/
+}
+.product_price{
+    display:block;
+    clear:both;
+    height:60px;
+    margin-left:19px;
+    /*background:blue;*/
+}
+
+.product_qty{
+    float:left;
+    margin-left:50px;
+    width:106px;
+    /*height:120px;*/
+    /*line-height:120px;*/
+    /*background:red;*/
+}
+.product_qty #minus{
+    width:22px;
+    height:26px;
+    float:left;
+}
+.product_qty .input{
+    float:left;
+    width:62px;
+    height:24px;
+    padding-top:1px;
+    overflow:hidden;
+}
+.product_qty #plus{
+    width:22px;
+    height:26px;
+    float:right;
+}
+.product_del{
+    width:60px;
+    height:120px;
+    float:left;
+    color:#666;
+    text-align:right;
+    line-height:115px;
+    /*background:black;*/
+}
+#totals{
+    float:left;
+    width:200px;
+    height:120px;
+}
+#checkout{
+    float:right;
+    width:600px;
+    height:120px;
+}

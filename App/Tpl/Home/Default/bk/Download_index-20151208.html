@@ -1,0 +1,396 @@
+<include file="Home:nav"/>
+<div class="fmian">
+<div class="layout_list">
+
+<div style="margin:0px auto;width:1080px;height:50px;padding-top:30px;padding-bottom:20px;">
+		<volist name="category_list" id="vo" key="$k">
+			<div class="category_div">
+			  <a href="{:U('Download/index',array('category_id'=>$key))}"> 				
+				<font <if condition="$vo['selected'] eq 1"> class="category_font_select" <else/> class="category_font"</if>>{$vo['title']}</font>
+			  </a>
+			  <if condition="$vo['haschild']  eq 1">
+				<input type="button" value="" style="background:url(../Public/image/category_arrow.png);width:11px;height:5px;" onclick='javascript:change_visible("{$vo['id']}");' />
+				
+				
+				<!-- version 1
+				<div id="{$key}_div" style="visibility:hidden;z-index:9;padding-left:10px;padding-right:10px;border:1px solid #DDD;">
+					
+					<ul>
+					<volist name="vo['child']" id="child">
+						<li>
+						<a href="{:U('Download/index',array('category_id'=>$child['id']))}"> <font class="category_font">{$child['title']}</font></a>
+						</li>
+					</volist>
+					</ul>
+				</div>
+				
+				-->
+			<!-- version 2	-->
+
+        <div id="{$vo['id']}_div" style="visibility:hidden;z-index:999;position: absolute">
+					<img src="../Public/image/arrow-top.png" style="z-index:999;margin-left:20px;">
+					<div style="z-index:999;padding-top:10px;padding-left:10px;padding-right:10px;margin-top:-4px;background-color:#FFF;border:1px solid #DDD;max-height:160px;overflow:scroll">
+						
+						<ul>
+					    <volist name="vo['child']" id="child">
+						   <li>
+						    <a href="{:U('Download/index',array('category_id'=>$child['id']))}"> <font class="category_2_font">{$child['title']}</font></a>
+						   </li><li>1</li><li>1111111111111111111111111111111111111111111111111111111111111111111</li><li>1</li>
+					    </volist>
+					  </ul>
+					</div>					
+				</div>
+
+
+
+
+<!--
+				<div id= "{$vo['id']}_div" style="visibility:hidden;z-index:9;padding-left:10px;padding-right:10px;">
+					
+					<div class="container"  >
+					<div class="content"> 
+						<ul>
+					  <volist name="vo['child']" id="child">
+						 <li>
+						  <a href="{:U('Download/index',array('category_id'=>$child['id']))}"> <font class="category_font">{$child['title']}</font></a>
+						 </li>
+					  </volist>
+					  </ul> 
+					  <s><i></i></s>
+					</div>
+				</div>
+				</div>
+				-->
+				<!--			
+				<div id="{$key}_div" style="visibility:hidden;z-index:9;padding-left:10px;padding-right:10px;border:1px solid #DDD;">
+					<ul>
+					<volist name="vo['child']" id="child">
+						<li>
+						<a href="{:U('Download/index',array('category_id'=>$child['id']))}"> <font class="category_font">{$child['title']}</font></a>
+						</li>
+					</volist>
+					</ul>
+				</div>
+				
+				
+				
+				-->
+				
+			  </if>
+			  </div>
+		</volist>
+		<div style="width:300px;float:right;height:33px;border:1px solid #DDD;background-color:#FAFAFA;border-radius:25px;-moz-border-radius:25px;"> 
+			<div style="float:right;margin:0px auto;margin-right:15px;margin-top:8px;border-left:1px solid #DDD;width:30px;">
+     	   	 <img src="../Public/image/search.png" style="float:right;" onclick="search();"/>
+     	</div>
+     	<div style="width:230px;float:left;margin-top:8px;"> 
+     	   	<input id="search_tag" type="text" style="background:transparent;width:230px;padding-left:15px;font-size:12px;color:#999;" 
+     	    value="<if condition="$search eq 1">{$keyword}<else/>Insert tag to find...</if>" 
+     	   onblur="if(value ==''){ value = 'Insert tag to find...';this.style.color='#999';}"
+     	    onfocus="if (value =='Insert tag to find...'){value ='';this.style.color='#333';}" />
+     	</div>
+		</div>  
+		
+</div>
+
+<!--  "javascript:change_category({$key});"  visible
+	<div style="margin:0px auto;width:1080px;min-height:800px;height:auto;position: relative;">
+	
+	<div style="width:1080px;margin:0px auto;" id="file_div">
+		
+		<volist name="file_list" id="vo" key="$k">
+			<div class="file_img_div">
+				<img src="{$vo['back_img']}" class="back_img"/>
+			</div>			
+		</volist>
+		
+	</div>
+	
+	</div>
+	img_size
+	position: absolute;  position:absolute; relative   class="container-fluid"
+	-->
+<div style="margin:0px auto;width:1080px;min-height:800px;height:auto;">
+<div id="masonry" style="width:1080px;margin:0px auto;" >
+  <volist name="file_list" id="vo" key="$k">
+  	<a  onmouseover='' onmouseout=''></a>
+			<div class="box" >
+				<img src="{$vo['back_img']}" class="back_img" id="{$vo['id']}" onclick="javascript:show_file('{$vo['file_path']}','{$vo['tags']}','{$vo['title']}');" />
+				<div class="file_title">
+					
+					<a href="{$vo['file_path']}"><div style="width:26px;height:26px;background:url(../Public/image/download_big.png);float:right;"></div></a>
+					
+					 <!-- /download.php?filepath={$vo['back_img']}javascript:download_pic("{$vo['back_img']}");-->
+					<p style="font-size:14px;color:#555;line-height:25px;">{$vo['title']}</p>
+					<notempty name="vo['tags']">
+						<p style="font-size:12px;color:#999;">
+							<img src="../Public/image/tag.png"/>
+						{$vo['tags']}</p>
+					</notempty>
+					
+				</div>
+			</div>		
+			
+		</volist>
+		<div style="width:100%;height:160px;"></div>
+</div>
+
+
+	</div>
+
+
+<input id="category_id" type="hidden" value="{$category_id}"/>
+<input id="level" type="hidden" value="{$level}"/>
+<input id="filelistcount" type="hidden" value="{$filelistcount}"/>
+
+<div id="show" style="width:1000px;display:none;">
+	<div style="height:50px;">   <!-- <font id="show_title"></font> -->
+		<div style="float:left;margin-left:10px;">
+			<img src="../Public/image/tag-big.png">
+			<font id="show_tag" style="font-size:14px;color:#999;"></font>
+		</div>
+	</div>
+  <div style="width:90%;margin:0px auto;"><img id="show_pic"  style="width:100%;"src=""></div>
+  <div style="width:90%;margin:0px auto;height:55px;border:1px solid #DDD;margin-top:20px;background:#FCFCFC;">
+  	<div style="margin:0px auto;width:96px;margin-top:20px;"><a id="show_file" href=""><img src="../Public/image/download.png" >&nbsp;&nbsp;<font style="size:18px;color:#666;">Download</font></a></div>
+  </div>
+</div>
+
+<style>
+	.category_div{float:left;margin-right:100px;}
+	.category_font { font-size:18px;color:#666;}
+	.category_font_select { font-size:18px;color:#333;}
+	.category_2_font{font-size:12px;color:#666;}
+	.box{ margin:0px 10px 10px 0px;float: left;border:1px solid #DDD;}/*width: 258px;*/
+	.back_img{}/* width:258px;height:200px; */
+	.box img {max-width: 100%}
+	.file_title{margin:15px;height:40px;font-size:14px;color:#666;}
+/*   
+.container-fluid {padding: 20px;height:auto;position: absolute;}
+.file_img_div{float:left;width:260px;height:200px;}
+*/
+  .layout_list{float: left;}
+  .fullSlide{float: left;}/**/
+  .bottom {float: left;width:100%;}
+  .bd{margin: 0 auto;}
+  
+  /* for child category div */
+  div.container{position:absolute;top:60px;left:40px;display:block;height:160px;width:10%;
+  	background-color:transparent;*border:1px solid #666;}
+.content{border:1px solid #666;-moz-border-radius:3px;-webkit-border-radius:3px;position:absolute;
+background-color:#fff;width:100%;height:100%;padding:5px;*top:-2px;
+*border-top:1px solid #666;*border-top:1px solid #666;*border-left:none;*border-right:none;*height:102px;
+box-shadow: 3px 3px 4px #999;-moz-box-shadow: 3px 3px 4px #999;-webkit-box-shadow: 3px 3px 4px #999;
+/* For IE 5.5 - 7 */
+filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#999999');
+/* For IE 8 */
+-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#999999')"; 
+}
+s{position:absolute;top:-20px;*top:-22px;left:20px;display:block;height:0;width:0;font-size: 0; 
+	line-height: 0;border-color:transparent transparent #666 transparent;border-style:dashed dashed solid dashed;border-width:10px;}
+i{position:absolute;top:-9px;*top:-9px;left:-10px;display:block;height:0;width:0;font-size: 0;
+line-height: 0;border-color:transparent transparent #fff transparent;border-style:dashed dashed solid dashed;border-width:10px;}
+
+</style>
+
+
+<!-- <include file="Home:bottom"/>
+<script type="text/javascript" src="../Public/js/waterfall/jquery.waterfall.js"></script> --> 
+
+
+
+<script type="text/javascript" src="../Public/js/masonry/masonry.pkgd.js"></script>
+<script type="text/javascript" src="../Public/js/masonry/masonry.pkgd.min.js"></script>
+<script type="text/javascript">	
+	
+	var searching = {$search}+0;
+	
+  $(document).ready(function()
+  {		
+    document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" style="margin:3px 2px 0px 0px;"/>'
+    		+'<a href="{:U(\'Download/index\')}">'+"{$Think.lang.DOWNLOADS}"+'</a> ';
+    		
+  } );
+  
+  function change_category(category_id)
+  {
+  	
+  }
+  
+  function show_file(file_path,tag,title){
+  	//document.getElementById("show_title").innerHTML=title;
+  	document.getElementById("show_tag").innerHTML=tag;
+  	document.getElementById("show_file").href=file_path; 
+  	document.getElementById("show_pic").src=file_path;
+  	
+  	art.dialog({
+									title: title,
+									content: document.getElementById("show"),
+									 lock:true,
+									 //width: _width,
+									 //top:_top,
+									 style:'succeed noClose',
+									 okVal: 'OK',
+									 
+							 } );
+  }
+  
+  function change_visible(category_id){
+  	
+  	if(document.getElementById(category_id+"_div").style.visibility=="hidden"){
+  		//alert('gggg');
+  	  document.getElementById(category_id+"_div").style.visibility="visible";
+  	}
+  	else
+  		document.getElementById(category_id+"_div").style.visibility="hidden";
+  		
+ 
+  		//document.getElementById(category_id+"_div").style.display="block";
+  }
+  
+  function download_pic(pic){
+  	
+  }
+  
+  
+  var $container;
+  $(function(){
+     $container = $('#masonry');
+
+    $container.imagesLoaded( function(){
+        $container.masonry({
+            itemSelector : '.box',
+            gutterWidth : 20,
+            isAnimated: true,
+        });
+    });
+   
+  });
+ 
+ $(window).scroll(function(){
+      if ($(document).height() - $(this).scrollTop() - $(this).height()<100) {
+       // auto_bottom();
+        ajax_load_data();
+      }
+ });
+ 
+ 
+ function ajax_load_data()
+  {
+ 	  var url = "{:U('Download/ajax_getfilelist')}";
+	  var data = {category_id:document.getElementById("category_id").value,
+	  	          level:document.getElementById("level").value,
+	    		      filelistcount:document.getElementById("filelistcount").value,
+	    		      searching:searching
+	    		      };
+	  
+	  document.getElementById("filelistcount").value = 8+ parseInt(document.getElementById("filelistcount").value);
+
+	  $.post(url,data,function(data){
+           if(data.status == 1){			
+					 // document.getElementById("filelistcount").value = data.filelistcount;	
+					  var files = data.filelist;
+					  var str = "";
+	          //var templ = '<div class="box"><img src="{{src}}" class="back_img" id=/></div>'
+					  for(var i in files){
+					  	templ = '<div class="box">'
+					  	+'<img src="'+files[i].back_img+'" class="back_img" id="'+files[i].id+'" '+
+					  	'onclick="javascript:show_file(\''+files[i].file_path+'\',\''+files[i].tags+'\',\''
+					  	+files[i].title+'\');"/>'+
+					  	'<div class="file_title"><a href="'+files[i].file_path+'">'
+					  	+'<div style="width:26px;height:26px;background:url(../Public/image/download_big.png);float:right;">'
+					  	+'</div></a>'
+					  	+'<p style="font-size:18px;color:#666;line-height:25px;">'+files[i].title+'</p>';
+					  	//alert(files[i].tags);
+					  	if(files[i].tags !='')
+					  	templ = templ+'<p style="font-size:14px;color:#999;"><img src="../Public/image/tag.png"/>'+files[i].tags+'</p>';
+					  	
+					  	templ = templ+ '</div>'+'</div>';
+					  	str += templ;//.replace("{{src}}", files[i].back_img);	
+					  }
+					  var $boxs = (str);
+					   $container.append( $boxs ).masonry( 'appended', $boxs);
+	          			
+					 }else{
+					  //alert("no more file ");		
+													
+				   }
+	  },"json");   
+   }
+
+				
+			
+ function ajax_load_data2()
+    {
+ 	  var url = "{:U('Download/ajax_getfilelist')}";
+	  var data = {category_id:document.getElementById("category_id").value,
+	    		      filelistcount:document.getElementById("filelistcount").value};
+	  document.getElementById("filelistcount").value = 8+ parseInt(document.getElementById("filelistcount").value);
+	  
+	  $.post(url,data,function(data){
+           if(data.status == 1){			
+					  
+					  var files = data.filelist;
+					  var str = "";
+	          var templ = '<img src="{{src}}" class="back_img" id="{{id}}"/>'
+					  for(var i in files){
+					  	str = templ.replace("{{src}}", files[i].back_img);	
+					  	str = str.replace("{{id}}", files[i].id);	
+					  	var newNode = document.createElement("div");
+					  	 newNode.className='box';
+					  	 newNode.innerHTML = str ;
+					  	 var oldNode = document.getElementById("masonry");   		
+					  	 oldNode.appendChild(newNode);
+					  }
+	          			
+					 }else{
+					  //alert("no more file ");												
+				   }
+	  },"json");   
+   }
+ 
+ 
+ function search(){
+ 	if(document.getElementById('search_tag').value=='' || document.getElementById('search_tag').value=='tag1,tag2...')
+ 	{
+ 		alert('please input at least one tag');return false;
+ 	}
+ 	
+ 	searching = 1;
+ 	// set all category not selected
+ 	
+ 	document.location="/Download/index/search/1/keyword/"+document.getElementById('search_tag').value;
+ 	
+ }
+   /*
+  $("#file_div").waterfall({
+	    itemClass: ".file_img_div",
+	    minColCount: 4,
+	    spacingHeight: 20,
+	   // column_space:20,
+	    resizeable: true,
+	    ajaxCallback: function(success, end) {
+	    	var url = "{:U('Download/ajax_getfilelist')}";
+	    	var data = {category_id:document.getElementById("category_id").value,
+	    		filelistcount:document.getElementById("filelistcount").value};
+	    	$.post(url,data,function(data){
+           if(data.status == 1){			
+					  document.getElementById("filelistcount").value = data.filelistcount;	
+					  var files = data.filelist;
+					  var str = "";
+	          var templ = '<div class="file_img_div"><img src="{{src}}" class="back_img"/></div>'
+					  for(var i in files){
+					  	str += templ.replace("{{src}}", files[i].back_img);	
+					  }
+					  $(str).appendTo($("#file_div"));
+	          success();
+	          end();				
+					 }else{
+					  //alert("no more file ");												
+				   }
+			   },"json");      
+	        
+	    }
+	});
+	*/
+</script>

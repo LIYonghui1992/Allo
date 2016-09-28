@@ -1,0 +1,336 @@
+<!--
+<style type="text/css">
+	.flexslider{width:1080;height:360px;margin:1px auto;padding:1px;}
+	.products{margin:0px auto;margin-left:2px;margin-right:2px;width:100%;height:360px;}	
+	.product {height: 350px;width: 100%;margin-right: 50px;border: 1px solid #DDD;}
+	
+</style>
+-->
+<style type="text/css">
+	.title_blue{font-size:14px;color:#2089a1;font-weight:bold;	}
+	.title_grey{font-size:14px;color:#666;}
+	
+	.indicator_select{float:left;width:8px;height:8px;background-color:#666;border-radius:4px;margin:1px 10px;}
+	.indicator{float:left;width:8px;height:8px;background-color:#CCC;border-radius:4px;margin:1px 10px;}
+</style>
+
+<include file="Home:nav" />
+<div class="fmian">
+	<div class="layout_list" id="layout_list">
+		
+		<notempty name="pricelist">
+			<div style="width:100%;margin-top:20px;">
+				<div style="height:350px;width:1080px;margin:0px auto;">
+  				<div style="float:right;width:30px;height:60px;margin-top:100px;">  					
+  					<img id="right_arrow" src="../Public/image/<if condition="$pricelistsize gt 1">right_arrow_blue.png<else/>right_arrow_grey.png</if>" onclick="slide_right();"/>  					
+  				</div>
+  				
+  				<div style="float:left;width:30px;height:60px;margin-top:100px;">
+  					<img id="left_arrow" src="../Public/image/left_arrow_grey.png" onclick="slide_left();"/>  					
+  				</div>
+  				
+  				<div style="width:600px;height:350px;margin:0px auto;"> <!-- float:left;margin-left:200px; -->
+  					<img id="price_pic" src="{$pricelist[0]['pic']}" width="100%" height="100%">
+  				</div>
+  				
+				</div>
+				
+				<!-- page/count indicator <img src="../Public/image/index.11.2.png"  style="margin:1px 10px;"/> #15869f-->
+				<div style="margin:0px auto;margin-top:20px; height:50px;width:{$pricelistsize*28}px">					
+					<div name="counter"  id="count_0" class="indicator_select">               
+          </div>
+					<for start="1" end="$pricelistsize">
+           <div name="counter"  id="count_{$i}" class="indicator">               
+           </div>
+          </for>					
+				</div>
+				
+				
+				<!-- title price and descri-->
+				<div style="height:130px;text-align:center;">
+					<font id="price_title" style="font-size:24px;color:#666;font-weight:bold;">{$pricelist[0]['title']}</font>
+					<br>
+					<font style="font-size:18px;color:#999;">multiply outlets</font>
+					<br>
+					<font id="price_price" style="font-size:18px;color:#666;font-weight:bold;line-height:50px;">{$pricelist[0]['price']}</font>					
+				</div>
+				
+				<div style="height:60px;width:800px;margin:0px auto;text-align:justify;margin-bottom:70px;">
+					{$product['content']}					
+				</div>
+			</div>
+			
+		</div>
+</div>	
+
+
+
+<div class="clearfix" style="width:100%;background-color:#FAFAFA;">
+	<div style="width:1080px;margin:0px auto;border-bottom:1px solid #DDD;padding:20px 0px;">
+		<font style="font-size:30px;color:#666;">Technical Specs</font>
+		<br>
+		<a href="javascript:slider(0);"><font name="titles" id="title_0" class="title_blue" >{$pricelist[0]['title']}</font></a>
+				
+		<for start="1" end="$pricelistsize">
+			<font style="font-size:14px;color:#CCC;">&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</font>
+      <a href="javascript:slider({$i});"><font name="titles" id="title_{$i}" class="title_grey">{$pricelist[$i]['title']}</font></a>
+    </for>	
+	</div>
+	
+	<div class="clearfix" style="width:1080px;margin:0px auto;border-bottom:1px solid #DDD;padding:40px 0px;">
+		<div style="float:left;width:370px;padding-left:10px;">
+			<font style="font-size:22px;color:#666;">Product Info</font><br>
+		</div>
+		
+		<div id="product_info" style="float:left;width:700px;">
+			
+			<volist name="pricelist[0]['param']" id="param">  
+				<if condition="$param['type'] eq 0">
+					<div style="width:100%;height:20px;margin:8px 0px;">
+						<div style="float:left;width:200px;text-align:right;">
+							<font style="font-size:14px;color:#666;font-weight:bold;">{$param['param']}</font>
+						</div>
+						<div style="float:right;width:470px;text-align:left;">
+							<font style="font-size:14px;color:#888;">{$param['value']}</font>
+						</div>
+						
+					</div>
+				</if>
+				
+			</volist>
+			
+		</div>	
+		
+	</div>
+
+
+	<div class="clearfix" style="width:1080px;margin:0px auto;border-bottom:1px solid #DDD;padding:40px 0px;">
+		<div style="float:left;width:370px;padding-left:10px;">
+			<font style="font-size:22px;color:#666;">Size</font><br>
+		</div>
+		
+		<div id="size" style="float:left;width:700px;">
+			
+			<volist name="pricelist[0]['param']" id="param">  
+				
+				<if condition="$param['type'] neq 0">
+					<div style="width:100%;height:20px;margin:8px 0px;">
+						<div style="float:left;width:200px;text-align:right;">
+							<font style="font-size:14px;color:#666;font-weight:bold;">{$param['param']}</font>
+						</div>
+						<div style="float:right;width:470px;text-align:left;">
+							<font style="font-size:14px;color:#888;">{$param['value']}</font>
+						</div>
+						
+					</div>
+				</if>
+			</volist>
+			
+		</div>	
+		
+	</div>
+	
+
+</div> <!-- grey background div-->	
+	
+	<notempty name="product['manual']">	
+  	<div  class="clearfix" style="width:1080px;margin:0px auto;margin-top:20px;">
+  		
+  		<div style="float:right;margin-right:70px;height:45px;width:340px;background-color:#15869f;text-align:center;border-radius:50px;margin:0px auto;">
+		    <a href="{$product['manual']}" id="buttonhref"> 
+		  	 <font style="font-size:18px;font-weight: bold;color:#FFF;line-height:45px;" id="buttontip">Download Manual</font>
+		    </a> 		
+      </div>
+      
+      <div style="float:left;margin-left:70px;height:45px;width:250px;margin:0px auto;">		    
+		  	 <font style="font-size:18px;font-weight: bold;color:#666;line-height:45px;">I want to find more about it.</font>		   		
+      </div>
+  	</div>
+  </notempty>	
+		
+
+		
+		
+
+		
+		</notempty>
+				
+	
+	<!-- 	
+ <link type="text/css"  href="../Public/flexslider/flexslider.css" rel="stylesheet"  />
+<link type="text/css"  href="/slidertest/flexslider/flexslider.css" rel="stylesheet"  />
+<script type="text/javascript" src="../Public/flexslider/jquery.flexslider-min.js"></script> -->
+
+<script type="text/javascript">
+	
+	var price_index = 0;
+	
+	var pricelist_json = eval(<?php echo $pricelist_json; ?>);
+	
+	$(document).ready(function()
+  {		
+  	document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png" />'
+  	+'<a href="{:U(\'Product/index\')}">'+"{$Think.lang.PRODUCTS}"+'</a>' 
+  	+'<img src="../Public/image/arrow_footer.png" />'
+  	+'<a href="'+"/Product/lists/product_group_id/"+"{$_COOKIE['allocacoc_pathinfo_group_id']}"+'">'	   	
+  	+"{$_COOKIE['allocacoc_pathinfo_group']}"+'</a> '
+  	+'<img src="../Public/image/arrow_footer.png" />'
+  	+'<a>'+"{$_COOKIE['allocacoc_pathinfo_prd']}"+'</a>';
+ 
+  } );
+
+
+	$(function() {
+		$("#pricelist").change(function() {
+			var id = $("#pricelist").find("option:selected").val();
+			var url = "{:U('Product/pricelist')}";
+			$.post(url, {
+					id: id
+				},
+				function(data) {
+					if (data.stauts == 1) {
+						$('#price1').text(data.price);
+						if (data.availability == 1) {
+							$('#availability').text('{$Think.lang.RECOMMENDED_RETAIL_PRICE}');
+						} else {
+							$('#availability').text('{$Think.lang.NOT_AVALIABLE_YET}');
+						}
+					}
+				},
+				"json");
+		});
+		
+
+		/*
+		if($(".flexslider").width()<=1280)
+  	{
+  	   $(".flexslider").width(1080);
+  	}
+  	$("#mid").flexslider({
+  		 selector: ".products > .product",
+  	    animation:"slide",
+  	    slideshowSpeed: 5000,
+  	    pauseOnHover:true,
+  	    pauseOnAction:false,
+  	    controlNav:false,
+  	    minItems: 1,
+        maxItems: 1,
+  	    move:1,
+  	    slideshow: false,
+  	    //itemWidth: 220,
+        //itemMargin: 50,
+  	});
+  	*/
+
+	});
+	
+	
+	
+	function slide_right(){
+		if((price_index+1)>={$pricelistsize})
+		  return;
+		
+		slider(price_index+1);
+	}
+	
+	
+	function slide_left(){
+		if(price_index<1)
+		  return;
+		
+		slider(price_index-1);				
+	}
+	
+	function slider(pos){
+		
+		price_index = pos;
+		
+		if(price_index < 1)
+		  document.getElementById("left_arrow").src = "../Public/image/left_arrow_grey.png";
+		else
+			document.getElementById("left_arrow").src = "../Public/image/left_arrow_blue.png";
+		
+		if((price_index+1) >={$pricelistsize})
+		  document.getElementById("right_arrow").src = "../Public/image/right_arrow_grey.png";
+		else
+			document.getElementById("right_arrow").src = "../Public/image/right_arrow_blue.png";
+			
+		
+		
+		
+		document.getElementById("price_pic").src = pricelist_json[price_index]['pic'];//"{$pricelist["+price_index+"]['pic']}";//{$pricelistsize};
+		document.getElementById("price_price").innerHTML = pricelist_json[price_index]['price'];
+		document.getElementById("price_title").innerHTML = pricelist_json[price_index]['title'];
+		
+		//update indicator
+		var names = document.getElementsByName("counter");
+    for(var i=0; i< names.length; i++){
+      names[i].setAttribute("class", "indicator"); 
+    }
+    document.getElementById("count_"+price_index).setAttribute("class", "indicator_select"); 
+		
+		
+		//update titles
+		var names = document.getElementsByName("titles");
+    for(var i=0; i< names.length; i++){
+      names[i].setAttribute("class", "title_grey"); 
+    }
+    document.getElementById("title_"+price_index).setAttribute("class", "title_blue");
+		
+		
+		//update product info
+		document.getElementById("product_info").innerHTML = '';
+		var str = '';
+			
+			
+		var params = pricelist_json[price_index]['param'];
+		if(params === 'undefined' || params == null)
+		;
+		else{
+			for(var j=0; j< params.length; j++){
+				if(params[j]['type']==0){
+  				str += '<div style="width:100%;height:20px;margin:8px 0px;">'
+  				      +'<div style="float:left;width:200px;text-align:right;">'
+  				      +'<font style="font-size:14px;color:#666;font-weight:bold;">'+params[j]['param']+'</font>'
+  				      +'</div>'
+  				      +'<div style="float:right;width:470px;text-align:left;">'
+  				      +'<font style="font-size:14px;color:#888;">'+params[j]['value']+'</font>'
+  				      +'</div>'
+  				      +'</div>';
+				}
+			}
+	  }
+		
+		document.getElementById("product_info").innerHTML = str;
+		
+		
+		//update size info
+		document.getElementById("size").innerHTML = '';
+		var str = '';
+			
+		var params = pricelist_json[price_index]['param'];
+				
+		if(params === 'undefined' || params == null)
+		;
+		else{
+			for(var j=0; j< params.length; j++){
+				if(params[j]['type']!=0){
+  				str += '<div style="width:100%;height:20px;margin:8px 0px;">'
+  				      +'<div style="float:left;width:200px;text-align:right;">'
+  				      +'<font style="font-size:14px;color:#666;font-weight:bold;">'+params[j]['param']+'</font>'
+  				      +'</div>'
+  				      +'<div style="float:right;width:470px;text-align:left;">'
+  				      +'<font style="font-size:14px;color:#888;">'+params[j]['value']+'</font>'
+  				      +'</div>'
+  				      +'</div>';
+				}
+			}
+		}
+			
+		
+		document.getElementById("size").innerHTML = str;	
+	}
+
+
+
+</script>

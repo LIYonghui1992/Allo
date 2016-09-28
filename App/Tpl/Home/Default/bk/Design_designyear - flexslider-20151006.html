@@ -1,0 +1,115 @@
+<html>
+		
+	<head>
+		<link rel="stylesheet" href="/slidertrack/css/lrtk.css" type="text/css" media="screen">
+    <script type="text/javascript" src="/slidertrack/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/slidertrack/js/jquery-easing-1.3.0.js"></script>
+    <script type="text/javascript" src="/slidertrack/js/modernizr.mediaqueries.js"></script>
+    <script type="text/javascript" src="/slidertrack/js/responsive-hub.js"></script>
+    <script type="text/javascript" src="/slidertrack/js/jquery.silver_track.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/slidertrack/js/jquery.silver_track_recipes.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/slidertrack/js/jquery.silver_track.navigator.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/slidertrack/js/jquery.silver_track.bullet_navigator.js" charset="utf-8"></script>
+    
+    <script type="text/javascript">
+  /*
+      var track2 = $(".slider-container").silverTrack();
+      var parent = track.container.parents(".track");
+      
+      // 左右箭头
+      track2.install(new SilverTrack.Plugins.Navigator({
+       prev: $("a.prev", parent),
+       next: $("a.next", parent)
+      }));
+      
+      //下面三个小圆点 , #products
+      track2.install(new SilverTrack.Plugins.BulletNavigator({
+      container: $(".bullet-pagination", parent)
+      }));
+      
+      track2.start();
+  */
+  /*
+  $(" #pastproducts ").each(function() {
+  	var example = $(this);
+    var parent = example.parents(".track");
+    var track2 = example.silverTrack();
+
+    track2.install(new SilverTrack.Plugins.Navigator({
+      prev: $("a.prev", parent),
+      next: $("a.next", parent)
+    }));
+    
+    track2.install(new SilverTrack.Plugins.BulletNavigator({
+      container: $(".bullet-pagination", parent)
+    })); 
+    track2.start();
+  	
+  	});*/
+  $('#year-right').flexslider({
+      	selector: ".pastproducts > .pastproduct",
+        animation: "slide",
+        minItems: 4,
+        maxItems: 4,
+        move:4,
+        slideshow: false,
+        itemWidth: 212,//一个滚动项目的宽度
+        itemMargin: 10,//滚动项目之间的间距
+      });
+  	
+  	
+   
+</script>
+
+
+<style>
+  .flexslider{width:982;height:360px;margin:1px auto;padding:1px;}
+	.flexslider2{width:902;height:360px;margin:1px auto;padding:1px;}
+	.flex-viewport{padding-left:5px;padding-right:5px;}
+	.pastproducts{margin:0px auto;margin-left:20px;margin-right:20px;width:902px;height:350px;}	
+  .pastproduct {height: 300px;width: 212px;margin-right: 10px;
+    /*float: left;position: relative;*/ border: 1px solid #CCC;background-color: #FFF;}
+  }
+ 
+</style>
+	</head>
+	
+	<body style="width:950px;height:380px;">
+		<div id="year-right" class="flexslider" style="width:950px;height:380px;">
+			<div class="pastproducts" id="productlist">
+            <volist name="designwinnerlist" id="vo" key="k">
+        		<div class="pastproduct">
+        			
+        			<div style="width:212px; height:180px;"> 
+        				<a href="{:U('Design/detail',array('id'=>$vo['id']))}">
+                <img src="{$vo.background_img}" style="width:212px; height:170px;"/>
+                </a>
+              </div>
+         
+          	
+              <div style="margin:0px auto; width:180px;height:40px;margin-left:15px;margin-top:10px;">
+                <font class="p-font2" style="font-size:16px;font-weight:bold;">{$vo.title} </font> 
+                <font class="p-font2" style="font-size:16px;"><br>{$vo.price}</font>
+              
+              </div> 
+          
+              <div style="margin-top:15px;border:1px solid #DDD;overflow:hidden; border-radius:10px; width:88%;margin-left:15px;">
+              <span style="display: block;background:#15869f;
+              text-align:left;height:8px;width:{$vo['pcs_ordered']/$vo['funding_goal']*100}%;"></span>
+              </div>
+           
+              <div style="margin:0px auto; width:180px;height:30px;margin-right:15px;text-align:right;">
+                <font class="p-font2">{$vo['pcs_ordered']}/{$vo['funding_goal']} pcs required </font>
+              </div>  
+                                                     
+            </div>                     							
+				  </volist>	
+				  
+     	    </div>
+             	    
+              
+    </div>
+	
+	</body>
+	
+</html>

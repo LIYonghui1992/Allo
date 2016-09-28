@@ -1,0 +1,109 @@
+<div id="msg"></div>
+<form name="myform" id="myform" action="{:U($module_name.'/insert',array('iscreatehtml'=>1))}" method="post">
+  <div id="filelist" class="hide"></div>
+  <div class="error">
+    <ul>
+    </ul>
+  </div>
+  <table cellpadding="0" cellspacing="0" class="table_form" width="100%">
+    <tbody>
+      <tr>
+        <td width="10%">NO.</td>
+        <td width="90%" id="box_no"><input type="text" class="input-text " name="no" id="no" value="" size=""></td>
+      </tr>
+      <tr>
+        <td width="10%">Extra listlayer</td>
+        <td width="90%" id="box_extra"><input type="radio" class="input_radio " name="extra" id="extra_1" value="1">
+          YES
+          <input type="radio" class="input_radio " name="extra" id="extra_2" checked="" value="0">
+          NO </td>
+      </tr>
+      <tr>
+        <td width="10%">Socket type</td>
+        <td width="90%" id="box_product_model_id">
+        	<select id="product_model_id" name="product_model_id" onchange="" class="">
+                <option value="0">请选择</option>
+                <volist name="product_model" id="vo">
+                	<option value="{$vo.id}">{$vo.title}</option>
+                </volist>
+          	</select>
+        </td>
+      </tr>
+      <tr>
+        <td width="10%">Product group name</td>
+        <td width="90%" id="box_title"><input type="text" class="input-text input-title f_l" name="title" id="title" value="" size=""></td>
+      </tr>
+      <tr>
+        <td width="10%">Product group img</td>
+        <td width="90%" id="box_img"><div id="img_aid_box"></div>
+          <input type="text" class="input-text " name="img" id="img" value="" size="">
+          <input type="button" class="button" value="图片上传" onclick="javascript:swfupload('img_uploadfile','img','文件上传',1,0,0,1,'jpg,jpeg,gif,png',4,28,'8075res+QS/u5xNoE1qfJ/oB+7byVBCm0pa4ZtG1+a4al+qHkp6/rYeX0S6SBWFZfq7Xsy45DRTHqw',up_image,nodo)"></td>
+      </tr>
+      <tr>
+        <td width="10%">BANNER 1</td>
+        <td width="90%" id="box_banner_one"><div id="banner_one_aid_box"></div>
+          <input type="text" class="input-text " name="banner_one" id="banner_one" value="" size="">
+          <input type="button" class="button" value="图片上传" onclick="javascript:swfupload('banner_one_uploadfile','banner_one','文件上传',1,0,0,1,'jpg,jpeg,gif,png',4,28,'9064fWHifIEnH9gvB7mVg1E4OFCdUhwmlTChuwBgczbmBNUXOwux2WFVK4RxEnqhAAUSco7DZNz7jQ',up_image,nodo)"></td>
+      </tr>
+      <tr>
+        <td width="10%">BANNER 2</td>
+        <td width="90%" id="box_banner_two"><div id="banner_two_aid_box"></div>
+          <input type="text" class="input-text " name="banner_two" id="banner_two" value="" size="">
+          <input type="button" class="button" value="图片上传" onclick="javascript:swfupload('banner_two_uploadfile','banner_two','文件上传',1,0,0,1,'jpg,jpeg,gif,png',4,28,'92fejDgVzZ0RgkWNsvv1xnmX4i+FkepuNs8oJksSy9/wJMYEmbhx8BOzlaTzFuLJsCVkn9GdcxBhfQ',up_image,nodo)"></td>
+      </tr>
+      <tr>
+        <td width="10%">BANNER 3</td>
+        <td width="90%" id="box_banner_three"><div id="banner_three_aid_box"></div>
+          <input type="text" class="input-text " name="banner_three" id="banner_three" value="" size="">
+          <input type="button" class="button" value="图片上传" onclick="javascript:swfupload('banner_three_uploadfile','banner_three','文件上传',1,0,0,1,'jpg,jpeg,gif,png',4,28,'122e/UtIaK9COAz5MMaibSgCFANMYXdjYWl3OCzgMI56NITlC9C02TqJh+yGvKtYDBfRgxXx5YqFvg',up_image,nodo)"></td>
+      </tr>
+      <tr>
+        <td width="10%">video 1 title</td>
+        <td width="90%" id="box_video_title_one"><input type="text" class="input-text " name="video_title_one" id="video_title_one" value="" size=""></td>
+      </tr>
+      <tr>
+        <td width="10%">video 1 url</td>
+        <td width="90%" id="box_video_url_one"><input type="text" class="input-text " name="video_url_one" id="video_url_one" value="" size="" validate=" url:true"></td>
+      </tr>
+      <tr>
+        <td width="10%">video 2 title</td>
+        <td width="90%" id="box_video_title_two"><input type="text" class="input-text " name="video_title_two" id="video_title_two" value="" size=""></td>
+      </tr>
+      <tr>
+        <td width="10%">video 2 url</td>
+        <td width="90%" id="box_video_url_two"><input type="text" class="input-text " name="video_url_two" id="video_url_two" value="" size="" validate=" url:true"></td>
+      </tr>
+      <tr>
+        <td width="10%">video 3 title</td>
+        <td width="90%" id="box_video_title_three"><input type="text" class="input-text " name="video_title_three" id="video_title_three" value="" size=""></td>
+      </tr>
+      <tr>
+        <td width="10%">video 3 url</td>
+        <td width="90%" id="box_video_url_three"><input type="text" class="input-text " name="video_url_three" id="video_url_three" value="" size="" validate=" url:true"></td>
+      </tr>
+      <tr>
+        <td width="10%"><font color="red">*</font>发布时间</td>
+        <td width="90%" id="box_createtime"><input class="Wdate input-text  " validate=" required:true" name="createtime" type="text" id="createtime" size="25" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'
+
+		})" value="2015-01-25 12:31:11"></td>
+      </tr>
+      <tr>
+        <td width="10%">状态</td>
+        <td width="90%" id="box_status"><label style="float:left;width:75px" class="checkbox_status">
+            <input type="radio" class="input_radio " name="status" id="status_1" checked="" value="1">
+            已审核</label>
+          <label style="float:left;width:75px" class="checkbox_status">
+            <input type="radio" class="input_radio " name="status" id="status_2" value="0">
+            未审核</label></td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="bootline"></div>
+  <div id="btnbox" class="btn">
+	<input type="hidden"  name="lang" value="{$langid}" />
+	<input type="hidden" name="forward" value="{$_SERVER['HTTP_REFERER']}" />
+    <input type="submit" value="提交" class="button">
+    <input type="reset" value="取消" class="button">
+  </div>
+</form>
+</div>
