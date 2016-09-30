@@ -612,6 +612,7 @@ class CartAction extends BaseAction
 				$suborder_data['weight'] = $data1['weight'];
 				$suborder_data['orderid'] = $orderid;
 				$suborder_data['createtime'] = $time;
+				$suborder_data['type_name'] = $data1['typetitle'];
 
 				$shipfee=$data1['shipfee'];
 				$productfee=$data1['productfee'];
@@ -962,15 +963,80 @@ class CartAction extends BaseAction
 
 
 	public function save_address(){
+//		cookie("address_arr",null);
+		$address_arr=array();
+		$arr=unserialize(cookie("address_arr"));
+//		$this->ajaxReturn(json_encode($arr));
+		if(!empty($arr)){//不为空
+			$address_arr=$arr;
+		}
+		error_log("read address arr:".json_encode($arr));
+
 		if(IS_POST){
+
+			if(isset($_POST['stat'])&&$_POST['stat']==1){
+				$this->ajaxReturn(json_encode($arr));
+			}else if(isset($_POST['stat'])&&$_POST['stat']==2){
+				$nowproduct_id=$_POST['nowproduct_id'];//这是是需要新添加的地址
+				$product_id=$_POST['product_id'];//这个是选中的地址productid
+//				$address_infoid="address_info"."-".$product_id;
+//				$info_last=cookie($address_infoid);
+//				$info_last[0]=$nowproduct_id;//修改它里面的productid为新的
+
+				//先拿到原始的，点击连接选中的那个地址的信息，这个信息是在address_arr里
+				foreach($address_arr as $val){
+					if($val[0]==$product_id){
+						$info_last=$val;
+					}
+				}
+				$info_last[0]=$nowproduct_id;
+				//然后将新的信息存到cookie里对应新的id
+				$address_infonowid="address_info"."-".$nowproduct_id;
+				cookie($address_infonowid,$info_last,3600);
+				$this->ajaxReturn(cookie($address_infonowid));
+				//如果我们在第二个订单的地址位置直接选择第一个订单所用的地址，则这时候就会出现一个问题，第二个订单是可以被写入正确信息的，
+				//但是如何确定第二个订单的已选择三个字 显示在第一个地址的右边呢？ 因为第一个地址里面存的Productid是第一个订单的，如何让第二个订单找到这个地址呢？ 难道必须引入一个addressid?（暂时没有要求 显示已选择）
+
+				//现在的问题 就是如何确定 当用户点击添加地址 ，并且地址只有一条的时候 ，如何让第三个订单在第一个地址的右边显示已选择，因为一二三 这三个订单公用一个地址。
+			}
+
+			//添加新地址的时候，默认就更新了上次的地址
 			$info=$_POST['info'];
 			$productid=$info[0];
 			$address_info="address_info"."-".$productid;
 			cookie($address_info,$info,3600);
-			$this->ajaxReturn(json_encode($productid));
+
+//			$firstname=$info[1];
+//			$lastname=$info[2];
+//			$phone=$info[3];
+//			$company=$info[4];
+//			$address=$info[5];
+//			$city=$info[6];
+//			$country=$info[7];//第7个是国家的名字
+//			$postcode=$info[9];
+//			$str=$company.",".$address.",".$city.",".$country.",".$firstname.",".$lastname.",".$phone.",".$postcode;
+			//这里要遍历判断，如果是新的地址就要加进去，不是新的订单就执行更新
+			$flag=0;
+			foreach($address_arr as &$val){
+				if($val[0]==$productid){
+					$val=$info;
+					$flag=1;
+				}
+			}
+			if($flag==0){ //如果没有这条则加入新的
+				$address_arr[]=$info;//二维数组
+			}
+			error_log("print address arr".json_encode($address_arr));
+
+			cookie("address_arr",serialize($address_arr),3600);
+//			$this->ajaxReturn(json_encode(cookie($address_info)));
+			$this->ajaxReturn(json_encode(cookie("address_arr")));
 			//前端的地址显示最好改成从cookie里面拿取的，如果cookie过期了 就没有地址了
 
+
 		}
+
+
 
 	}
 
@@ -1388,7 +1454,7 @@ class CartAction extends BaseAction
 						exit('success');
 					}
 				} else {
-					error_log("fail  fail  fail");
+					error_log("pay fail  fail  fail");
 					exit('fail');
 				}
 //		}

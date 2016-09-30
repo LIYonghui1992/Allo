@@ -211,7 +211,7 @@
 
         <input type="reset" value="{:L('reset')}" class="button"  />
         
-        <input type="button" value="export order"   onclick="javascript:export_order();"/>
+        <input type="button" value="export order" style="border: 1px #CCCCCC solid;border-radius:5px; height: 27px; margin-left:15px;"  onclick="javascript:export_order();"/>
 
       </form></td>
 
@@ -360,7 +360,9 @@ function export_order(){
 	
 	 var myselect=document.getElementById("searchtype");
 	 var index=myselect.selectedIndex ; // selectedIndex�����������ѡ�����index
+
 	 var searchtype = myselect.options[index].value;// myselect.options[index].text;
+  //  alert(index);
 	 var title=document.getElementById("title").value;
 
 

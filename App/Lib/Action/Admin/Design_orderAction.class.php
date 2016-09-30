@@ -360,25 +360,37 @@ class Design_orderAction extends AdminbaseAction {
             ->setCellValue('K1', 'email')
             ->setCellValue('L1', 'phone')
             ->setCellValue('M1', 'product_name')
-            ->setCellValue('N1', 'qty')
-            ->setCellValue('O1', 'address2')          
+            ->setCellValue('N1', 'product_type')
+            ->setCellValue('O1', 'qty')
+//            ->setCellValue('O1', 'address2')
             ->setCellValue('P1', 'price')           
             ->setCellValue('Q1', 'shipfee') 
             ->setCellValue('R1', 'total')                      
             ->setCellValue('S1', 'type/version')             
             ->setCellValue('T1', 'payflag')
             ->setCellValue('U1', 'orderNo')
-            ->setCellValue('V1', 'paytype '); 
+            ->setCellValue('V1', 'paytype ')
+            ->setCellValue('W1', 'type_id ');
       //winner_name,email,id
+		$where=array();
       if($_GET['winner_name'])
         $where['winner_name']=array('eq',$_GET['winner_name']);        
       if($_GET['email'])
         $where['email']=array('eq',$_GET['email']);
       if($_GET['id'])
         $where['id']=array('eq',$_GET['id']);
-        
-      $orders = M('design_order')->where($where)->select();
 
+		$orders=array();
+		//不管是按照同一个产品 还是用一个邮箱地址，都不可能有重复的订单号，所以按照订单号查出来的肯定是全部的
+      	$order = M('design_order')->where($where)->select();
+		$option=array('type_id','type_name','qty');
+		foreach($order as $val){
+			$order_id=$val['orderid'];
+			$suborders=M('design_suborder')->where('orderid =\'' . $order_id . '\'')->select($option);
+			foreach($suborders as $value){
+				$orders[]=array_merge($val,$value);
+			}
+		}
       for ($i = 0, $len = count($orders); $i < $len; $i++){
       	$objPHPExcel->getActiveSheet(0)->setCellValue('A' . ($i + 2), $orders[$i]['id']);
       	$objPHPExcel->getActiveSheet(0)->setCellValue('B' . ($i + 2), $status_array[$orders[$i]['status']]);
@@ -394,16 +406,18 @@ class Design_orderAction extends AdminbaseAction {
       	$objPHPExcel->getActiveSheet(0)->setCellValue('L' . ($i + 2), $orders[$i]['phone']);
       	
       	$objPHPExcel->getActiveSheet(0)->setCellValue('M' . ($i + 2), $orders[$i]['winner_name']);
-      	$objPHPExcel->getActiveSheet(0)->setCellValue('N' . ($i + 2), $orders[$i]['qty']);
-      	$objPHPExcel->getActiveSheet(0)->setCellValue('O' . ($i + 2), $orders[$i]['address2']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('N' . ($i + 2), $orders[$i]['type_name']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('O' . ($i + 2), $orders[$i]['qty']);
+//      	$objPHPExcel->getActiveSheet(0)->setCellValue('O' . ($i + 2), $orders[$i]['address2']);
       	$objPHPExcel->getActiveSheet(0)->setCellValue('P' . ($i + 2), $orders[$i]['price']);
       	$objPHPExcel->getActiveSheet(0)->setCellValue('Q' . ($i + 2), $orders[$i]['shipfee']);
       	$objPHPExcel->getActiveSheet(0)->setCellValue('R' . ($i + 2), $orders[$i]['total']);
       	$objPHPExcel->getActiveSheet(0)->setCellValue('S' . ($i + 2), $orders[$i]['typename']);      	      	
       	$objPHPExcel->getActiveSheet(0)->setCellValue('T' . ($i + 2), $payflag_array[$orders[$i]['payflag']]);
-      	$objPHPExcel->getActiveSheet(0)->setCellValue('U' . ($i + 2), $orders[$i]['orderid']);      	
-      	$objPHPExcel->getActiveSheet(0)->setCellValue('V' . ($i + 2), $paytype_array[$orders[$i]['paytype']]);	
-      } 
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('U' . ($i + 2), $orders[$i]['orderid']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('V' . ($i + 2), $paytype_array[$orders[$i]['paytype']]);
+	  	$objPHPExcel->getActiveSheet(0)->setCellValue('W' . ($i + 2), $orders[$i]['type_id']);
+	  }
              
       $objPHPExcel->getActiveSheet()->setTitle('design_order');
 

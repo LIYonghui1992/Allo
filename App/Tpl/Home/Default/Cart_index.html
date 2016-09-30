@@ -50,7 +50,7 @@
 								<li class="address_des"><span >Address:</span><span id="address_des{$Think.lang.$key}" style="display: none"></span></li>
 								<!--这里给一个默认的国家id 初始化的时候可以先根据这个id计算运费-->
 								<li><input type="text" id="record_countryid{$Think.lang.$key}" style="display:none" value="1"></li>
-								<li><a id="address{$Think.lang.$key}" href="javascript:add_address({$Think.lang.$key});" ><font style="color:#FFF;font-size:12px;line-height:50px;" > Add address>> </font></a></li>
+								<li><a id="address{$Think.lang.$key}"  href="javascript:add_address({$Think.lang.$key});" ><font style="color:#FFF;font-size:12px;line-height:50px;" > Add address>> </font></a></li>
 							</ul>
 						</div>
 
@@ -190,7 +190,7 @@
 		<div class="shipping-div">
 			<div class="shipping-field"><font style="font-size:12px;">Country*</font></div>
 
-			<select id="countrylist" class="shipping-input" style="width:512px;" onchange="ship_price();" >
+			<select id="countrylist" class="shipping-input" style="width:512px;" onchange="choose_country();" >
 				<option value="-1" selected>Choose your country</option>
 				<volist name="country_list" id="vo"  >
 					<option id="countrylist{$vo.id}" value="{$vo.id}">{$vo.title}</option>
@@ -199,6 +199,23 @@
 
 		</div>
 	</div>
+	<!--<div id="select_address">-->
+
+		<!--<div style="clear: both"></div>-->
+		<!--<div>-->
+			<!--<div style="width:200px;">-->
+				<!--<img src="../Public/image/checkout_icon1.png" style="width:16px;height:23px;float:left;padding-left:10px;"/>-->
+				<!--<font style="font-size:16px;font-weight:bold;color:#884697;padding-left:15px;">address 1</font>-->
+			<!--</div>-->
+			<!--<div style="width:200px;">-->
+<!--sfsfsfsffsfffff-->
+			<!--</div>-->
+
+		<!--</div>-->
+		<!--<div style="clear: both"></div>-->
+
+
+	<!--</div>-->
 	<div><input type="text" id="allo_total" style="display:none"></div>
 	<div><input type="text" id="record_productid" style="display:none"></div>
 
@@ -215,18 +232,132 @@
 		//但是这样我的运费暂时无法存到cookie里， 只能最后点击提交的时候 一起传送到后台数据库中存起来 同时生成订单
 //		var info_arr=new Array();
 		var arr=[];
-
+//		$('.address1234').dialog({content: 'hello world'});
+		var flag=0;
 		function add_address(productid){
-			arr=[];
+			flag=0;
 			document.getElementById("record_productid").value=productid;
-			var dia=art.dialog({
+			//拿到当前cookie里面存的地址，然后解析分为多个子地址，进行判断，如果有地址则弹窗选择，没有地址则弹窗填写
+			arr=[];
+
+			var url="{:U('Cart/save_address')}";
+			var data={stat:1};
+
+			$.post(url,data,function (data,status) {
+				if(status=="success") {
+//					alert(data);
+					if(data=="false"){ //false说明为空， 没有任何一个地址，则直接跳出填写页面
+						addnew_address(1);//默认传个1 则没有数据的时候 默认第一个改名为1
+						return;
+					}
+					var record_num=0;
+					var obj=eval(data);
+					str="<div style='clear: both'></div>";
+					str+="<div style='width:200px;'>";
+
+					for(var i=0;i<obj.length;i++){
+						var k=i+1;
+
+						str+="<div>";
+							str+="<div style='width:200px;'>";
+							str+="<img src='../Public/image/checkout_icon1.png' style='width:16px;height:23px;float:left;'/>";
+							str+="<font style='font-size:16px;font-weight:bold;color:#884697;'>address"+" "+k+"</font>";
+							str+="</div>";
+							str+="<div style='width:200px;'>";
+							str+="<a id='select_add"+obj[i][0]+"' href='javascript:select_add("+obj[i][0]+","+obj[i][8]+","+k+");'>";
+//							for(var j=0;j<obj[i].length;j++){
+//								obj[i][j];
+//							}
+										str+=obj[i][1]+","+obj[i][2]+","+obj[i][3]+","+obj[i][4]+","+obj[i][5]+","+obj[i][6]+","+obj[i][7]+","+obj[i][9];
+							str+="</a>";
+							str+="</div>";
+						str+="</div>";
+					str+="</div>";
+					str+="<div style='clear: both'>";
+						if(productid==obj[i][0]){
+							record_num=i+1;
+						}
+					}
+
+					str+="<div style='height:1px;border-bottom-color: #CCCCCC; border-bottom-width: 1px;border-bottom-style: solid;'></div>";
+					str+="<div style='width:200px;height:50px;'>";
+						str+="<a href='javascript:addnew_address("+record_num+");'>";
+						str+="<font style='font-size:16px;font-weight:bold;color:#884697;line-height:50px;' >"+"+ add new address>>"+"</font>";
+						str+="</a>";
+					str+="</div>";
+
+
+						var dia=art.dialog({
+							align:'right bottom',
+							width:300,
+							id:'choose address',
+							follow:document.getElementById("address"+productid),
+							quickClose: true,
+//							lock:true,
+							fixed:true
+						});
+						dia.content(str);
+						dia.show();
+						return;
+				}
+			});
+
+
+
+
+//			dia.content(document.getElementById('select_address'));
+
+
+//			dia.show(document.getElementById("address"+productid));
+
+			return;
+
+
+		}
+		/*
+		将选中的地址添加到当前的订单id中
+
+		*/
+		function select_add(productid,countryid,record_num){
+			var url="{:U('Cart/save_address')}";
+			nowproductid=$("#record_productid").val();
+//			if(productid==nowproductid){
+//				alert("同一个");
+//				return;
+//			}
+
+			data={stat:2,product_id:productid,nowproduct_id:nowproductid};
+			$.post(url,data,function (data,status) {
+				if(status=="success"){
+//					show_address(nowproductid);
+					address_des_id="address_des"+nowproductid;
+					document.getElementById(address_des_id).style.display="block";
+					document.getElementById(address_des_id).innerHTML="地址修改成功,有地址";
+
+					//让顾客知道选的是哪个
+					address_id="address"+nowproductid;
+					str="<font style='color:#FFF;font-size:12px;line-height:50px;'>"+"address"+record_num+"</font>";
+					document.getElementById(address_id).innerHTML=str;//这里的addressid为数字 所以要组合起来
+
+
+					ship_price(nowproductid,countryid); //修改成功了 重新算运费
+					record_countryid="record_countryid"+nowproductid;//找到记录当前国家
+					$("#"+record_countryid).val(countryid);//记录的存上修改后的国家，方便点checkout的时候和调数量的时候使用
+					alert(data);
+				}
+
+			});
+		}
+
+		function addnew_address(record_num){
+			var Dia=art.dialog({
 				width:300,
 				height:100,
 				id: 'shake-demo',
 				lock: true,
 				fixed: true,
 				ok: function () {
-					save_address();
+					save_address(record_num);
 				},
 				okValue: '确定',
 				cancelValue:'取消',
@@ -234,26 +365,47 @@
 					alert('取消填写');
 				}
 			});
-			dia.title(document.getElementById('shipping'));
-			dia.content(document.getElementById('shipping-2'));
-			dia.show();
+			Dia.title(document.getElementById('shipping'));
+			Dia.content(document.getElementById('shipping-2'));
+			Dia.show();
+			//新地址添加完要执行 弹出的窗口刷新，并且显示已选择
+		}
+		/**
+		 * 左侧边栏显示地址，作为可提交订单的判断条件-地址是否全部填写？
+		 *
+		 * */
+//		function show_address(productid){
+//			address_des_id="address_des"+productid;
+//			var str=$("#"+countrylistid).text()+" /"+$("#address").val()+" /"+$("#firstname").val()+$("#lastname").val()+" /"+$("#phone").val();
+//			document.getElementById(address_des_id).style.display="block";
+//			document.getElementById(address_des_id).innerHTML=str;
+//		}
+		/**
+		 * 记录国家
+		 *	每次选中国家，然后存到cookie里后
+		 *
+		 * */
+		function record_country(productid){
+			countryid=$("#countrylist").val();
+			record_countryid="record_countryid"+productid;//找到记录当前国家
+			$("#"+record_countryid).val(countryid);//记录的存上当前的值
+			return countryid;
 		}
 
 
-		function save_address(){
+		function save_address(record_num){
 			//如果没有选国家，则会按照默认上次的国家计算一遍
-			ship_price();
+
 			var result = checkinput();
 			if(!result){
 				return false;
 			}
-
-			//接着往下执行：1.将当前的地址信息保存到div中
-			countrylistid="countrylist"+$("#countrylist").val();
+			//应该考虑 先存到cookie里，保存成功了 再计算运费和改变国家
 			productid=$("#record_productid").val();
+			countryid=record_country(productid);
+			ship_price(productid,countryid);
 
-			address_des_id="address_des"+productid;
-
+			countrylistid="countrylist"+countryid;
 
 			//2. 将所有的地址信息保存到后台的cookie里 这里用数组的形式给存起来
 			var url="{:U('Cart/save_address')}";
@@ -265,28 +417,25 @@
 			arr[4]=$("#company").val();
 			arr[5]=$("#address").val();
 			arr[6]=$("#city").val();
-			arr[7]=$("#"+countrylistid).text();
-			arr[8]=$("#countrylist").val();
+			arr[7]=$("#"+countrylistid).text();//这里拿出来的是国家的名字
+			arr[8]=$("#countrylist").val();//这里拿出来的是国家的id
 			arr[9]=$("#postcode").val();
-
-
-//			arr["countryid"]=$("#countrylist").val();
-//			arr["country"]=$("#"+countrylistid).text();
-//			arr["city"]=$("#city").val();arr["firstname"]=$("#firstname").val();
-//			arr["lastname"]=$("#lastname").val();
-//			arr["phone"]=$("#phone").val();
-//			arr["company"]=$("#company").val();
-//			arr["address"]=$("#address").val();
-//			arr["postcode"]=$("#postcode").val();
-//			arr["city"]=$("#city").val();
-
 			var data={info:arr};
 			$.post(url,data,function (data,status) {
 				if(status=="success"){
-//					alert(data);
-					var str=$("#"+countrylistid).text()+" /"+$("#address").val()+" /"+$("#firstname").val()+$("#lastname").val()+" /"+$("#phone").val();
+					if(record_num!=0){
+						address_id="address"+productid;
+						str="<font style='color:#FFF;font-size:12px;line-height:50px;'>"+"address"+record_num+"</font>";
+						document.getElementById(address_id).innerHTML=str;//这里的record_num为数字 所以要组合起来
+					}
+
+					address_des_id="address_des"+nowproductid;
 					document.getElementById(address_des_id).style.display="block";
-					document.getElementById(address_des_id).innerHTML=str;
+					document.getElementById(address_des_id).innerHTML="地址修改成功,有地址";
+
+//					alert(data);
+					//改为存完地址 刷新浮动窗！！！！
+//					show_address(productid);
 				}
 			});
 
@@ -296,20 +445,13 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		function choose_country(){
+			if(document.getElementById("countrylist").value==-1){
+				document.getElementById("countrylist") .style.color='#999';
+			}else{
+				document.getElementById("countrylist") .style.color='#333';
+			}
+		}
 
 
 
@@ -320,13 +462,11 @@
 		 2.地址的国家
 		 */
 //		var arr1=new Array;
-		function ship_price()
+		function ship_price(productid,countryid)
 		{
 			//遍历订单下已经调勾的子订单
 			//checkbox content:{$vo['productid']}--{$vo['typeid']}--{$vo['price']}--{$vo['qty']}
 			arr=[];
-			productid=$("#record_productid").val();
-
 			$(".checkbox :checkbox[checked]:visible").each(function(i) {
 //				var info=this.id.split("--"); //把它的id 分割成字符串数组
 				var info = this.value.split("--");
@@ -336,7 +476,7 @@
 				var qty = info[3];
 				if (pre_productid == productid) {
 					//productid--typeid--price--qty--countryid
-					str = this.value + "--" + document.getElementById("countrylist").value;
+					str = this.value + "--" +countryid;
 					arr.push(str);
 
 				}
@@ -349,22 +489,13 @@
 			}
 
 //			var currency = "$";
-			if(document.getElementById("countrylist").value==-1){
-				document.getElementById("countrylist") .style.color='#999';
-			}else{
-				document.getElementById("countrylist") .style.color='#333';
-			}
 			var url = "{:U('Cart/shipPrice')}";
-
-
-//			var data =  { countryid: document.getElementById("countrylist").value,allo_total:allo_total};
 			var data =  { info:arr};
 			$.post(url,data,function(data,status){
 				if(status == "success"){
 //					alert(data);
 					document.getElementById(shipfeeid).innerHTML = data;
 					recalculate();
-//					document.getElementById("allo_pay_total").innerHTML = currency+data.allo_pay_total;
 					document.getElementById("buy").disabled = false;
 					//window.location.reload();
 				}else{
@@ -577,6 +708,9 @@
 			//只要点了就计算运费 因为刚开是可能初始化的时候会给record_countryid附一个值，就是说可以计算出运费的
 			//所以要判断是否可以计算运费了 主要是根据国家选没选
 			record_countryid="record_countryid"+productid;
+
+//			alert($("#"+record_countryid).val()); //这里显示 国家没改变 则计算出来的运费就是错误的
+
 			if(!$("#"+record_countryid).val()==""){
 				if($("#"+productid+" :checkbox[checked]:visible").length>0){
 					$("#"+productid+" :checkbox[checked]:visible").each(function(i) {

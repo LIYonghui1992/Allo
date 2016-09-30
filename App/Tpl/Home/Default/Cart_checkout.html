@@ -298,11 +298,11 @@
 //			}
 
 			if (this.name == 'email') {
-
 				if(this.value==''){
 					rs = 0;
+
 					alert('Please enter a valid mailbox!')
-					return false;
+
 				}
 				if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))) {
 					rs = 0;
@@ -311,20 +311,28 @@
 //					document.getElementById("msgbox").style.display="block";
 					//window.location.hash = "#msgbox";
 //					scrollTo(400,100);
+
 					alert('Please enter a valid mailbox! For example: abcd@allocacoc.com');
-					return false;
+
 				}
+
 			}
 
 		});
-		return true;
+		if(rs==0){
+			return false;
+		}else{
+			return true;
+		}
 
 	}
 
 	$(function() {
+
 		$("#buy").click(function() {
 
 			var result = checkinput_email();
+//			alert(result);
 			if(!result){
 				return false;
 			}
