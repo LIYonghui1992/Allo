@@ -581,13 +581,18 @@ class CartAction extends BaseAction
 			$order_id = $this->build_order_no();//拿到一个微秒的ID
 			$orderid = $order_id;
 			$time = time();
-			$productid = $k;
+//			$productid = $k;
+			//这里需要处理一下
+			$ids=explode('--', $k);
+			$productid=$ids[0];
+			$productfee=$ids[1];
+			$shipfee=$ids[2];
+			$totalfee=$ids[3];
+
 			//根据productid 拿到存的地址信息
 			$address_infoid="address_info"."-".$productid;
 			$address_info=cookie($address_infoid);
-			$shipfee=0;
-			$productfee=0;
-			$totalfee=0;
+
 			$winner_name="";
 //			每条订单的所有产品的数量和
 			$order_qty = 0;
@@ -614,9 +619,6 @@ class CartAction extends BaseAction
 				$suborder_data['createtime'] = $time;
 				$suborder_data['type_name'] = $data1['typetitle'];
 
-				$shipfee=$data1['shipfee'];
-				$productfee=$data1['productfee'];
-				$totalfee=$data1['total'];
 				$winner_name=$data1['title'];
 
 				error_log("这里的".$shipfee."price:".$productfee."total".$totalfee."dataarr=".json_encode($suborder_data)) ;
@@ -632,7 +634,6 @@ class CartAction extends BaseAction
 				//这个产品的所有类型的重量和
 //				$order_weight += $data1['weight'];
 			}
-			$data=array();
 			$data = array(
 				'orderid' => $order_id,
 				'first_name' => $address_info[1],
@@ -722,7 +723,7 @@ class CartAction extends BaseAction
 	{
 
 //		$data = array(); //用来存写入数据库数据
-		$cart_save = array();//这个数组用于存$data
+//		$cart_save = array();//这个数组用于存$data
 
 		$cart = array(); //用于存$item
 		$cartinfo = array();
@@ -747,8 +748,7 @@ class CartAction extends BaseAction
 			$qty = $ids[3];
 			$productfee=$ids[4];
 			$shipfee=$ids[5];
-
-
+			$totalfee=intval($productfee)+intval($shipfee);
 			$product = M('design_winner')->where('id=' . $productid)->find();
 			$item['title'] = $product['title'];
 			$item['background_img'] = $product['background_img'];
@@ -756,12 +756,10 @@ class CartAction extends BaseAction
 			$item['typeid'] = $typeid;
 			$item['qty'] = $qty;
 			$item['price'] = $price; //前端传过来的价格肯定是与物品对应的价格
-			$item['productfee'] =$productfee ;
-			$item['shipfee']=$shipfee;
-			$item['total']=$productfee+$shipfee;//单条订单的总的价格
 			$item['weight'] = $product['weight'] * $item['qty'];//用户购买的所有数量的这个产品的总重量和
 			//如果是有子类型 则用子类型里面的图片和title
-
+			$item['type_pic'] = $product['background_img'];
+			$item['typetitle'] = "";
 			if ($typeid != 0) {
 				$version = M('designwinner_price')->where('id=' . $typeid)->find();
 				$item['type_pic'] = $version['type_pic'];
@@ -774,11 +772,9 @@ class CartAction extends BaseAction
 			 */
 			//总数据 createtime updatetime orderid designwinner_id winner_name winner_text qty type_id type_name price_id price total
 			//还少  updatetime orderid  winner_text type_name price_id price
-
-			$cart_save=$this->integrate_arr($productid,$typeid,$item,$cart_save);
-			$orderid=$productid."--".$productfee."--".$shipfee."--".$item['total'];
+//			$cart_save=$this->integrate_arr($productid,$typeid,$item,$cart_save);
+			$orderid=$productid."--".$productfee."--".$shipfee."--".$totalfee;
 			$cart=$this->integrate_arr($orderid,$typeid,$item,$cart);
-
 			//记录已经选中购买的
 			$id = "$productid" . '-' . "$typeid";
 			$cart_list[$id] = $qty;
@@ -786,8 +782,17 @@ class CartAction extends BaseAction
 		cookie("cart_list", $cart_list, 3600);//选中付款的列表 只包含$productid-$typeid=>qty
 //		dump($cart);
 
+
+		// 在这里核查 是否用户填写的地址与用户点击提交计算用的地址不一致
+		// 这里检查 防止假地址  实际计费地址以多个页面最后用户选中的地址为准计费，而非点击checkout页面的当前地址
+		// 返回一个审核后的cart
+
+		$cart=$this->checkSPrice($cart);
+//		dump($cart);
+
 		// 将订单数据和子订单数据插入到数据库表中
-		$result = $this->insertOrder($cart_save, $msg);
+//		$result = $this->insertOrder($cart_save, $msg);
+		$result = $this->insertOrder($cart, $msg);
 		if ($result != 1) {
 			$this->assign('tip', $msg);
 			R('/Cart/index');
@@ -860,6 +865,8 @@ class CartAction extends BaseAction
 	 * 2.单条订单的运费？还是单条商品的运费
 	 * 3.总的运费=单条运费之和
 	 * 4.总的运费加总的商品的价格之和
+	 *
+	 * 另一种情况： 用于核查 计算由参数传过来的值
 	 */
 	public function shipPrice()
 	{
@@ -869,7 +876,8 @@ class CartAction extends BaseAction
 //			$this->ajaxReturn(json_encode($info));
 //			exit;
 			$total_weight=0;
-			//$info 里面存着多条productid-typeid-price-qty-countryid
+			//$info 里面存着多条productid--typeid--price--qty--countryid
+			$ship_price=array();
 			foreach($info as $v){
 
 				$ids = explode('--', $v); //得到分割后的数组 $ids=(productid,typeid,price,qty,countryid)
@@ -909,56 +917,73 @@ class CartAction extends BaseAction
 				$shipfee = intval(substr($additionalPrice, 1) * $pcs) + intval(substr($firstPrice, 1));
 			}
 			$this->ajaxReturn($shipfee);
-
-//			$order_shipfee_arr[$k] = $shipfee;
-			//计算出总的运费
-//			$total_shipfee += $shipfee;
+		}
 
 
+	}
 
+	public function checkSPrice($cart=[]){
+		$new_cart=array();
+		if(!empty($cart)){
+			foreach($cart as $k=>$val){
+				$ids=explode("--",$k);
+				$productid=$ids[0];//必须
+				$address_infoid="address_info"."-".$productid;
+				$info=cookie($address_infoid);
+				$countryid=$info[8];//必须
 
+				$product_fee=$ids[1];
+				$ship_fee=$ids[2];
+//			$total_fee=$ids[3];
+				$total_weight=0;
+				$ship_price=array();
+				foreach ($val as $key=>$value){
+					$typeid=$key;//必须
+					$qty=$value['qty'];//必须
+					$ship_price = M('ship_price_new')->where(array('id' => $countryid))->find();
+					if (empty($ship_price)) {//选中的国家 表里面没有
+						$rs = array('stauts' => 0, 'msg' => 'Sorry, We Cannot ship product to your country now!');
+						error_log("check_ship_fee".json_encode($rs));
 
-//  			$total_weight = session("allo_weight");
-//			$order_weight_arr = cookie("order_weight_arr");
-//			$total_shipfee = 0;
-//			$order_shipfee_arr = array();
-			/**
-			 * test area
-			 */
-//			$this->ajaxReturn(json_encode($test1));
-//			foreach ($order_weight_arr as $k => $val) {
-				//计算出每个产品订单 单独的运费
-//				$total_weight = intval($val);
-//				$base = intval($ship_price['first']);//首重
-//				$additional = intval($ship_price['additional']);
-//				$firstPrice = $ship_price['price'];
-//				$additionalPrice = $ship_price['additional_price'];
-//				if ($total_weight <= $base)
-//					$shipfee = substr($firstPrice, 1);
-//				else {
-//					$pcs = ceil(($total_weight - $base) / $additional);
-//
-//					$shipfee = intval(substr($additionalPrice, 1) * $pcs) + intval(substr($firstPrice, 1));
-//				}
-//				$order_shipfee_arr[$k] = $shipfee;
-//				//计算出总的运费
-//				$total_shipfee += $shipfee;
+//					echo json_encode($rs);
+						exit;
+//					return $cart;
+					}
+					$product = M('design_winner')->where('id=' . $productid)->find();
+					if($typeid!=0){
+						$version = M('designwinner_price')->where('id=' . $typeid)->find();
+						$total_weight += $version['weight'] * $qty;//本条产品的重量 遍历要把这个订单的重量都加
+					}else{
+						$total_weight += $product['weight'] * $qty;//本条产品的重量 遍历要把这个订单的重量都加
+					}
 
-//			}
+				}
+				//实际上是重量决定了运费
+				$base = intval($ship_price['first']);//首重
+				$additional = intval($ship_price['additional']);
+				$firstPrice = $ship_price['price'];
+				$additionalPrice = $ship_price['additional_price'];
+				if ($total_weight <= $base)
+					$shipfee = substr($firstPrice, 1);
+				else {
+					$pcs = ceil(($total_weight - $base) / $additional);
 
+					$shipfee = intval(substr($additionalPrice, 1) * $pcs) + intval(substr($firstPrice, 1));
+				}
+				//相同的也倒一遍，不同的则直接就刷新了
+				//不然就再次遍历,如果不一致 则只改键即可
+				$ship_fee=$shipfee;
+				$total_fee=$ship_fee+$product_fee;
+				$k=$productid."--".$product_fee."--".$ship_fee."--".$total_fee;
+				foreach($val as $key=>$value){
+					$new_cart[$k][$key]=$value;
+				}
 
-//  		将总的运费和总的要支付的价格返回
-//			$true_total = $total_shipfee + $totalprice;
-
-//			cookie('allo_shipfee_arr', $order_shipfee_arr);
-//			cookie('allo_shipfee', $total_shipfee);
-//			cookie('allo_pay_total', $true_total);
-//			$rs = array('allo_pay_total' => $true_total, 'ship_price' => $total_shipfee);
-
-//			echo json_encode($rs);
-//			exit;
+			}
 
 		}
+//		dump($new_cart);
+		return $new_cart;
 	}
 
 

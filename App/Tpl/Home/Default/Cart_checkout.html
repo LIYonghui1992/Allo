@@ -99,7 +99,7 @@
 				<li class="order" id="{$Think.lang.$key}">
 						<div class="total_info">
 							<span>Product: $
-								<span class="sp" id="productfee--{$Think.lang.$key}">sfsfsf</span>
+								<span class="sp" id="productfee--{$Think.lang.$key}"></span>
 							</span>
 							<span>Shipping fee: $
 								<span class="sp" id="shipfee{$Think.lang.$key}"></span>
@@ -251,7 +251,7 @@
 				productfeeid="productfee"+"--"+this.id;
 				shipfeeid="shipfee"+this.id;
 				totalfeeid="total"+this.id;
-				document.getElementById(productfeeid).textContent=productfee;
+				document.getElementById(productfeeid).innerHTML=productfee;
 				document.getElementById(shipfeeid).innerHTML=shipfee;
 				document.getElementById(totalfeeid).innerHTML=totalfee;
 				total_shipping+=parseInt(shipfee);

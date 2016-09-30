@@ -235,6 +235,8 @@
 //		$('.address1234').dialog({content: 'hello world'});
 		var flag=0;
 		function add_address(productid){
+//			alert(productid);
+
 			flag=0;
 			document.getElementById("record_productid").value=productid;
 			//拿到当前cookie里面存的地址，然后解析分为多个子地址，进行判断，如果有地址则弹窗选择，没有地址则弹窗填写
@@ -247,16 +249,16 @@
 				if(status=="success") {
 //					alert(data);
 					if(data=="false"){ //false说明为空， 没有任何一个地址，则直接跳出填写页面
-						addnew_address(1);//默认传个1 则没有数据的时候 默认第一个改名为1
+						addnew_address(1,0);//默认传个1 则没有数据的时候 默认第一个改名为1
 						return;
 					}
 					var record_num=0;
 					var obj=eval(data);
 					str="<div style='clear: both'></div>";
 					str+="<div style='width:200px;'>";
-
+					var k=0;
 					for(var i=0;i<obj.length;i++){
-						var k=i+1;
+						k=i+1;
 
 						str+="<div>";
 							str+="<div style='width:200px;'>";
@@ -281,7 +283,7 @@
 
 					str+="<div style='height:1px;border-bottom-color: #CCCCCC; border-bottom-width: 1px;border-bottom-style: solid;'></div>";
 					str+="<div style='width:200px;height:50px;'>";
-						str+="<a href='javascript:addnew_address("+record_num+");'>";
+						str+="<a href='javascript:addnew_address("+record_num+","+obj.length+");'>";
 						str+="<font style='font-size:16px;font-weight:bold;color:#884697;line-height:50px;' >"+"+ add new address>>"+"</font>";
 						str+="</a>";
 					str+="</div>";
@@ -343,13 +345,17 @@
 					ship_price(nowproductid,countryid); //修改成功了 重新算运费
 					record_countryid="record_countryid"+nowproductid;//找到记录当前国家
 					$("#"+record_countryid).val(countryid);//记录的存上修改后的国家，方便点checkout的时候和调数量的时候使用
-					alert(data);
+//					alert(data);
 				}
 
 			});
 		}
-
-		function addnew_address(record_num){
+		/**
+		 * 添加地址窗口
+		 *
+		 *
+		 * */
+		function addnew_address(record_num,k){
 			var Dia=art.dialog({
 				width:300,
 				height:100,
@@ -357,7 +363,7 @@
 				lock: true,
 				fixed: true,
 				ok: function () {
-					save_address(record_num);
+					save_address(record_num,k);
 				},
 				okValue: '确定',
 				cancelValue:'取消',
@@ -393,7 +399,7 @@
 		}
 
 
-		function save_address(record_num){
+		function save_address(record_num,k){
 			//如果没有选国家，则会按照默认上次的国家计算一遍
 
 			var result = checkinput();
@@ -423,15 +429,27 @@
 			var data={info:arr};
 			$.post(url,data,function (data,status) {
 				if(status=="success"){
+
+
+
 					if(record_num!=0){
 						address_id="address"+productid;
 						str="<font style='color:#FFF;font-size:12px;line-height:50px;'>"+"address"+record_num+"</font>";
 						document.getElementById(address_id).innerHTML=str;//这里的record_num为数字 所以要组合起来
+					}else{
+						alert(k);
+						var i = k+1;
+						address_id="address"+productid;
+						str="<font style='color:#FFF;font-size:12px;line-height:50px;'>"+"address"+i+"</font>";
+						document.getElementById(address_id).innerHTML=str;//这里的record_num为数字 所以要组合起来
 					}
 
-					address_des_id="address_des"+nowproductid;
+
+
+					address_des_id="address_des"+productid;
 					document.getElementById(address_des_id).style.display="block";
 					document.getElementById(address_des_id).innerHTML="地址修改成功,有地址";
+
 
 //					alert(data);
 					//改为存完地址 刷新浮动窗！！！！
