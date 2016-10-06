@@ -1,94 +1,91 @@
 <style>
-/*.cart_title2{width:160px;float:left;color:#FFF;font-size:18px;margin-top:5px;text-align:center;line-height:20px;}*/
-
-.field_div{width:160px;float:left;color:#666;font-size:14px;text-align:center;padding-top:20px;}
-.item_div{margin:0px auto; width:1080px;height:87px;margin-top:20px;margin-bottom:20px;border-bottom:1px solid #DDD;}
-.footer{background-color:#884697}
+.footer{background-color:#884697;}
 .footer .country {BACKGROUND-COLOR: #884697;}
 </style>
+<include file="Home:DNnav"/>
 <link rel="stylesheet" type="text/css" href="../Public/css/cart_checkout_content.css"/>
 <div class="fmian">
-<div class="layout_list">
-	<div style="margin:0px auto; width:1080px;height:89px;">
-  		<img src="../Public/image/DN_logo.png" style="width:260px;height:86px;"/>
-	 </div>
-
+	<div class="layout_list">
+	<!--<div style="margin:0px auto; width:1080px;height:89px;">-->
+  		<!--<img src="../Public/image/DN_logo.png" style="width:260px;height:86px;"/>-->
+	 <!--</div>-->
 <!-- display:none; -->
-	<div id="msgbox" style="display:none;margin:0px auto;width:1080px;height:50px;margin-top:20px;border:1px solid #e60012;background-color:#fff4f9;">
-		<div style="width:23px;height:23px;margin-top:15px;margin-left:10px;float:left;">
-			<img src="../Public/image/error.jpg" style="width:23px;height:23px;"/>
+		<div id="msgbox">
+			<div style="width:23px;height:23px;margin-top:15px;margin-left:10px;float:left;">
+				<img src="../Public/image/error.jpg" style="width:23px;height:23px;"/>
+			</div>
+			<div style="height:23px;margin-top:17px;margin-left:15px;float:left;">
+				<font id="msg" style="font-size:12px;font-weight:bold;color:#e60012;"></font>
+			</div>
 		</div>
-		<div style="height:23px;margin-top:17px;margin-left:15px;float:left;">
-			<font id="msg" style="font-size:12px;font-weight:bold;color:#e60012;"></font>
-		</div>
-	</div>
 
 <!--payment-->
-	<div id="payment" style="margin:0px auto;width:1080px;">
-		<img src="../Public/image/checkout_icon2.png" style="width:28px;height:22px;float:left;padding-left:10px;" />
-		<font style="font-size:16px;font-weight:bold;color:#884697;padding-left:5px;">Payment</font>
-	</div>
+		<div id="payment" style="margin-top:30px;width:90%;margin-left:5%;">
+			<img src="../Public/image/checkout_icon2.png" style="width:28px;height:22px;float:left;margin-left:10px;" />
+			<font style="font-size:16px;font-weight:bold;color:#884697;margin-left:8px;">Payment</font>
+		</div>
 
 <!-- payment-2 -->
-	<div id="payment-2" style="margin:0px auto;width:1080px;height:120px;margin-top:10px;border-top-width: 1px;border-top-style: solid;border-top-color: #884697;">
-		<div class="shipping-div" style="margin:0px auto;width:1080px;margin-top:20px;">
-			<font style="font-size:14px;font-weight:bold;font-color:#666666;">Choose your method of payment</font>
-		</div>
+		<!--<div class="h"></div>-->
+		<div id="payment-2">
+			<div class="shipping-div" style="margin:0px auto;width:100%;margin-top:20px;">
+				<font style="font-size:14px;font-weight:bold;font-color:#666666;">Choose the bank</font>
+			</div>
 
-		<div style="margin:0px auto;width:1080px; height:200px;">
-				<label style="width:550px;">
-					<input type="radio" name="paytype"  style="margin-right:8px;" value="1" checked=true onclick="changetype(1);"/>
-					<img width=113px height=29px src="../Public/image/paypal.jpg" />
-				</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<label>
-					<input type="radio" name="paytype"   value="2" style="margin-right:8px;" onclick="changetype(2);"/>
-				  <img src="../Public/image/stripecards.png" />
-				</label>
+			<div style="margin:0px auto;width:100%; height:200px;margin-top: 20px;">
+					<label style="width:550px;">
+						<input type="radio" name="paytype"  style="margin-right:8px;" value="1" checked=true onclick="changetype(1);"/>
+						<img width=113px height=29px src="../Public/image/paypal.jpg" />
+					</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<!--<label>-->
+						<!--<input type="radio" name="paytype"   value="2" style="margin-right:8px;" onclick="changetype(2);"/>-->
+					  <!--<img src="../Public/image/stripecards.png" />-->
+					<!--</label>-->
+			</div>
 		</div>
-	</div>
 	<!--  end payment-2 -->
 
 
 
 	<!-- payment2 info area -->
-	<div  id="cardinfo" style="display:none;margin:0px auto;width:1080px;height:80px;margin-top:10px;border-top-width: 1px;border-top-style: solid;border-top-color: #DDD;" >
-		<div style="margin-top:22px;height:50px;">
-			<font style="font-size:14px;font-color:#666666;">	cardNo</font>&nbsp;
-		<input type="text" style="width:290px;"  id="cardno" name="cardno" class="card-input" placeholder="card number"/>
-		&nbsp;&nbsp;
-		<font style="font-size:14px;font-color:#666666;">	expiredate</font>&nbsp;
-		<input type="text"   id="expmonth" name="expmonth" class="card-input" placeholder="expmonth"/>&nbsp;
-		/ &nbsp;<input type="text"   id="expyear" name="expyear" class="card-input" placeholder="expyear"/>
-		&nbsp;&nbsp;
-		<font style="font-size:14px;font-color:#666666;">	cvc</font>&nbsp;
-		<input type="text"  id="cvc" name="cvc" class="card-input"/>
-		</div >
-	</div>
+		<!--<div  id="cardinfo">-->
+			<!--<div style="margin-top:22px;height:50px;">-->
+				<!--<font style="font-size:14px;font-color:#666666;">	cardNo</font>&nbsp;-->
+			<!--<input type="text" style="width:290px;"  id="cardno" name="cardno" class="card-input" placeholder="card number"/>-->
+			<!--&nbsp;&nbsp;-->
+			<!--<font style="font-size:14px;font-color:#666666;">	expiredate</font>&nbsp;-->
+			<!--<input type="text"   id="expmonth" name="expmonth" class="card-input" placeholder="expmonth"/>&nbsp;-->
+			<!--/ &nbsp;<input type="text"   id="expyear" name="expyear" class="card-input" placeholder="expyear"/>-->
+			<!--&nbsp;&nbsp;-->
+			<!--<font style="font-size:14px;font-color:#666666;">	cvc</font>&nbsp;-->
+			<!--<input type="text"  id="cvc" name="cvc" class="card-input"/>-->
+			<!--</div >-->
+		<!--</div>-->
 
 	<!--receipt-->
-	<div id="receipt" style="margin:0px auto;width:1080px;height:30px;margin-top:80px;">
-		  <img src="../Public/image/checkout_icon3.png" style="width:17px;height:22px;float:left;padding-left:10px;"/>
-		  <font style="font-size:16px;font-weight:bold;color:#884697;padding-left:5px;">Receipt</font>
+	<div id="receipt">
+		  <img src="../Public/image/checkout_icon3.png" style="width:17px;height:22px;float:left;margin-left:10px;"/>
+		  <font style="font-size:16px;font-weight:bold;color:#884697;margin-left:10px;">Receipt</font>
 	</div>
-	<div id="receipt-2" style="margin:0px auto;width:1080px;height:200px;margin-top:5px;border-top-width: 1px;border-top-style: solid;border-top-color: #884697;">
-
-		<div style="margin:0px auto;width:1080px;height:140px;margin-top:10px;">
-			<div style="width:500px;height:140px;float:left;">
+	<div id="receipt-2">
+		<div style="margin:0px auto;width:100%;height:140px;margin-top:10px;">
+			<div style="width:52%;height:140px;float:left;">
 				<font style="font-family:'Century Gothic';font-size:14px;font-color:#666666;font-weight:bold;">Electronic receipt of purchase </font>
 			  <font style="font-family:'Century Gothic';font-size:14px;font-color:#888888;"><br>This receipt will be sent to you once the order has been confirmed. This receipt can be regarded as an official document and can be used for product warranty ans maintenance requests.</font>
 			</div>
 
-			<div style="height:140px; width:500px;margin-left:550px;margin-top:40px;">
-			  <font style="font-family:'Century Gothic';font-size:12px;">Mail *</font>
-			  <input name="email"  id="email"type="text" class="shipping-input" style="width:250px;" value="your e-mail address"
-			  onfocus="if (value =='your e-mail address'){value ='';this.style.color='#333'}" onblur="if (value ==''){ value='your e-mail address';this.style.color='#999'}"/>
+			<div style="height:140px; width:45%;margin-left:3%;margin-top:40px;float:right;">
+			  <font style="font-family:'Century Gothic';font-size:14px;">Mail *</font>
+			  <input name="email"  id="email"type="text" class="shipping-input" style="width:250px;" value="your mail address"
+			  onfocus="if (value =='your mail address'){value ='';this.style.color='#333'}" onblur="if (value ==''){ value='your mail address';this.style.color='#999'}"/>
 		  </div>
+
 		</div>
 	</div>
 
 <!--下面为订单信息-->
-	<div id="confire" style="margin:0px auto;width:1080px;height:30px;border-bottom-width: 1px;border-bottom-style: solid;border-bottom-color: #884697;">
-				  <img src="../Public/image/checkout_icon4.png" style="width:22px;height:20px;float:left;padding-left:10px;"/>
+	<div id="confire">
+				  <img src="../Public/image/checkout_icon4.png" style="width:22px;height:20px;float:left;margin-left:10px;"/>
 				  <font style="font-size:16px;font-weight:bold;color:#884697;padding-left:5px;">Order Confirmation</font>
 	</div>
 
@@ -97,62 +94,59 @@
 			<volist name="cartlist" id="v1">
 
 				<li class="order" id="{$Think.lang.$key}">
-						<div class="total_info">
-							<span>Product: $
-								<span class="sp" id="productfee--{$Think.lang.$key}"></span>
-							</span>
-							<span>Shipping fee: $
-								<span class="sp" id="shipfee{$Think.lang.$key}"></span>
-							</span>
-							<span>Total: $
-								<span class="sp" id="total{$Think.lang.$key}"></span>
-							</span>
-						</div>
+					<div class="total_info">
+						<span>Product: $
+							<font class="sp" id="productfee--{$Think.lang.$key}"></font>
+						</span>
+						<span>Shipping fee: $
+							<font class="sp" id="shipfee{$Think.lang.$key}"></font>
+						</span>
+						<span>Total: $
+							<font class="sp" id="total{$Think.lang.$key}"></font>
+						</span>
+					</div>
 
-						<div class="product_list">
-							<volist name="v1" id="vo">
-								<!--<input id="product_fee{$Think.lang.$key}" type="hidden" value="{$vo['productfee']}"/>-->
-								<!--<input id="total_fee{$Think.lang.$key}" type="hidden" value="{$vo['total']}"/>-->
-								<!--<input id="ship_fee{$Think.lang.$key}" type="hidden" value="{$vo['shipfee']}"/>-->
+					<div class="product_list">
+						<volist name="v1" id="vo">
+							<!--<input id="product_fee{$Think.lang.$key}" type="hidden" value="{$vo['productfee']}"/>-->
+							<!--<input id="total_fee{$Think.lang.$key}" type="hidden" value="{$vo['total']}"/>-->
+							<!--<input id="ship_fee{$Think.lang.$key}" type="hidden" value="{$vo['shipfee']}"/>-->
 
-								<div class="suborder" id="suborder{$vo['productid']}--{$vo['typeid']}" >
+							<div class="suborder" id="suborder{$vo['productid']}--{$vo['typeid']}" >
 
-									<div class="image" >
-										<img src="{$vo['background_img']}" style="width:100px;height:75px;"/>
-									</div>
-
-
-									<!--商品信息-->
-									<div class="product_info">
-										<ul>
-											<li>
-											<span class="product_title" id="product_title{$vo['productid']}{$vo['typeid']}">
-												{$vo['title']}
-											</span>
-											</li>
-
-											<li>
-												<notempty name="vo['typetitle']">
-												<span class="product_type">
-													<!--<notempty name="vo['type_pic']"> Type:<img src="{$vo['type_pic']}" style="width:10px;height:10px;"/></notempty>-->
-													Type:{$vo['typetitle']}
-												</span>
-													<span class="t"></span>
-												</notempty>
-												<span class="product_qty" ><span>Qty:</span>{$vo['qty']}</span>
-											</li>
-										</ul>
-									</div>
-
-
+								<div class="image" >
+									<img src="{$vo['background_img']}" style="width:100px;height:75px;margin-top:22px;"/>
 								</div>
 
-							</volist>
-						</div>
+
+								<!--商品信息-->
+								<div class="product_info">
+									<ul>
+										<li>
+										<span class="product_title" id="product_title{$vo['productid']}{$vo['typeid']}">
+											{$vo['title']}
+										</span>
+										</li>
+
+										<li>
+											<notempty name="vo['typetitle']">
+											<span class="product_type">
+												<!--<notempty name="vo['type_pic']"> Type:<img src="{$vo['type_pic']}" style="width:10px;height:10px;"/></notempty>-->
+												Type:<font style="margin-left:5px;">{$vo['typetitle']}</font>
+											</span>
+												<span class="t"></span>
+											</notempty>
+											<span class="product_qty" >Qty:<font>{$vo['qty']}</font></span>
+										</li>
+									</ul>
+								</div>
 
 
+							</div>
+
+						</volist>
+					</div>
 				</li>
-
 				<li>
 					<div class="h"></div>
 				</li>
@@ -162,14 +156,14 @@
 				<div id="checkout">
 					<div id="totals">
 						<span>Items:
-							<span class="sp" id="items"></span>
+							<font class="sp" id="items"></font>
 							pcs
 						</span>
 						<span>Shipping: $
-							<span class="sp" id="shipping"></span>
+							<font class="sp" id="shipping"></font>
 						</span>
 						<span>Total: $
-							<span class="sp" id="total_fee"></span>
+							<font class="sp" id="total_fee"></font>
 						</span>
 					</div>
 					<div id="pay">

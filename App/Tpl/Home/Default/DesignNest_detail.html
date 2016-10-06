@@ -3,22 +3,22 @@
 <div class="fmian">
 
 	<div class="layout_list">
-		<div style="height:33px;float:left;">
+
+		<div style="height:33px;float:left;width:100%;margin-top:10px;">
 			<a href="{:U('Cart/index')}">
-				<div style="float:left;margin-top:4px;"> <img src="../Public/image/cart_unselect.png"  id="cart_img"/></div>
+				<div style="float:left;margin-top:4px;margin-left:10px;"> <img src="../Public/image/cart_unselect.png"  id="cart_img"/></div>
 				<div style="float:left;margin-top:5px;"><font id="header_cart" class="header_text">&nbsp;&nbsp;{$Think.lang.CART}</font><font class="header_text">(</font><font id="gocart" class="header_num">{$Think.cookie.qty }</font><font class="header_text">)</font></div>
 			</a>
 		</div>
 		<script>
-
 				var url="{:U('Cart/cookieQty')}";
 				$.get(url,function(data){
 					document.getElementById('gocart').innerHTML=data;
 				});
-
-
 		</script>
-		 <div class="design_main clearfix" style="margin-top:30px;">
+		<div style="clear:both; margin: 0;padding: 0;"></div>
+
+		<div class="design_main clearfix" style="margin-top:-20px;">
 			
 			<div id="top" style="margin:0px auto;margin-top:50px;width:1080px;height:400px;">
 				<div id="design-img" style="float:left;width:430px;height:400px;">
@@ -158,6 +158,10 @@
 			</div>
 			
 			-->
+
+
+
+
 			<empty name="fund['slide_pic']">
 				<empty name="fund['slide_pic_2']">
 					<empty name="fund['videourl']">

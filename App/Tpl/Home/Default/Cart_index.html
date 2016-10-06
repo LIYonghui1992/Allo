@@ -1,39 +1,29 @@
-<style>
-.cart_title{width:202px;float:left;color:#FFF;font-size:18px;text-align:center;line-height:50px;}
-/* .cart_title2{width:202px;float:left;color:#FFF;font-size:18px;margin-top:5px;text-align:center;line-height:20px;}*/
-.item_div{margin:0px auto; width:1280px;height:87px;margin-top:20px;margin-bottom:20px;border-bottom:1px solid #DDD;}
-.confire-item{float:right;margin:0px 10px; width:150px;line-height:50px;}
-.footer{background-color:#884697}
-.footer .country {BACKGROUND-COLOR: #884697;}
-.shipping-div{float:left;margin-left:10px;width:610px;height:40px;padding-top:5px;
-	color:#999;
-}
-.shipping-field{width:40px;float:left;}
-.shipping-input{padding-left:10px;height:30px;margin:0px auto;width:500px;margin-left:50px;border:1px solid #CCC;
-	font-size:12px;color:#999999;background-color:#EEE;}
-</style>
+
 <script src=__PUBLIC__."/artDialog/artDialog.min.js"></script>
 <link rel="stylesheet" type="text/css" href=__PUBLIC__."/artDialog/skins/chrome.css"/>
 <link rel="stylesheet" type="text/css" href="../Public/css/cart_index_content.css"/>
 <!--<link rel="stylesheet" type="text/css" href="__CSS__/cart_index_content.css"/>-->
 <include file="Home:DNnav"/>
+
+
+
 <div class="fmian">
 	<div class="layout_list">
-		<div class="design_main clearfix" style="margin-top:30px;">
-			<div style="margin:0px auto;width:1280px;height:40px;color:#e60012;line-height:40px;<empty name='tip'>display:none;</empty>">{$tip}
+		<div class="design_main clearfix" style="margin-top:30px;width:100%;">
+			<div style="margin:0px auto;width:100%;height:40px;color:#e60012;line-height:40px;<empty name='tip'>display:none;</empty>">{$tip}
 			</div>
 		</div>
 <!--从这里开始-->
 		<div id="cart_list">
 			<form action="{:U('Cart/checkout')}" method="post" id="form1">
 				<empty name="cart_save">
-					<div id="shop_empty">
-							<li style="margin-top:40px;height:62px;text-align:center;">
+					<div id="shop_empty" style="width:100%;height:auto;">
+							<div style="margin-top:40px;height:62px;width:100%;text-align:center;">
 								<img src="../Public/image/cart_empty.png"/>
-							</li>
-							<li style="margin-top:20px;height:50px;text-align:center;">
+							</div>
+							<div style="margin-top:20px;height:50px;width:100%;text-align:center;">
 								<font style="font-size:20px;"> {$Think.lang.SHOP_EMPTY} </font>
-							</li>
+							</div>
 					</div>
 				</empty>
 
@@ -43,15 +33,17 @@
 
 						<div class="address" >
 							<ul>
-								<li id="product_title{$Think.lang.$key}">{$Think.lang.$key}</li>
+								<li id="product_title{$Think.lang.$key}" style="color:#000;font-size:16px;font-weight:900;" >{$Think.lang.$key}</li>
 								<li><span >Product: $</span><span id="product_fee{$Think.lang.$key}">{$Think.lang.$key}</span></li>
 								<li><span >Shipfee: $</span><span id="shipfee{$Think.lang.$key}">0</span></li>
-								<!--<li><a href="javascript:addaddress();" ><font style="color:#FFF;font-size:18px;line-height:50px;" > Add address </font></a></li>-->
-								<li class="address_des"><span >Address:</span><span id="address_des{$Think.lang.$key}" style="display: none"></span></li>
+								<li ><a id="address{$Think.lang.$key}"  href="javascript:add_address({$Think.lang.$key});" ><font style="line-height:40px;" > Add address>> </font></a></li>
+
+
+								<li class="address_des"><span id="address_des{$Think.lang.$key}" style="display: none;"></span></li>
 								<!--这里给一个默认的国家id 初始化的时候可以先根据这个id计算运费-->
 								<li><input type="text" id="record_countryid{$Think.lang.$key}" style="display:none" value="1"></li>
-								<li><a id="address{$Think.lang.$key}"  href="javascript:add_address({$Think.lang.$key});" ><font style="color:#FFF;font-size:12px;line-height:50px;" > Add address>> </font></a></li>
 							</ul>
+
 						</div>
 
 						<div class="product_list">
@@ -67,79 +59,69 @@
 
 										<!--商品信息-->
 										<div class="product_info">
-											<ul>
-												<li>
-													<span class="product_title" id="product_title{$vo['productid']}{$vo['typeid']}">
+											<div style="width:100%;height:60px;">
+												<div class="product_title" id="product_title{$vo['productid']}{$vo['typeid']}">
 														{$vo['title']}
-													</span>
-													<notempty name="vo['typetitle']">
-													<span class="t"></span>
-													<span class="product_type">
+												</div>
+												<notempty name="vo['typetitle']">
+													<div class="t"></div>
+													<div class="product_type">
 														<!--<notempty name="vo['type_pic']"> Type:<img src="{$vo['type_pic']}" style="width:10px;height:10px;"/></notempty>-->
 														Type:{$vo['typetitle']}
-													</span>
-													</notempty>
-												</li>
-
-												<li>
+													</div>
+												</notempty>
+											</div>
+											<div style="width:100%; height:60px;">
 													<span class="product_price" >
 													{$vo['price']}
 													</span>
-												</li>
-											</ul>
-										</div>
-
-
-										<div class="product_qty">
-											<div style="width:106px;height:26px;background-image:url(../Public/image/qty.png); background-repeat:no-repeat;margin:47px 0;">
-
-												<div id="minus" onclick="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},0);">
-												</div >
-
-												<div class="input"><input id="qty{$vo['productid']}--{$vo['typeid']}" type="text" value="{$vo['qty']}" onblur="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},2);" style="width:62px;border:0; text-align:center;line-height:23px;"/>
-												</div>
-												<div id="plus" onclick="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},1);">
-												</div >
-
 											</div>
 										</div>
 
-										<div class="product_del">
-											<a href="#"><img src="../Public/image/cart_del.jpg" onclick="javascript:del({$vo['productid']},{$vo['typeid']},'{$vo[\'price\']}');"/></a>
+										<div class="product_qty">
+											<div id="minus" style="width:25px; float:left; color: #CCC; height: 40px; text-align: right;line-height: 32px; font-size: 45px;cursor:pointer; -moz-user-select:-moz-none;" onclick="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},0);">
+												-
+											</div >
+											<div class="input" style="float:left;width:auto;height: 40px; line-height: 40px;"><input id="qty{$vo['productid']}--{$vo['typeid']}" type="text" value="{$vo['qty']}" onblur="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},2);" style="font-size:15px;width:40px; text-align:center;line-height:23px;"/>
+											</div>
+											<div id="plus" style="width:25px;float:right;color: #CCC;height: 40px; text-align: left;line-height: 40px; font-size: 29px; cursor:pointer; -moz-user-select:-moz-none;" onclick="javascript:changeqty('{$vo[\'price\']}',{$vo['productid']},{$vo['typeid']},1);">
+												+
+											</div >
 										</div>
+
+										<!--<div class="product_del">-->
+											<!--<a href="#"><img src="../Public/image/cart_del.jpg" onclick="javascript:del({$vo['productid']},{$vo['typeid']},'{$vo[\'price\']}');"/></a>-->
+										<!--</div>-->
+
 									</div>
 								</volist>
 						</div>
-					<!--<div><hr style="width:120px;size:2px;"></div>-->
 						<div class="h"></div>
 					</div>
-
-
 				</volist>
-
+					<div style="clear:both"></div>
 				<notempty name="cart_save">
-					<div id="total_checkout" style=" float:left;height:200px; width:900px;">
+					<div id="total_checkout" style=" margin-top:10px;height:400px; width:100%;">
 						<div id="totals" style="float:left; width:20%;">
 							<ul>
-								<li style="float:left;"><font>Total: $</font><font id="allo_pay_total" style="color:#884697;">0</font></li>
-								<li style="float:left; margin-left:15px;"><font>Item : <font id="confire_pcs" style="color:#884697;">0</font> pcs</font></li>
+								<li style="float:right;margin-right:15px;font-size: 15px;"><font>Total: </font><span style="color:#884697;display: block; font-weight: bolder;">$ <font id="allo_pay_total" > 0</font></span></li>
+								<!--<li style="float:left; margin-left:15px;"><font>Item : <font id="confire_pcs" style="color:#884697;">0</font> pcs</font></li>-->
 							</ul>
 						</div>
 
 						<div id="checkout" style="float:left; width:80%;">
-							<div style="float:left;"> <input type="checkbox" id="all"/><font> {$Think.lang.ALL}</font> </div>
-							<div style="float:right;width:150px;background-color:#884697;text-align:center;"><a href="javascript:submit1();" id="buy" ><font style="color:#FFF;font-size:18px;line-height:50px;" > Checkout</font></a></div>
+							<div style="float:left; margin-left: 13px;"> <input type="checkbox" id="all"/><font style="margin-left:3px;"> {$Think.lang.ALL}</font> </div>
+							<div id="checkout_background" style="line-height:45px;margin-right: 10px;"><a href="javascript:submit1();" id="buy" ><font style="color:#FFF;font-size:18px;font-weight: bolder;"> Checkout</font></a></div>
 						</div>
 					</div>
 				</notempty>
 					<!-- <div class="confire-item" style="font-size:18px;font-weight:bold;color:#666666;width:200px;"> <font>{$Think.lang.TOTAL}({:C('INCL_VAT')}):</font><font id="confire_total" style="color:#15869f;"></font> </div> -->
 
-				<div style=" float:left;height:200px; width:800px;"></div>
+				<div style="height:30px; width:100%;"></div>
 		</form>
 
 		</div>
-		<div style="clear: both;"> </div>
-
+		<div style="height:30px; width:100%;"></div>
 	</div>
 
 
@@ -156,11 +138,8 @@
 		</div>
 		<div class="shipping-div">
 			<div class="shipping-field"><font style="font-size:12px; width:50px;">Name*</font></div>
-			<input name="firstname" id="firstname"  type="text" class="shipping-input" style="width:238px;" value="First Name"
-				   onfocus="if (value =='First Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='First Name';this.style.color='#999'}"
-			/>
-			<input name="lastname" type="text" id="lastname" class="shipping-input" style="width:238px; margin-left:10px;" value="Last Name"
-				   onfocus="if (value =='Last Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Last Name';this.style.color='#999'}"/>
+			<input name="firstname" id="firstname"  type="text" class="shipping-input" style="width:238px;" value="First Name" onfocus="if (value =='First Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='First Name';this.style.color='#999'}"/>
+			<input name="lastname" type="text" id="lastname" class="shipping-input" style="width:238px; margin-left:10px;" value="Last Name" onfocus="if (value =='Last Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Last Name';this.style.color='#999'}"/>
 		</div>
 
 		<div class="shipping-div">
@@ -199,31 +178,13 @@
 
 		</div>
 	</div>
-	<!--<div id="select_address">-->
 
-		<!--<div style="clear: both"></div>-->
-		<!--<div>-->
-			<!--<div style="width:200px;">-->
-				<!--<img src="../Public/image/checkout_icon1.png" style="width:16px;height:23px;float:left;padding-left:10px;"/>-->
-				<!--<font style="font-size:16px;font-weight:bold;color:#884697;padding-left:15px;">address 1</font>-->
-			<!--</div>-->
-			<!--<div style="width:200px;">-->
-<!--sfsfsfsffsfffff-->
-			<!--</div>-->
-
-		<!--</div>-->
-		<!--<div style="clear: both"></div>-->
-
-
-	<!--</div>-->
 	<div><input type="text" id="allo_total" style="display:none"></div>
 	<div><input type="text" id="record_productid" style="display:none"></div>
 
 </div>
 
-	
-
-	<script>
+<script>
 
 		//选了国家之后 每次计算运费 返回的都是其中的一条订单的运费
 		//所以先要根据这个地址id=address productid 找到productid 然后把修改后的数量参数给穿回去
@@ -232,8 +193,8 @@
 		//但是这样我的运费暂时无法存到cookie里， 只能最后点击提交的时候 一起传送到后台数据库中存起来 同时生成订单
 //		var info_arr=new Array();
 		var arr=[];
-//		$('.address1234').dialog({content: 'hello world'});
 		var flag=0;
+		var dia;
 		function add_address(productid){
 //			alert(productid);
 
@@ -252,7 +213,9 @@
 						addnew_address(1,0);//默认传个1 则没有数据的时候 默认第一个改名为1
 						return;
 					}
-					var record_num=0;
+					var record_num=0;//这个是用来记录当前的所有cookie里已经存的历史地址中，有没有一条是和当前的productid一样的。
+					// 1.如果有就记录下来是哪一条 record_num=i+1；则标记选中的地址时可以为address+record_num
+					// 2.如果没有record_num=0; 就为0,而address+ 这里用地址的总条数+1。(第二个参数)
 					var obj=eval(data);
 					str="<div style='clear: both'></div>";
 					str+="<div style='width:200px;'>";
@@ -262,83 +225,78 @@
 
 						str+="<div>";
 							str+="<div style='width:200px;'>";
-							str+="<img src='../Public/image/checkout_icon1.png' style='width:16px;height:23px;float:left;'/>";
-							str+="<font style='font-size:16px;font-weight:bold;color:#884697;'>address"+" "+k+"</font>";
+								str+="<img src='../Public/image/checkout_icon1.png' style='width:16px;height:23px;float:left;'/>";
+								str+="<font style='font-size:16px;font-weight:bold;color:#884697;'>address"+" "+k+"</font>";
+								str+="</div>";
+								str+="<div style='width:200px;'>";
+									str+="<a id='select_add"+obj[i][0]+"' href='javascript:select_add("+obj[i][0]+","+obj[i][8]+","+k+");'>"+"<br/>";
+//												str+=obj[i][1]+","+obj[i][2]+","+obj[i][3]+","+obj[i][4]+","+obj[i][5]+","+obj[i][6]+","+obj[i][7]+","+obj[i][9];
+												str+="<b>Name: </b>"+obj[i][1]+" "+obj[i][2]+"<br/>";
+												str+="<b>Phone: </b>"+obj[i][3]+"<br/>";
+												str+=" <b>Company: </b>"+obj[i][4]+"<br/>";
+												str+="<b>Address: </b>"+obj[i][5]+"<br/>";
+												str+=" <b>City: </b>"+obj[i][6]+"<br/>";
+												str+="<b>Country: </b>"+obj[i][7]+"<br/>";
+												str+=" <b>PostalCode: </b>"+obj[i][9]+"<br/>";
+									str+="</a>";
+								str+="</div>";
+								str+="</div>";
 							str+="</div>";
-							str+="<div style='width:200px;'>";
-							str+="<a id='select_add"+obj[i][0]+"' href='javascript:select_add("+obj[i][0]+","+obj[i][8]+","+k+");'>";
-//							for(var j=0;j<obj[i].length;j++){
-//								obj[i][j];
-//							}
-										str+=obj[i][1]+","+obj[i][2]+","+obj[i][3]+","+obj[i][4]+","+obj[i][5]+","+obj[i][6]+","+obj[i][7]+","+obj[i][9];
-							str+="</a>";
-							str+="</div>";
-						str+="</div>";
-					str+="</div>";
-					str+="<div style='clear: both'>";
+						str+="<div style='clear: both'>";
 						if(productid==obj[i][0]){
 							record_num=i+1;
 						}
 					}
 
 					str+="<div style='height:1px;border-bottom-color: #CCCCCC; border-bottom-width: 1px;border-bottom-style: solid;'></div>";
-					str+="<div style='width:200px;height:50px;'>";
+					str+="<div style='width:300px;height:50px;'>";
 						str+="<a href='javascript:addnew_address("+record_num+","+obj.length+");'>";
 						str+="<font style='font-size:16px;font-weight:bold;color:#884697;line-height:50px;' >"+"+ add new address>>"+"</font>";
 						str+="</a>";
 					str+="</div>";
 
 
-						var dia=art.dialog({
-							align:'right bottom',
-							width:300,
-							id:'choose address',
-							follow:document.getElementById("address"+productid),
-							quickClose: true,
-//							lock:true,
-							fixed:true
+						 dia=art.dialog({
+							 title:" ",
+							 align:'right bottom',
+//							 width:300,
+							 cancel:false,
+							 id:'choose address',
+							 follow:document.getElementById("address"+productid),
+							 quickClose:true,
+							 lock:true,
+							 drag:true,
+							 background:"white",
+							 opacity:0.1
+//							 fixed:true
 						});
 						dia.content(str);
 						dia.show();
-						return;
 				}
 			});
-
-
-
-
-//			dia.content(document.getElementById('select_address'));
-
-
-//			dia.show(document.getElementById("address"+productid));
-
-			return;
-
-
 		}
-		/*
-		将选中的地址添加到当前的订单id中
-
-		*/
+		/**
+		 *将选中的地址添加到当前的订单id中
+		 * 1. update cookie
+		 * 2. record countryid
+		 * 3. recount ship fee
+		 * 4. change address flag, example: address 1
+		 * 5. record address status: have address in this order
+		 **/
 		function select_add(productid,countryid,record_num){
-			var url="{:U('Cart/save_address')}";
 			nowproductid=$("#record_productid").val();
-//			if(productid==nowproductid){
-//				alert("同一个");
-//				return;
-//			}
-
+			var url="{:U('Cart/save_address')}";
 			data={stat:2,product_id:productid,nowproduct_id:nowproductid};
 			$.post(url,data,function (data,status) {
 				if(status=="success"){
 //					show_address(nowproductid);
 					address_des_id="address_des"+nowproductid;
-					document.getElementById(address_des_id).style.display="block";
+//					document.getElementById(address_des_id).style.display="block";
 					document.getElementById(address_des_id).innerHTML="地址修改成功,有地址";
 
 					//让顾客知道选的是哪个
 					address_id="address"+nowproductid;
-					str="<font style='color:#FFF;font-size:12px;line-height:50px;'>"+"address"+record_num+"</font>";
+					str="<font style='color:#000;font-size:16px;line-height:40px;'>"+"address"+record_num+" ></font>";
 					document.getElementById(address_id).innerHTML=str;//这里的addressid为数字 所以要组合起来
 
 
@@ -346,6 +304,7 @@
 					record_countryid="record_countryid"+nowproductid;//找到记录当前国家
 					$("#"+record_countryid).val(countryid);//记录的存上修改后的国家，方便点checkout的时候和调数量的时候使用
 //					alert(data);
+					dia.close();
 				}
 
 			});
@@ -398,9 +357,20 @@
 			return countryid;
 		}
 
-
+		/**
+		 * save the new address to cookie
+		 * 1. save to cookie
+		 * 2. record countryid for recounting ship fee when qty is changed.
+		 * 3. recount ship fee
+		 * 4. change address flag, example: address 1
+		 * 5. record address status: have address in this order
+		 *
+		 **/
 		function save_address(record_num,k){
 			//如果没有选国家，则会按照默认上次的国家计算一遍
+			if(k!=0){
+				dia.close();
+			}
 
 			var result = checkinput();
 			if(!result){
@@ -429,25 +399,20 @@
 			var data={info:arr};
 			$.post(url,data,function (data,status) {
 				if(status=="success"){
-
-
-
 					if(record_num!=0){
 						address_id="address"+productid;
-						str="<font style='color:#FFF;font-size:12px;line-height:50px;'>"+"address"+record_num+"</font>";
+						str="<font style='color:#000;font-size:16px;line-height:40px;'>"+"address"+record_num+" ></font>";
 						document.getElementById(address_id).innerHTML=str;//这里的record_num为数字 所以要组合起来
 					}else{
-						alert(k);
+//						alert(k);
 						var i = k+1;
 						address_id="address"+productid;
-						str="<font style='color:#FFF;font-size:12px;line-height:50px;'>"+"address"+i+"</font>";
+						str="<font style='color:#000;font-size:16px;line-height:40px;'>"+"address"+i+" ></font>";
 						document.getElementById(address_id).innerHTML=str;//这里的record_num为数字 所以要组合起来
 					}
 
-
-
 					address_des_id="address_des"+productid;
-					document.getElementById(address_des_id).style.display="block";
+//					document.getElementById(address_des_id).style.display="block";
 					document.getElementById(address_des_id).innerHTML="地址修改成功,有地址";
 
 
@@ -472,12 +437,12 @@
 		}
 
 
-
-
 		/*
 		 需要的信息:
 		 1.这个商品的所有子订单的typeid和qty
 		 2.地址的国家
+		 1. 找到所有已勾选的
+		 2.
 		 */
 //		var arr1=new Array;
 		function ship_price(productid,countryid)
@@ -485,43 +450,40 @@
 			//遍历订单下已经调勾的子订单
 			//checkbox content:{$vo['productid']}--{$vo['typeid']}--{$vo['price']}--{$vo['qty']}
 			arr=[];
-			$(".checkbox :checkbox[checked]:visible").each(function(i) {
-//				var info=this.id.split("--"); //把它的id 分割成字符串数组
-				var info = this.value.split("--");
-				var pre_productid = info[0];
-				var typeid = info[1];
-				var price = info[2];
-				var qty = info[3];
-				if (pre_productid == productid) {
-					//productid--typeid--price--qty--countryid
+			var productfeeid="product_fee"+productid;
+			var shipfeeid="shipfee"+productid;
+			var checked_arr=$("#" + productid + " :checkbox[checked]:visible");
+			if (checked_arr.length > 0) {
+				checked_arr.each(function (i) {
 					str = this.value + "--" +countryid;
 					arr.push(str);
-
+				});
+				if(arr.length==0){
+					document.getElementById(shipfeeid).innerHTML = 0;
+					return;
 				}
-				//也可能没产品没有调勾但是想添地址，这个时候要判断下，如果产品没有调勾则add address就隐藏了
-			});
-			shipfeeid="shipfee"+productid;
-			if(arr.length==0){
-				document.getElementById(shipfeeid).innerHTML = 0;
+				var url = "{:U('Cart/shipPrice')}";
+				var data =  { info:arr};
+				$.post(url,data,function(data,status){
+					if(status == "success"){
+//					alert(data);
+						document.getElementById(shipfeeid).innerHTML = data;
+						recalculate();
+						document.getElementById("buy").disabled = false;
+						//window.location.reload();
+					}else{
+						alert(data.msg);
+						document.getElementById("buy").disabled = true;
+
+					}
+				},"json");
 				return;
 			}
+			document.getElementById(shipfeeid).innerHTML = 0;
+			document.getElementById(productfeeid).innerHTML=0;
+			recalculate();
 
-//			var currency = "$";
-			var url = "{:U('Cart/shipPrice')}";
-			var data =  { info:arr};
-			$.post(url,data,function(data,status){
-				if(status == "success"){
-//					alert(data);
-					document.getElementById(shipfeeid).innerHTML = data;
-					recalculate();
-					document.getElementById("buy").disabled = false;
-					//window.location.reload();
-				}else{
-					alert(data.msg);
-					document.getElementById("buy").disabled = true;
 
-				}
-			},"json");
 		}
 
 
@@ -693,8 +655,6 @@
 		}
 
 
-
-		
 		$("#all").click(function(){    
 			if(this.checked){
 				$(":checkbox").attr("checked", true);
@@ -726,30 +686,11 @@
 			//只要点了就计算运费 因为刚开是可能初始化的时候会给record_countryid附一个值，就是说可以计算出运费的
 			//所以要判断是否可以计算运费了 主要是根据国家选没选
 			record_countryid="record_countryid"+productid;
-
-//			alert($("#"+record_countryid).val()); //这里显示 国家没改变 则计算出来的运费就是错误的
-
-			if(!$("#"+record_countryid).val()==""){
-				if($("#"+productid+" :checkbox[checked]:visible").length>0){
-					$("#"+productid+" :checkbox[checked]:visible").each(function(i) {
-						arr[i]=this.value+"--"+$("#"+record_countryid).val();
-//						alert(arr[i]);
-//						return;
-					});
-					var url = "{:U('Cart/shipPrice')}";
-					$.post(url,{info:arr},function (data,status) {
-						if(status="success"){
-							document.getElementById(shipfeeid).innerHTML=data;
-							recalculate();
-							return;
-						}
-					});
-				}else{
-					document.getElementById(shipfeeid).innerHTML=0;
-					document.getElementById(productfeeid).innerHTML=0;
-					recalculate();
-				}
+			countryid=$("#"+record_countryid).val();
+			if(countryid!=""){
+				ship_price(productid,countryid);
 			}else{
+				document.getElementById(shipfeeid).innerHTML=0;
 				recalculate();
 			}
 
@@ -801,85 +742,70 @@
 		});
 	
 
-		function changeqty(pri,productid,typeid,type)
+		function changeqty(price,productid,typeid,type)
 		{
-			var qty01=document.getElementById("qty"+productid+"--"+typeid).value;
 
 			var qty =	parseInt(document.getElementById("qty"+productid+"--"+typeid).value);
-			if(qty01==""){
-				document.getElementById("qty"+productid+"--"+typeid).value=0;
-				qty=0;
-			}
 
-
-			checkboxid=productid+"--"+typeid+"--"+pri;
-
-			if(type==0 && qty>0)
-			{
+			if(type==0 && qty>0) {
 				qty = qty-1;
-			  	document.getElementById("qty"+productid+"--"+typeid).value = qty;
-
-				document.getElementById(checkboxid).value=productid+"--"+typeid+"--"+pri+"--"+qty;
-
+				document.getElementById("qty"+productid+"--"+typeid).value = qty;
 			}
 			if(type==1){
 				qty = qty+1;
 				document.getElementById("qty"+productid+"--"+typeid).value = qty;
-				document.getElementById(checkboxid).value=productid+"--"+typeid+"--"+pri+"--"+qty;
 			}
-			if(type==2)
-			{
-				document.getElementById(checkboxid).value=productid+"--"+typeid+"--"+pri+"--"+qty;
+			if(type==2) {
+				if(qty==""){
+					document.getElementById("qty"+productid+"--"+typeid).value=0;
+					qty=0;
+					//并且删掉元素
+				}
 			}
 
-			arr=[];
-			var shipfeeid="shipfee"+productid;
-			//改变数量的时候，可以先判断有没有调勾，没有调勾这步直接省略
-			//或者像下面这个是 不管有没有调勾都重新计算了当前已经调勾的所有的
+			checkboxid="checkbox"+productid+"--"+typeid;
+			document.getElementById(checkboxid).value=productid+"--"+typeid+"--"+price+"--"+qty;
+			//先算运费，然后更新购物车
+
 			record_countryid = "record_countryid" + productid;
-			if(!$("#"+record_countryid).val()=="") {
-				if ($("#" + productid + " :checkbox[checked]:visible").length > 0) {
-					$("#" + productid + " :checkbox[checked]:visible").each(function (i) {
-						arr[i] = this.value + "--" + $("#" + record_countryid).val();
-					});
-					//有地址 则根据国家以及商品信息计算此条运费 商品数量要拿最新的数据
-					var url = "{:U('Cart/shipPrice')}";
-					$.post(url, {info: arr}, function (data, status) {
-						document.getElementById(shipfeeid).innerHTML = data;
-						recalculate();
-					});
-				}
-//				else {
-//					document.getElementById(shipfeeid).innerHTML = 0;
-//					recalculate();
-//				}
+			countryid=$("#" + record_countryid).val(); //刚开始给一个默认的国家的时候 是会计算运费的
+			if(countryid!="") {
+				ship_price(productid,countryid);
 			}else{
 				//如果没有初始国家，则直接执行运费为0
 				document.getElementById(shipfeeid).innerHTML=0;
 				recalculate();
 			}
 
-			//购物车的数量的更新是必须要执行的
-			//ͬcookie ajax
-			url = "{:U('Cart/updateCart')}";
-			$.post(url, {
-				  action:'update',
-				  productid:productid,
-				  typeid:typeid,
-				  price:pri,
-				  qty:qty
-				},
-				function(data,status) {
-					if (status == "success") {
-						//成功之后 只需要再次执行即可
-						recalculate();
+			if(qty==0){
+				del(productid,typeid,price);
+			}else{
+				//购物车的数量的更新是必须要执行的
+				//ͬcookie ajax
+				url = "{:U('Cart/updateCart')}";
+				$.post(url, {
+							action:'update',
+							productid:productid,
+							typeid:typeid,
+							price:price,
+							qty:qty
+						},
+						function(data,status) {
+							if (status == "success") {
+								//成功之后 只需要再次执行即可
+								recalculate();
 //							document.getElementById("total"+productid+"--"+typeid).innerHTML = data;
-					}
-					else{
-						alert("fail to update cart");
-					}
-				},
-				"json");
+							}
+							else{
+								alert("fail to update cart");
+							}
+						},
+						"json");
+			}
+
+
+
+
 
 		}
 	
@@ -888,6 +814,18 @@
 
 		function del(productid,typeid,price)
 		{
+			suborderid="suborder"+productid+"--"+typeid;
+			document.getElementById(suborderid).style.display="none";
+			var checkboxid = "checkbox"+productid+"--"+typeid;
+			document.getElementById(checkboxid).checked=false;
+			//如果当前所有选中商品都没有了，那么下面的结算隐藏 换成返回购物页面
+			sum=$(".checkbox :checkbox[checked]:visible").length;
+			if(sum==0){
+				$("#total_checkout").hide();
+				$(".order").hide();
+				$("#shop_empty").show();
+			}
+
 		var url = "{:U('Cart/updateCart')}";
 		$.post(url, {
 			  action:'del',
@@ -896,20 +834,6 @@
 			},
 			function(data,status) {
 				if (status == "success") {
-					suborderid="suborder"+productid+"--"+typeid;
-					document.getElementById(suborderid).style.display="none";
-					//document.getElementById("gocart").innerHTML= data.qty ;
-					var domid = productid+"--"+typeid+"--"+price;
-					document.getElementById(domid).checked=false;
-					//如果当前所有选中商品都没有了，那么下面的结算隐藏 换成返回购物页面
-					sum=$(".checkbox :checkbox[checked]:visible").length;
-					if(sum==0){
-						$("#total_checkout").hide();
-						$(".address").hide();
-//						$("#shop_empty").show();
-					}
-
-					recalculate();
 
 				}
 				else{
@@ -935,8 +859,8 @@
 //
 
 
-	function checkinput()
-	{
+		function checkinput()
+		{
 		rs = 1;
 
 		//check input
@@ -983,4 +907,8 @@
 
 		return true;
 	}
-	</script>
+
+
+
+
+</script>
