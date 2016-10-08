@@ -23,7 +23,7 @@ class CartAction extends BaseAction
 
 		if (IS_POST) {
 			$productid = intval($_POST['productid']);
-			$typeid = intval($_POST['typeid']);//最小的分类是类型id
+			$typeid = intval($_POST['typeid']);//最小的分类是类型id  在这里如果是一个空值传进来了(没有子型号)，那么强制转换成int后会变成0
 			$count = intval($_POST['qty']);
 
 			$id = "$productid" . '-' . "$typeid";
@@ -1120,6 +1120,7 @@ class CartAction extends BaseAction
 				echo json_encode($rs);
 			} else {
 				$model->commit();
+				error_log("email data have beed saved"."\r\n",3,"/tmp/error/errors.log");
 //				$this->ajaxReturn('存到数据库成功'.json_encode($record));
 			}
 
@@ -1127,8 +1128,6 @@ class CartAction extends BaseAction
 
 
 
-//			$this->ajaxReturn('购物车刷新成功');
-//			exit;
 
 
 			//paypal
@@ -1149,14 +1148,16 @@ class CartAction extends BaseAction
 				$pp_info['amount'] = $total; // 告诉Paypal，我要收多少钱
 				$pp_info['currency_code'] = 'USD';
 				//$pp_info['currency_code'] = 'USD';// 告诉Paypal，我要用什么货币。这里需要注意的是，由于汇率问题，如果网站提供了更改货币的功能，那么上面的amount也要做适当更改，paypal是不会智能的根据汇率更改总额的
-				$pp_info['return'] = 'http://abook.hk/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当用户成功付款后paypal会将用户自动引导到此页面。如果为空或不传递该参数，则不会跳转
+				$pp_info['return'] = 'http://webshop.allocacoc.com/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当用户成功付款后paypal会将用户自动引导到此页面。如果为空或不传递该参数，则不会跳转
 				$pp_info['invoice'] = $orderid;
 				$pp_info['charset'] = 'utf-8';
 				$pp_info['no_shipping'] = '1';
 				$pp_info['no_note'] = '1';
-				$pp_info['cancel_return'] = 'http://abook.hk/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面
-				$pp_info['notify_url'] = 'http://abook.hk/Cart/paypal_notify/orderid/' . $orderid . '/';
+				$pp_info['cancel_return'] = 'http://webshop.allocacoc.com/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面
+				$pp_info['notify_url'] = 'http://webshop.allocacoc.com/Cart/paypal_notify/orderid/' . $orderid . '/';
 				//'http://www.domain.com/index.php/design/paypal_notify/orderid/'.$order_id;// Paypal会将指定 invoice 的订单的状态定时发送到此URL(Paypal的此操作，是paypal的服务器和我方商城的服务器点对点的通信，用户感觉不到）
+				//notify_url=http%3A%2F%2Fwebshop.allocacoc.com%2FCart%2Fpaypal_notify%2Fordesrid%2F2016100857f87e4e543c0%2F&rm=2
+
 				$pp_info['rm'] = 2;
 				$paypal_payment_url = $gateway . http_build_query($pp_info);
 				unset($pp_info);
@@ -1166,7 +1167,7 @@ class CartAction extends BaseAction
 			}
 
 
-			//stripe,card
+//			stripe,card
 			if ($_POST['paytype'] == 2) {
 
 				\Stripe\Stripe::setApiKey(C('STRIPE_SK'));
@@ -1330,21 +1331,23 @@ class CartAction extends BaseAction
 	 */
 	public function paypal_notify()
 	{
+
 //		file_put_contents(serialize($_POST), 'post.log');
 		//Now you have the post request serialized we can grab the contents and apply it to a variable for fast testing.
 		//www.allocacoc.cc/Cart/paypal_notify/orderid/2016091457d9047f5bafc2016091457d9047f5c6e6
 		// 由于这个文件只有被Paypal的服务器访问，所以无需考虑做什么页面什么的，这个页面不是给人看的，是给机器看的
 		//$order_id = (int) $_REQUEST['orderid'];
 		$orderid = $_GET['orderid'];
+		error_log("here notify"."\r\n"."and orderid is:".$_GET['orderid'],3,"/tmp/error/errors.log");
 		$order_id_arr = str_split($orderid, 21);
-		error_log(json_encode($order_id_arr));
+		error_log("order arr: ".json_encode($order_id_arr)."\r\n",3,"/tmp/error/errors.log");
 		//这个标示用来区分是不是所有的订单都支付了
 //		$flag = 1;
 		$order_info=array();
 		foreach ($order_id_arr as $value) {
 			$orderid = $value;
 			$order_info = M('design_order')->where('orderid=\'' . $orderid . '\'')->find();
-			error_log(json_encode($order_info));
+			error_log("order info:".json_encode($order_info)."\r\n",3,"/tmp/error/errors.log");
 //			if(empty($order_info)){
 //				error_log("order_info is empty");
 //				$flag=0;
@@ -1358,11 +1361,11 @@ class CartAction extends BaseAction
 //		$req = 'cmd=_notify-validate';// 验证请求
 		$req = 'cmd=' . urlencode('_notify-validate');
 		foreach ($_POST as $k => $v) {
-			error_log("post content:".$k."=>".$v);
+			error_log("post content:".$k."=>".$v."\r\n",3,"/tmp/error/errors.log");
 			$v = urlencode(stripslashes($v));
 			$req .= "&$k=$v";
 		}
-		error_log("start verify Post ,request data is $req");
+		error_log("start verify Post ,request data is $req"."\r\n",3,"/tmp/error/errors.log");
 ///////////////////////////////////////////////////////////////////
 //		Curl 方法
 /////////////////////////////////////////////////////////////////
@@ -1374,7 +1377,7 @@ class CartAction extends BaseAction
 		curl_setopt($ch,CURLOPT_POSTFIELDS,$req);
 		$res = curl_exec($ch);
 		curl_close($ch);
-		error_log("res:".json_encode($res));
+		error_log("res:".json_encode($res)."\r\n",3,"/tmp/error/errors.log");
 //////////////////////////////////////////////////////////////////////
 //		$ch = curl_init();
 //		error_log("curl_init is :".$ch);
@@ -1426,7 +1429,7 @@ class CartAction extends BaseAction
 //		$res = 'VERIFIED';
 //		if ($res && !empty($order_info)) {
 //		if ($res) {
-				error_log("verified order status：" . json_encode($res));
+				error_log("verified order status：" . json_encode($res)."\r\n",3,"/tmp/error/errors.log");
 				// 本次请求是否由Paypal官方的服务器发出的请求
 				if (strcmp($res, 'VERIFIED') == 0) {
 					/**
@@ -1435,19 +1438,19 @@ class CartAction extends BaseAction
 					 * 判断订单金额
 					 * 判断货币类型
 					 */
-					error_log('here verified');
+					error_log('here verified',3,"/tmp/error/errors.log");
 					if (($_POST['payment_status'] != 'Completed' && $_POST['payment_status'] != 'Pending')) {
 						// 如果有任意一项成立，则终止执行。由于是给机器看的，所以不用考虑什么页面。直接输出即可
-						error_log('payment status is fail');
+						error_log('payment status is fail'."\r\n",3,"/tmp/error/errors.log");
 						exit('fail');
 					} else {// 如果验证通过，则证明本次请求是合法的
-						error_log('payment status is succ');
+						error_log('payment status is succ'."\r\n",3,"/tmp/error/errors.log");
 						// motify payflag
 						foreach ($order_id_arr as $order_id) {
 							$order_info = M('design_order')->where('orderid =\'' . $order_id . '\'')->find();
 							$result = M('design_order')->where('orderid=\'' . $order_id . '\'')->setField('payflag', 1);
 							if (!$result) {
-								error_log("PayFlag modify error: fail to modify flag, order is " . $order_id . "\n");
+								error_log("PayFlag modify error: fail to modify flag, order is " . $order_id ."\r\n",3,"/tmp/error/errors.log");
 								exit('fail');
 							}
 							//mail to customer
@@ -1463,9 +1466,9 @@ class CartAction extends BaseAction
 							$order_qty += $val;
 							$result = $model->where('id=' . $k)->setField('order_qty', $order_qty);
 							if (!$result) {
-								error_log("Design winner quantity modify error: fail to modify order_qty(design_winner), product id is " . $k . "quantity is :" . $val . "\n");
+								error_log("Design winner quantity modify error: fail to modify order_qty(design_winner), product id is " . $k . "quantity is :" . $val ."\r\n",3,"/tmp/error/errors.log");
 							}else{
-								error_log("Productid is".$k.",Design winner quantity modify success,"."quantity is :" . $val ."\n");
+								error_log("Productid is".$k.",Design winner quantity modify success,"."quantity is :" . $val ."\r\n",3,"/tmp/error/errors.log");
 							}
 						}
 						//遍历购物车 将已经支付了的商品从购物车列表里删掉
@@ -1479,7 +1482,7 @@ class CartAction extends BaseAction
 						exit('success');
 					}
 				} else {
-					error_log("pay fail  fail  fail");
+					error_log("pay fail  fail  fail"."\r\n",3,"/tmp/error/errors.log");
 					exit('fail');
 				}
 //		}

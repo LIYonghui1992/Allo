@@ -2,6 +2,7 @@
 .footer{background-color:#884697;}
 .footer .country {BACKGROUND-COLOR: #884697;}
 </style>
+<include file="Home:DN_header" />
 <include file="Home:DNnav"/>
 <link rel="stylesheet" type="text/css" href="../Public/css/cart_checkout_content.css"/>
 <div class="fmian">
@@ -129,13 +130,17 @@
 										</li>
 
 										<li>
-											<notempty name="vo['typetitle']">
+
+												<notempty name="vo['typetitle']">
 											<span class="product_type">
 												<!--<notempty name="vo['type_pic']"> Type:<img src="{$vo['type_pic']}" style="width:10px;height:10px;"/></notempty>-->
 												Type:<font style="margin-left:5px;">{$vo['typetitle']}</font>
 											</span>
-												<span class="t"></span>
-											</notempty>
+													<span class="t"></span>
+													<else />
+													<span style="float: left;width:40px;padding-left:5px;height:60px;line-height:100px;"></span>
+												</notempty>
+
 											<span class="product_qty" >Qty:<font>{$vo['qty']}</font></span>
 										</li>
 									</ul>
@@ -330,42 +335,43 @@
 			if(!result){
 				return false;
 			}
-			alert("Please wait for a moment, it's turning to the payment page... ");
+//			alert("Please wait for a moment, it's turning to the payment page... ");
 			//if pay using card, check card input first
 			type = 1;
-			var paytype = document.getElementsByName("paytype");
-			for(var i=0;i<paytype.length;i++){
-				if(paytype[i].checked)
-					type = paytype[i].value;
-			}
+//			var paytype = document.getElementsByName("paytype");
+//			for(var i=0;i<paytype.length;i++){
+//				if(paytype[i].checked)
+//					type = paytype[i].value;
+//			}
 			//点击提交的时候 首先判断输入的卡的信息是否为空
-			if(type==2)
-			{
-				if(document.getElementById("cardno").value=='' || document.getElementById("expmonth").value==''
-						|| document.getElementById("expyear").value=='' || document.getElementById("cvc").value=='')
-				{
-					document.getElementById("msg").innerHTML = 'please input card info !';
-					document.getElementById("msgbox").style.display="block";
-					scrollTo(400,100);
-					return false;
-				}
-
-			}
+//			if(type==2)
+//			{
+//				if(document.getElementById("cardno").value=='' || document.getElementById("expmonth").value==''
+//						|| document.getElementById("expyear").value=='' || document.getElementById("cvc").value=='')
+//				{
+//					document.getElementById("msg").innerHTML = 'please input card info !';
+//					document.getElementById("msgbox").style.display="block";
+//					scrollTo(400,100);
+//					return false;
+//				}
+//
+//			}
 
 			//if pay using card,generate stripe token first
-			if(type==2)
-			{
-				Stripe.setPublishableKey('{:C('STRIPE_PK')}');//'pk_test_u1F10fuUigV8J5gnJjvsAgHg'
-				//根据提供的卡的信息在stripe.js 库中创建一个令牌
-				Stripe.card.createToken({
-					number: document.getElementById("cardno").value,
-					cvc: document.getElementById("cvc").value,
-					exp_month: document.getElementById("expmonth").value,
-					exp_year: document.getElementById("expyear").value
-				}, stripeResponseHandler);
-			}
+//			if(type==2)
+//			{
+//				Stripe.setPublishableKey('{:C('STRIPE_PK')}');//'pk_test_u1F10fuUigV8J5gnJjvsAgHg'
+//				//根据提供的卡的信息在stripe.js 库中创建一个令牌
+//				Stripe.card.createToken({
+//					number: document.getElementById("cardno").value,
+//					cvc: document.getElementById("cvc").value,
+//					exp_month: document.getElementById("expmonth").value,
+//					exp_year: document.getElementById("expyear").value
+//				}, stripeResponseHandler);
+//			}
 			if(type==1) {
 				submitPay();
+
 			}
 		});
 	});
@@ -401,16 +407,17 @@
 		{
 			return false;
 		}
+//		alert("here");
 
 			//record into database[ajax],then pay
 			var url = "{:U('Cart/submit_order')}";
-			var price = '{$price}';
+//			var price = '{$price}';
 			var data =  {
-				stripetoken: token,
-				cardno: document.getElementById("cardno").value,
-				expmonth: document.getElementById("expmonth").value,
-				expyear: document.getElementById("expyear").value,
-				cvc: document.getElementById("cvc").value,
+//				stripetoken: token,
+//				cardno: document.getElementById("cardno").value,
+//				expmonth: document.getElementById("expmonth").value,
+//				expyear: document.getElementById("expyear").value,
+//				cvc: document.getElementById("cvc").value,
 				paytype:type,
 				email:document.getElementById("email").value};
 //{
@@ -434,6 +441,7 @@
 // };
 
 		  $.post(url,data,function(data){
+//			  alert(data.paymenturl);
 					if(data.status != 1){
 						fail(data['msg']);
 						return false;

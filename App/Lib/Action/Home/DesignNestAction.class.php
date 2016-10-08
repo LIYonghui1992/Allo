@@ -1085,9 +1085,8 @@ class DesignNestAction extends BaseAction {
 		$where['status'] = 1;
 		$designwinner_id = $_GET['id'];
 		$where['id'] = intval($designwinner_id);
-
 		$fund_list = M('design_winner') -> where($where) -> select();
-		if($fund_list)
+		if($fund_list) //这里面拿到的第0条是一个数组
 		  $fund = $fund_list[0];
     
     if (!empty($fund['slide_pic'])) {
@@ -1142,16 +1141,16 @@ class DesignNestAction extends BaseAction {
 				$pcs_ordered += $val['qty'];
 				
 		}
-		$fund['pcs_ordered2'] = $pcs_ordered;
+		$fund['pcs_ordered2'] = $pcs_ordered;//这里是已经筹备的众筹数
 		//if($pcs_ordered>$fund['funding_goal']) $pcs_ordered = $fund['funding_goal'];
 
 		$fund['pcs_ordered'] = $pcs_ordered;
 			
-		$fund['winner_text'] = $fund['winner_text'];
+//		$fund['winner_text'] = $fund['winner_text'];
 		
 		$fund['orderflag'] = 0;
 		if($fund['deadline'] > time())
-		  $fund['orderflag'] = 1;
+		  $fund['orderflag'] = 1;//可下订单
 		
 		
 		$fund['target_money'] = intval($fund['funding_goal'])*substr($fund['price'],1);
@@ -1354,7 +1353,7 @@ class DesignNestAction extends BaseAction {
 		
     	$designwinner_id = $_REQUEST['id'];
     	$qty = $_REQUEST['qty'];    	   	
-    	$typeid = $_REQUEST['typeid'];    
+    	$typeid = $_REQUEST['typeid']; //如果为空则这里拿到的是0
     	
     	session('dh_price','');
   		session('dh_qty','');
@@ -1367,10 +1366,10 @@ class DesignNestAction extends BaseAction {
   		$winner = M('design_winner') -> where($where)->select();
   		$bigpic = $winner[0]['background_img'];
   		$title = $winner[0]['title'];
-  		$price = $winner[0]['price'];
+  		$price = $winner[0]['price'];//产品单价
   
-  		$typename;
-  		if(!empty($typeid))
+  		$typename='';
+  		if($typeid!=0)
   		{
   			$map['id'] = $typeid;
     		$type =  M('designwinner_price') -> where($map)->select();
@@ -1411,11 +1410,11 @@ class DesignNestAction extends BaseAction {
   		//var_dump($country_list);
   		
   		//write into session
-  		session('dh_price',$price);
+  		session('dh_price',$price);//单价
   		session('dh_qty',$qty);
-  		session('dh_total',$total);
-  		if(!empty($typeid))
-  		  session('dh_typeid',$typeid);
+  		session('dh_total',$total);//单价乘数量
+//  		if(!empty($typeid))
+		session('dh_typeid',$typeid);
   		session('dh_designwinner_id',$designwinner_id);
   		
     	$this -> assign('designwinner_id', $designwinner_id);
@@ -1446,6 +1445,7 @@ class DesignNestAction extends BaseAction {
 		public function submit_order() {
 
 		if (IS_POST) {
+
 			//$design = M('design_winner') -> where('id=' . $_POST['design_id']) -> find();
 			
 			//将countryid转化为country
@@ -1455,14 +1455,18 @@ class DesignNestAction extends BaseAction {
 			$info =  M('ship_price_new') -> where('id=' . $countryid) -> find();
 			$country = $info['country_name'];
 			$order_id = $this ->build_order_no();
-			$typeid = '';
-			if(session('?dh_typeid'))
-			  $typeid = session('dh_typeid');
-			
+			$orderid=$order_id;
+			$time = time();
+			$typeid = session('dh_typeid');//空的时候 为0
+
+			$flag = 1;
+			$model = new Model();
+//		$m=M('design_order');
+			$model->startTrans();
 
 			//$data = array('design_id' => intval($_POST['design_id']), 'lang' => 9, 'num' => intval($_POST['num']), 'country' => trim($_POST['ctry']), 'first_name' => $_POST['first_name'], 'last_name' => $_POST['last_name'], 'company' => trim($_POST['company']), 'address' => trim($_POST['address']), 'zip' => trim($_POST['zip']), 'city' => trim($_POST['city']), 'email' => trim($_POST['email']), 'phone' => trim($_POST['phone']), 'winner_name' => $design['title'],'createtime'=>time());
 			$data = array(
-			'orderid' => $order_id,
+			'orderid' => $orderid,
 			'first_name' => $_POST['first_name'], 
 			'last_name' => $_POST['last_name'], 
 			'phone' => trim($_POST['phone']),
@@ -1475,52 +1479,76 @@ class DesignNestAction extends BaseAction {
 			'city' => trim($_POST['city']), 						
 			'country' => $country,
 			'price_id' => $typeid,//trim($_POST['price_id']),
-			'typename' => $_POST['typename'],				
+			'typename' => '',
 			'price' => session('dh_price'),//trim($_POST['price']),
-		  'shipfee' => session('dh_shipfee'),//trim($_POST['shipfee']),
-			'total' => session('dh_true_total'),//trim($_POST['total']),
+		  	'shipfee' => session('dh_shipfee'),//trim($_POST['shipfee']),
+			'total' => session('dh_true_total'),//trim($_POST['total']),//计算运费后的总价
 			'winner_name' => $_POST['designwinner_title'],			  
 			'lang' => LANG_ID, 
 			'payflag'=>0,
 			'status'=>0,
 			'paytype'=>$_POST['paytype'],
-			'createtime'=>time());
-			
+			'createtime'=>$time);
+
+
 						
-						
-			$id = M('design_order') -> add($data);		
-			
+			$id = $model->table(C('DB_PREFIX') . 'design_order') -> add($data);
+
 			//fail tp add record
-			if(!$id){
+			if(!$id ||$id<1){
+				$flag=0;
+			}
+			//add to suborder
+			$suborder_data=array(
+				'createtime'=>$time,
+				'orderid' => $orderid,
+				'designwinner_id'=>intval(session('dh_designwinner_id')),
+				'winner_name' => $_POST['designwinner_title'],
+				'qty' => session('dh_qty'),
+				'type_id'=>$typeid,
+				'type_name' => $_POST['typename'],
+				'price'=>session('dh_price'),
+				'total' => session('dh_total'),
+				'weight'=>session('dh_weight')
 
-				$rs = array('stauts' => 0, 'msg' => 'Error: Failed to submit!');
-
-				echo json_encode($rs);
-				exit ;
-
+			);
+			$hid1 = $model->table(C('DB_PREFIX') . 'design_suborder')->add($suborder_data);
+			if (!$hid1 || $hid1 < 1) {
+				$flag = 0;
 			}
 
+
+			if($flag==0){
+				$model->rollback();
+				$rs = array('stauts' => 0, 'msg' => 'Error: Failed to submit!');
+				echo json_encode($rs);
+				exit ;
+			} else {
+				$model->commit();
+			}
+//			$this->ajaxReturn("hereadd".$id."flag: ".$flag." hid1: ".$hid1 );
+//			exit;
 			//paypal
 			if ($_POST['paytype']==1) {
 
         //build payment url,return ,then javascript reward to paypal
         //$gateway = 'https://www.paypal.com/cgi-bin/webscr?';
-        $gateway = 'https://www.paypal.com/cgi-bin/webscr?';//https://www.sandbox.paypal.com/cgi-bin/webscr?
+        $gateway = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';//https://www.sandbox.paypal.com/cgi-bin/webscr?
         $account = 'arthur.limpens@allocacoc.com';//jing.wang@allocacoc.com.cn
         $pp_info = array();// 初始化准备提交到Paypal的数据  
         $pp_info['cmd'] = '_xclick';// 告诉Paypal，我的网站是用的我自己的购物车系统  
         $pp_info['business'] = $account;// 告诉paypal，我的（商城的商户）Paypal账号，就是这钱是付给谁的  
-        $pp_info['item_name'] = "支付订单：{$order_id}";// 用户将会在Paypal的支付页面看到购买的是什么东西，只做显示，没有什么特殊用途，如果是多件商品，则直接告诉用户，只支付某个订单就可以了  
+        $pp_info['item_name'] = "支付订单：{$orderid}";// 用户将会在Paypal的支付页面看到购买的是什么东西，只做显示，没有什么特殊用途，如果是多件商品，则直接告诉用户，只支付某个订单就可以了
         //$pp_info['amount'] = substr(trim($_POST['total']),1); // 告诉Paypal，我要收多少钱
         $pp_info['amount'] = session('dh_true_total');
         $pp_info['currency_code'] = 'USD';// 告诉Paypal，我要用什么货币。这里需要注意的是，由于汇率问题，如果网站提供了更改货币的功能，那么上面的amount也要做适当更改，paypal是不会智能的根据汇率更改总额的  
-        $pp_info['return'] = 'http://www.allocacoc.com/DesignNest/index.html';// http://test.allocacoc.com/Design/index.html 当用户成功付款后paypal会将用户自动引导到此页面。如果为空或不传递该参数，则不会跳转  
-        $pp_info['invoice'] = $order_id;  
+        $pp_info['return'] = 'http://webshop.allocacoc.com/DesignNest/index.html';// http://test.allocacoc.com/Design/index.html 当用户成功付款后paypal会将用户自动引导到此页面。如果为空或不传递该参数，则不会跳转
+        $pp_info['invoice'] = $orderid;
         $pp_info['charset'] = 'utf-8';  
         $pp_info['no_shipping'] = '1';  
         $pp_info['no_note'] = '1';  
-        $pp_info['cancel_return'] = 'http://www.allocacoc.com/DesignNest/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面  
-        $pp_info['notify_url'] = 'http://www.allocacoc.com/DesignNest/paypal_notify/orderid/'.$order_id .'/';
+        $pp_info['cancel_return'] = 'http://webshop.allocacoc.com/DesignNest/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面  
+        $pp_info['notify_url'] = 'http://webshop.allocacoc.com/DesignNest/paypal_notify/orderid/'.$orderid .'/';
         //'http://www.domain.com/index.php/design/paypal_notify/orderid/'.$order_id;// Paypal会将指定 invoice 的订单的状态定时发送到此URL(Paypal的此操作，是paypal的服务器和我方商城的服务器点对点的通信，用户感觉不到）  
         $pp_info['rm'] = '2';  
   
@@ -1659,13 +1687,14 @@ class DesignNestAction extends BaseAction {
         }
 
         $ch = curl_init();
-        curl_setopt($ch,CURLOPT_URL,'https://www.paypal.com/cgi-bin/webscr');//https://www.sandbox.paypal.com/cgi-bin/webscr
+//        curl_setopt($ch,CURLOPT_URL,'https://www.paypal.com/cgi-bin/webscr');//https://www.sandbox.paypal.com/cgi-bin/webscr
+        curl_setopt($ch,CURLOPT_URL,'https://www.sandbox.paypal.com/cgi-bin/webscr');//https://www.sandbox.paypal.com/cgi-bin/webscr
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
         curl_setopt($ch,CURLOPT_POST,1);
         curl_setopt($ch,CURLOPT_POSTFIELDS,$req);
         $res = curl_exec($ch);
         curl_close($ch);
-        
+        error_log("pre pay:".$res);
         //$res = 'VERIFIED';
         if( $res && !empty($order_info) ) {
             // 本次请求是否由Paypal官方的服务器发出的请求
@@ -1685,7 +1714,11 @@ class DesignNestAction extends BaseAction {
                 	
                 
                     $result = M('design_order')->where('orderid=\''. $order_id.'\'')->setField('payflag',1);
-                    $result2 = M('design_winner')->where('id='. $order_info['designwinner_id'])->setInc('order_qty',$order_info['qty']);
+
+                    $product = M('design_winner')->where('id='. $order_info['designwinner_id'])->find();
+					$order_qty = $product['order_qty'];
+					$order_qty+= $order_info['qty'];
+					$result2 = M('design_winner')->where('id=' .$order_info['designwinner_id'])->setField('order_qty', $order_qty);
                     
                     if(!$result || !$result2)
                     {
@@ -1762,7 +1795,7 @@ class DesignNestAction extends BaseAction {
 			$qty =  session('dh_qty');//$_POST['qty'];
 			$designwinner_id =  session('dh_designwinner_id');//$_POST['designwinner_id'];
 			$total = session('dh_total');//$_POST['total'];
-			
+			$typeid=session('dh_typeid');
 			//calculate shipping price ,according to weight country
 			$design = M('design_winner') -> where('id=' .$designwinner_id) -> find();
 			if(!$design)
@@ -1772,7 +1805,10 @@ class DesignNestAction extends BaseAction {
 				exit ;
 			}
 			$total_weight = intval($design['weight']) * intval($qty);
-			
+			if($typeid!=0) {
+				$version = M('designwinner_price')->where('id=' . $typeid)->find();
+				$total_weight = $version['weight'] * $qty;
+			}
 			//a_ship_price_new
 			//$ship_price = M('ship_price') -> where('country_id=' .$countryid) -> find();
 			$ship_price = M('ship_price_new') -> where('id=' .$countryid) -> find();
@@ -1800,7 +1836,7 @@ class DesignNestAction extends BaseAction {
 			$true_total = $shipfee + substr($total,1);
 			session('dh_shipfee',$shipfee);	
 			session('dh_true_total',$true_total);
-			
+			session('dh_weight',$total_weight);
 			$rs = array('stauts' => 1, 
 			'total'=>substr($total,0,1).$true_total, 
 			'ship_price' => substr($firstPrice,0,1).$shipfee);

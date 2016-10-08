@@ -16,6 +16,7 @@
 					document.getElementById('gocart').innerHTML=data;
 				});
 		</script>
+
 		<div style="clear:both; margin: 0;padding: 0;"></div>
 
 		<div class="design_main clearfix" style="margin-top:-20px;">
@@ -35,7 +36,7 @@
 				
 				
 				<form>
-				<div id="top-right" style="width:580px;margin-left:510px;height:500px;">
+				<div id="top-right" style="width:580px;height:500px; float:right">
 					<ul>
 						 <font style="font-size:30px;font-weight:bold;"> {$fund['title']}  </font>
 						 
@@ -150,6 +151,7 @@
 				<!--这一部分在选择不同的产品类型之后这里会更新显示不同的产品类型图片-->
 				<input type="hidden" id="typepic" value=""/>
 			</div>
+
 			
 			<!--
 			<div style="margin:0px auto;margin-top:10px;width:1080px;margin-bottom:5px;">
@@ -304,9 +306,9 @@
 </div>		
   
 	<!--	   <include file="Home:bottom" /> -->
-	<link type="text/css"  href="../Public/flexslider/flexslider.css" rel="stylesheet"  />
-  <script type="text/javascript" src="../Public/flexslider/jquery.flexslider-min.js"></script>
-	<script type="text/javascript">	
+<link type="text/css"  href="../Public/flexslider/flexslider.css" rel="stylesheet"  />
+<script type="text/javascript" src="../Public/flexslider/jquery.flexslider-min.js"></script>
+<script type="text/javascript">
 			//var tab_index = 0;//0 comment, 1 blog
 			/*
 			tab_index=0;
@@ -329,9 +331,7 @@
   	   	
   	   	//$(".bottom").css('margin-top','0px');
   	  } );
-			
-			
-			
+
 			function load_commnent(comment_url){
 				//alert(comment_url);
 				$('#comment_list').load(comment_url);
@@ -426,7 +426,6 @@
 					alert("please select type");
 					return;
 				}
-
 				//update session
 				var url = "{:U('Cart/updateCart')}";
 				$.post(url, {
@@ -472,7 +471,10 @@
 					 alert('please choose color');
 				 	 return;
 				}
-				
+				//这里 将没有子类型的产品 默认给了一个类型id=0
+				if(typeid==""&&parseInt(size)==0){
+					typeid=0;
+				}
 				var qty = document.getElementById("qty").value;
 				 if(qty=="" || qty==null)
 				 {
@@ -487,14 +489,12 @@
 				 
 				var url = '/DesignNest/order_designwinner/id/'+winnerid + '/qty/' + parseInt(qty)
 				         +  '/typeid/' + typeid  + '/price/'+price;
-				if(typeid=="")
-				  var url = '/DesignNest/order_designwinner/id/'+winnerid + '/qty/' + parseInt(qty)
-				         +  '/price/'+price;
+//				if(typeid=="")
+//				  var url = '/DesignNest/order_designwinner/id/'+winnerid + '/qty/' + parseInt(qty)
+//				         +  '/price/'+price;
 				//alert(url);
 				window.location = url;
-				
-				
-				
+
 			}
 			
 			
@@ -782,9 +782,9 @@
 				//alert('resetVerifyCode');
 				$("#verifyImage").attr("src","{:U('Home/Index/verify_big')}");//document.getElementById("verifyImage").src="{:U('Home/Index/verify_big')}";
 			}
-		</script>
+</script>
 
-	<style type="text/css">
+<style type="text/css">
 	.footer{background-color:#884697}
 	.footer .country {BACKGROUND-COLOR: #884697;}
 	.type{width:20px;height:20px;margin-left:10px;border:1px solid #DDD;}		
@@ -804,4 +804,4 @@
 	}	
 	.order_font{font-size: 20px;color:#884697;}		
 	.price_text{font-size:20px;font-weight:bold;color:#666666;}			 
-	</style>
+</style>

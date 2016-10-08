@@ -11,7 +11,7 @@ if($sys_config['URL_MODEL']) $RULES = include DATA_PATH.  'Routes.php'; //URL路
 
 $config	= array(
 
-		'DEFAULT_THEME'		=> 'Default',
+		'DEFAULT_THEME'	=> 'Default',
 
 		'DEFAULT_CHARSET' => 'utf-8',
 
@@ -40,6 +40,8 @@ $config	= array(
 		'COOKIE_PREFIX'=>'allocacoc_',
 
 		'COOKIE_EXPIRE'=>'',
+
+		'COOKIE_TIME'=>3600,//新加
 
 		'VAR_PAGE' => 'p',
 
