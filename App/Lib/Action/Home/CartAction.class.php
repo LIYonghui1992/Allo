@@ -1155,6 +1155,7 @@ class CartAction extends BaseAction
 				$pp_info['no_note'] = '1';
 				$pp_info['cancel_return'] = 'http://webshop.allocacoc.com/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面
 				$pp_info['notify_url'] = 'http://webshop.allocacoc.com/Cart/paypal_notify/orderid/' . $orderid . '/';
+
 				//'http://www.domain.com/index.php/design/paypal_notify/orderid/'.$order_id;// Paypal会将指定 invoice 的订单的状态定时发送到此URL(Paypal的此操作，是paypal的服务器和我方商城的服务器点对点的通信，用户感觉不到）
 				//notify_url=http%3A%2F%2Fwebshop.allocacoc.com%2FCart%2Fpaypal_notify%2Fordesrid%2F2016100857f87e4e543c0%2F&rm=2
 
@@ -1167,10 +1168,11 @@ class CartAction extends BaseAction
 			}
 
 
+			/*
 //			stripe,card
 			if ($_POST['paytype'] == 2) {
 
-				\Stripe\Stripe::setApiKey(C('STRIPE_SK'));
+//				\Stripe\Stripe::setApiKey(C('STRIPE_SK'));
 				//\Stripe\Stripe::setApiKey("sk_test_f3jgU2hZxqndFQI7j9qpThSD");
 				$token = $_POST['stripetoken'];
 				error_log("开始Card支付");
@@ -1249,7 +1251,9 @@ class CartAction extends BaseAction
 
 				}
 			}
+			*/
 		}
+
 	}
 
 	//delete from cookie, cart
@@ -1329,6 +1333,13 @@ class CartAction extends BaseAction
 	/**
 	 *  recieve notify info from paypal
 	 */
+//	public function paypal_notify(){
+//		$orderid = $_GET['orderid'];
+//		error_log("here notify"."\r\n"."and orderid is:".$_GET['orderid'],3,"/tmp/error/errors.log");
+//		$order_id_arr = str_split($orderid, 21);
+//		error_log("order arr: ".json_encode($order_id_arr)."\r\n",3,"/tmp/error/errors.log");
+//	}
+
 	public function paypal_notify()
 	{
 

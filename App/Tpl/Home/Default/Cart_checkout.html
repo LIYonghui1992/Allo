@@ -306,7 +306,7 @@
 				if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))) {
 					rs = 0;
 					//tip('Please enter a valid mailbox!');
-//					document.getElementById("msg").innerHTML = 'Please enter a valid mailbox!';
+//					document.getElementById("msg").innerHTML = 'Please enter a valid mailbox! For example: abcd@allocacoc.com!';
 //					document.getElementById("msgbox").style.display="block";
 					//window.location.hash = "#msgbox";
 //					scrollTo(400,100);
@@ -333,9 +333,9 @@
 			var result = checkinput_email();
 //			alert(result);
 			if(!result){
+				rs=1;
 				return false;
 			}
-//			alert("Please wait for a moment, it's turning to the payment page... ");
 			//if pay using card, check card input first
 			type = 1;
 //			var paytype = document.getElementsByName("paytype");
@@ -369,6 +369,7 @@
 //					exp_year: document.getElementById("expyear").value
 //				}, stripeResponseHandler);
 //			}
+
 			if(type==1) {
 				submitPay();
 
@@ -379,20 +380,16 @@
 
 	function stripeResponseHandler(status, response) {
 		if (response.error) {
-//			alert(response.error);
 			// Show the errors on the form
 			document.getElementById("msg").innerHTML = 'invalid card info !';
 			document.getElementById("msgbox").style.display="block";
 			scrollTo(400,100);
 			alert('invalid card info!');
 			rs = 0;
-//			window.location = '/DesignNest/index';
 			window.location = '/Cart/index';
 			return false;
 
 		} else {
-			//document.getElementById("loading").height = $(window).height();//document.body.clientHeight;//(document.body).height();
-
 			// response contains id and card, which contains additional card details
 			token = response.id;
 			submitPay();
@@ -420,26 +417,6 @@
 //				cvc: document.getElementById("cvc").value,
 				paytype:type,
 				email:document.getElementById("email").value};
-//{
-//				first_name:document.getElementById("firstname").value,
-//				last_name:document.getElementById("lastname").value,
-//				phone:document.getElementById("phone").value,
-//				company:document.getElementById("company").value,
-//				countryid: document.getElementById("countrylist").value,
-//				address: document.getElementById("address").value,
-//				city: document.getElementById("city").value,
-//				zip: document.getElementById("postcode").value,
-////				countryid: document.getElementById("countrylist").value,
-//				qty: '{$qty}',
-//				designwinner_id: '{$designwinner_id}',
-//				designwinner_title: '{$title}',
-//				price_id: '{$typeid}',
-//				typename: '{$typename}',
-//				price: '{$price}' ,
-//				shipfee:document.getElementById("ship-price").innerHTML,
-//				total:document.getElementById("total-price").innerHTML
-// };
-
 		  $.post(url,data,function(data){
 //			  alert(data.paymenturl);
 					if(data.status != 1){
@@ -547,9 +524,4 @@
 
 .shipping-input{padding-left:10px;height:30px;margin:0px auto;width:500px;margin-left:50px;border:1px solid #CCC;
 	font-size:12px;color:#999999;background-color:#EEE;}
-.payment-select{width:160px;height:50px;margin-top:5px;margin-right:400px;float:right;}
-.confire-item{float:left;text-align:center; font-weight:bold;font-size:20px;color:#884697;width:120px;padding-left:40px;margin-top:15px;}
-.confire-item2{float:left;text-align:center; font-weight:bold;font-size:20px;color:#884697;width:120px;padding-left:40px;margin-top:35px;}
-.confiretext1{font-size:18px;color:#666666;}
-.confiretext2{font-size:18px;font-weight:bold;color:#884697;}
 </style>
