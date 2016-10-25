@@ -1,21 +1,28 @@
 <include file="Home:DN_header" />
 <include file="Home:DNnav" />
+
 <div class="fmian">
 
 	<div class="layout_list">
 
-		<div style="height:33px;float:left;width:100%;margin-top:10px;">
+		<div id="cart_position" style="height:40px;width:100px;position:fixed;top:65%;left:97%;background:#884697;border-top-left-radius:10px;border-bottom-left-radius: 10px;">
+			<i id="end"></i>
 			<a href="{:U('Cart/index')}">
-				<div style="float:left;margin-top:4px;margin-left:10px;"> <img src="../Public/image/cart_unselect.png"  id="cart_img"/></div>
-				<div style="float:left;margin-top:5px;"><font id="header_cart" class="header_text">&nbsp;&nbsp;{$Think.lang.CART}</font><font class="header_text">(</font><font id="gocart" class="header_num">{$Think.cookie.qty }</font><font class="header_text">)</font></div>
+				<div style="float:left;margin-top:8px;margin-left:12px;"> <img src="../Public/image/cart_unselecta.png"  id="cart_img"/>
+				<div id="red_point" style="width:8px;height:8px;background:red;border-radius: 100%;position:relative;left:23px;top:-25px;display:none;"></div>
+				</div>
 			</a>
 		</div>
+
 		<script>
-				var url="{:U('Cart/cookieQty')}";
-				$.get(url,function(data){
-					document.getElementById('gocart').innerHTML=data;
-				});
+			var url="{:U('Cart/cookieQty')}";
+			$.get(url,function(data){
+				if(data>0){
+					document.getElementById("red_point").style.display="block";
+				}
+			});
 		</script>
+
 
 		<div style="clear:both; margin: 0;padding: 0;"></div>
 
@@ -26,6 +33,7 @@
 					
 					<div style="width:430px;height:340px;margin-top:10px;">
 						<img id="scrollpic" src="{$fund['expanded_img']}" style="width:400px;height:320px;padding-left:20px;"  />
+						<li id="start"></li>
 					</div>
 										
 				</div>
@@ -39,20 +47,14 @@
 				<div id="top-right" style="width:580px;height:500px; float:right">
 					<ul>
 						 <font style="font-size:30px;font-weight:bold;"> {$fund['title']}  </font>
-						 
-						
-						 <if condition=" $fund['orderflag'] eq 1">
 
-						     <div class="do_order">
-						 	
-						 	    <a href="javascript:go_order({$fund['id']});">
-						 		   <font class="order_font">Pre-order now</font>
-							    </a>
-
-						     </div>
-							 <br/>
-            			 </if>
-                 
+							 <if condition=" $fund['orderflag'] eq 1">
+								 <div class="do_order" id="addcart" style="">
+									 <a href="javascript:addcart();" class="addcar">
+										 <font class="order_font">Add to cart</font>
+									 </a>
+								 </div>
+							 </if>
 					</ul>
 					<ul>
 						 <font style="font-size:12px;"> {$fund['developer']}  </font>
@@ -64,15 +66,7 @@
 					</ul>
 
 					<!--添加到购物车-->
-					<ul>
-						<if condition=" $fund['orderflag'] eq 1">
-						<div class="do_order" id="addcart">
-							<a href="javascript:addcart();">
-								<font class="order_font">add cart</font>
-							</a>
-						</div>
-						</if>
-					</ul>
+
 
 					<br>
 
@@ -80,7 +74,6 @@
 					<if condition="$type_listsize gt 0">
 						<ul>
   						<font style="float:left;">type</font>
-  						
   						<volist name="type_list" id="vo">						 
   							 <input type="radio" name="aaa" style="display:none">
 							<!--选择不同的类型图片 会在js里将$vo.price 进行处理后显示在price处 并且会将产品的图片进行更改-->
@@ -303,12 +296,19 @@
 	<div id="error_tip" style="text-align:center;margin:5px auto;margin-top:30px;padding:10px;font-size:16px;font-color:#666666;" id="info">	
 		
 	</div>    
-</div>		
+</div>
+<div id="msg">已经加入购物车</div>
   
 	<!--	   <include file="Home:bottom" /> -->
 <link type="text/css"  href="../Public/flexslider/flexslider.css" rel="stylesheet"  />
 <script type="text/javascript" src="../Public/flexslider/jquery.flexslider-min.js"></script>
+<!--<script type="text/javascript" src="../Public/js/jquery.min.js"></script>-->
+<script src="../Public/js/jquery.fly.min.js"></script>
+<!--[if lte IE 9]>
+<script src="../Public/js/requestAnimationFrame.js"></script>
+<![endif]-->
 <script type="text/javascript">
+
 			//var tab_index = 0;//0 comment, 1 blog
 			/*
 			tab_index=0;
@@ -327,6 +327,13 @@
   	   	+"{$fund['title']}"+'</a> '; 	
   	   	
   	   	set_tab_index(0);
+
+
+//		  winHeight = document.body.clientHeight;
+//		  winWidth = document.body.clientWidth;
+//		  top=winHeight*70/100+"px";
+//		  left=winWidth*97/100+"px";
+//		  $("#cart_position").css({"left":left,"top":top});
   	   	
   	   	
   	   	//$(".bottom").css('margin-top','0px');
@@ -436,27 +443,82 @@
 						},
 						function(data,status) {
 							if (status == "success") {
-								document.getElementById("gocart").innerHTML= data ;
-								if (eleFlyElement && eleShopCart) {
-									var src = $("#scrollpic").attr("src");
-									$("#flyItem").find("img").attr("src", src);
-									//滚动大小
-									var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft || 0,
-											scrollTop = document.documentElement.scrollTop || document.body.scrollTop || 0;
-									eleFlyElement.style.left = event.clientX + scrollLeft + "px";
-									eleFlyElement.style.top = event.clientY + scrollTop + "px";
-									eleFlyElement.style.visibility = "visible";
-									//需要重定位
-									myParabola.position().move();
-								}
+								winHeight = document.body.clientHeight;
+								winWidth = document.body.clientWidth;
+//								alert(winWidth+" "+winHeight);
+
+//								var end_offset = $("#end").offset();
+								var start_offset = $("#start").offset();
+//								if({$type_listsize}>0){
+//									var img = document.getElementById("typepic").value;
+//								}else{
+									var img = document.getElementById("scrollpic").src;
+//								}
+
+//				var img = __PUBLIC__."/Car.png";
+									var flyer = $('<img class="u-flyer" width="156px" height="120px" src="'+img+'">');
+									flyer.fly({
+										start: {
+											left: start_offset.left+40,
+											top: start_offset.top-450
+										},
+										end: {
+//											left: end_offset.left-10,
+											left: winWidth*99/100,
+//											top: end_offset.top-210,
+											top: winHeight*70/100,
+											width: 0,
+											height: 0
+										},
+										onEnd: function(){
+
+										}
+									});
+								var urla="{:U('Cart/cookieQty')}";
+								$.get(urla,function(data){
+									if(data>0){
+										document.getElementById("red_point").style.display="block";
+									}
+								});
 							}
 							else{
 								alert("fail to add to cart");
 							}
 						},
 						"json");
-
 			}
+
+//			var offset = $("#end").offset();
+//			$("#addcart").click(function(event){
+//
+//				if(document.getElementById("typeid").value=="" && {$type_listsize}>0)
+//				{
+//					alert("please select type");
+//					return;
+//				}
+//				var addcar = $(this);
+//				var img = document.getElementById("typepic").value;
+////				var img = __PUBLIC__."/Car.png";
+//				var flyer = $('<img class="u-flyer" src="'+img+'">');
+//				flyer.fly({
+//					start: {
+//						left: event.pageX-500,
+//						top: event.pageY-500
+//					},
+//					end: {
+//						left: offset.left+10,
+//						top: offset.top-50,
+//						width: 0,
+//						height: 0
+//					},
+//					onEnd: function(){
+////						alert("OK");
+////						$("#msg").show().animate({width: '250px'}, 200).fadeOut(1000);
+////						addcar.css("cursor","default").removeClass('orange').unbind('click');
+////						this.destory();
+//					}
+//				});
+//			});
 
 			//原本点击pre-order now之后会直接生成一个订单到数据库
 			//而我们添加的购物车是 点击加入购物车之后，物品信息存在cookie中，然后最后用户点击立即付款的时候，才生成订单，也就是才执行go_order功能
@@ -785,6 +847,9 @@
 </script>
 
 <style type="text/css">
+	#msg{position:fixed; top:300px; right:35px; z-index:10000; width:1px; height:52px; line-height:52px; font-size:20px; text-align:center; color:#fff; background:#360; display:none}
+
+
 	.footer{background-color:#884697}
 	.footer .country {BACKGROUND-COLOR: #884697;}
 	.type{width:20px;height:20px;margin-left:10px;border:1px solid #DDD;}		

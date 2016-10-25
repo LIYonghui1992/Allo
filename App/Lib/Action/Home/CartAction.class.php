@@ -31,12 +31,12 @@ class CartAction extends BaseAction
 				$num = $this->addcart($id, $count);
 			} else if ($_POST['action'] == 'update') {
 				$this->modifycart($id, $count, 2);
-				if (isset($_POST['price'])) {
-					$price = $_POST['price'];
-				}
-				$price = intval(substr($price, 1));
-				$totalprice = $this->getTotal($price, $count);//这里算出的是单条商品的价格总和
-				$this->ajaxReturn($totalprice);
+//				if (isset($_POST['price'])) {
+//					$price = $_POST['price'];
+//				}
+//				$price = floatval(substr($price, 1));
+//				$totalprice = $this->getTotal($price, $count);//这里算出的是单条商品的价格总和
+//				$this->ajaxReturn($totalprice);
 			} else if ($_POST['action'] == 'del') {
 				$this->modifycart($id, '', 3);
 			}
@@ -59,7 +59,7 @@ class CartAction extends BaseAction
 				}
 			}
 		}
-		cookie("qty", $qty);
+		cookie("qty", $qty,C('COOKIE_TIME'));
 		$this->ajaxReturn($qty);
 	}
 
@@ -80,7 +80,7 @@ class CartAction extends BaseAction
 			return 1; //根据返回的是1判断这个商品是存在的，所以数量不需要再加了，否则则加1
 		}
 		$cartarray[$id] = $count;
-		cookie("cart", $cartarray, 3600);
+		cookie("cart", $cartarray, C('COOKIE_TIME'));
 		return 0;
 	}
 
@@ -124,7 +124,7 @@ class CartAction extends BaseAction
 				}
 			}
 		}
-		cookie("cart", $tmparray, 3600);
+		cookie("cart", $tmparray, C('COOKIE_TIME'));
 	}
 
 
@@ -207,8 +207,11 @@ class CartAction extends BaseAction
 			$cart = cookie('cart');
 			ksort($cart);
 		}
-		$cartlist = array();
+//		dump($cart);
+		//carlist 用来记录产品都有哪些 用于规定左侧address 地址框的高度 和右侧的的productlist的高度相同
+//		$cartlist = array();
 		//把所有数据都拿出来 然后和查找到的数据一起 最后分配到前端的模板上
+		//$cart 里面的元素 productid-typeid=>qty
 		foreach ($cart as $k => $v) {
 			$item = array();
 			//product_socket_img ,title,price,total,typepic,typeid
@@ -218,32 +221,35 @@ class CartAction extends BaseAction
 			$item['qty'] = $v;
 			$item['productid'] = $productid;
 			$item['background_img'] = $product['background_img'];
+			$item['expanded_img']=$product['expanded_img'];
 			$item['title'] = $product['title'];
 			$item['price'] = $product['price'];
 			$item['typeid'] = $typeid;
 			$item['weight'] = $product['weight'];
-
+//			$cartlist[$productid]=$productid;
 		//typeid不为0则有多种子产品  typeid 为0说明没有子产品
 			if ($typeid != 0) {
 				$version = M('designwinner_price')->where('id=' . $typeid)->find();
 				$item['type_pic'] = $version['type_pic'];
+				$item['background_img'] = $version['big_pic'];
+				$item['expanded_img'] = $version['big_pic'];
 				$item['typetitle'] = $version['type_name'];
-
+//				$item['big_pic']=$version['big_pic'];
 				$item['price'] = $version['price'];
 			}
 			//单条商品的价格
 			$item['total'] = $this->getTotal($item['price'], $v);
-			$cartlist[] = $item; //这里面存的是单条的商品信息
-			$cart_save=$this->integrate_arr($productid,$typeid,$item,$cart_save);//这里面存的是整合后的Productid数组
-		}
+//			$cartlist[] = $item; //这里面存的是单条的商品信息
+			$cart_save[$productid][$typeid] = $item;
+//			$cart_save=$this->integrate_arr($productid,$typeid,$item,$cart_save);//这里面存的是整合后的Productid数组
 
+		}
+//		var_dump($cart_save);
 		$Model = new Model();
 		//拿到id和国家名字
 		$sql = 'select id, country_name as title from a_ship_price_new group by country_name';
 		$country_list = $Model->query($sql);
-		$this->assign('cartlist', $cartlist);
 		$this->assign('cart_save',$cart_save);
-//		dump($cart_save);
 		$this->assign('country_list', $country_list);
 		$this->display('index');
 	}
@@ -260,7 +266,7 @@ class CartAction extends BaseAction
           return round($qty * ($this->getPrice($price))* C('TAX_PERCENT'),2);
           */
 
-		return intval($qty) * ($this->getPrice_n($price));
+		return floatval($qty) * ($this->getPrice_n($price));
 	}
 
 	function getPrice_n($price)
@@ -673,16 +679,17 @@ class CartAction extends BaseAction
 
 		if ($flag == 0) {
 			$model->rollback();
-			$msg = 'Sorry, Something wrong, please try again later.';
+			$msg = 'Sorry, Something wrong, please delete your browser cookies and try again later!';
 			return false;
 		} else {
 			$model->commit();
 		}
-		cookie('order_id_arr', $order_id_arr, 3600);
-		cookie('allo_pay_total',$allo_pay_total,3600);
+		cookie('order_id_arr', $order_id_arr, C('COOKIE_TIME'));
+		cookie('allo_pay_total',$allo_pay_total,C('COOKIE_TIME'));
 //		cookie('order_weight_arr', $order_weight_arr, 3600);
 //		cookie('order_total_arr', $order_total_arr, 3600);
-		cookie('order_qty_arr', $order_qty_arr, 3600);
+		cookie('order_qty_arr', $order_qty_arr, C('COOKIE_TIME'));
+//		var_dump($order_qty_arr);
 		return 1;
 	}
 
@@ -737,7 +744,6 @@ class CartAction extends BaseAction
 		$cart_list = array();
 		//遍历产生二维商品信息数组
 		// '3--6' => string '3--6--$100--2--200--5' (length=21)
-		//productid-typeid-qty-price-product_fee(这个订单的)—shipfee 运费
 		foreach ($cartinfo as $v) //$v=14-0-2-150
 		{
 			$item = array(); //用来存显示数据
@@ -746,12 +752,13 @@ class CartAction extends BaseAction
 			$typeid = $ids[1];
 			$price = $ids[2];
 			$qty = $ids[3];
-			$productfee=$ids[4];
-			$shipfee=$ids[5];
-			$totalfee=intval($productfee)+intval($shipfee);
+			$productfee=$ids[4];//一条订单里产品的费用
+			$shipfee=$ids[5];//单条订单里运费
+			$totalfee=floatval($productfee)+floatval($shipfee);//单条订单的产品+运费
 			$product = M('design_winner')->where('id=' . $productid)->find();
 			$item['title'] = $product['title'];
 			$item['background_img'] = $product['background_img'];
+			$item['expanded_img']=$product['expanded_img'];
 			$item['productid'] = $productid;
 			$item['typeid'] = $typeid;
 			$item['qty'] = $qty;
@@ -763,6 +770,8 @@ class CartAction extends BaseAction
 			if ($typeid != 0) {
 				$version = M('designwinner_price')->where('id=' . $typeid)->find();
 				$item['type_pic'] = $version['type_pic'];
+				$item['background_img'] = $version['big_pic'];
+				$item['expanded_img'] = $version['big_pic'];
 				$item['typetitle'] = $version['type_name'];
 				$item['weight'] = $version['weight'] * $item['qty'];
 			}
@@ -774,12 +783,13 @@ class CartAction extends BaseAction
 			//还少  updatetime orderid  winner_text type_name price_id price
 //			$cart_save=$this->integrate_arr($productid,$typeid,$item,$cart_save);
 			$orderid=$productid."--".$productfee."--".$shipfee."--".$totalfee;
-			$cart=$this->integrate_arr($orderid,$typeid,$item,$cart);
+//			$cart=$this->integrate_arr($orderid,$typeid,$item,$cart);
+			$cart[$orderid][$typeid]=$item;
 			//记录已经选中购买的
 			$id = "$productid" . '-' . "$typeid";
 			$cart_list[$id] = $qty;
 		}
-		cookie("cart_list", $cart_list, 3600);//选中付款的列表 只包含$productid-$typeid=>qty
+		cookie("cart_list", $cart_list, C('COOKIE_TIME'));//选中付款的列表 只包含$productid-$typeid=>qty
 //		dump($cart);
 
 
@@ -905,8 +915,19 @@ class CartAction extends BaseAction
 				}
 			}
 			//实际上是重量决定了运费
-			$base = intval($ship_price['first']);//首重
-			$additional = intval($ship_price['additional']);
+//			$base = intval($ship_price['first']);//首重
+//			$additional = intval($ship_price['additional']);
+//			$firstPrice = $ship_price['price'];
+//			$additionalPrice = $ship_price['additional_price'];
+//			if ($total_weight <= $base)
+//				$shipfee = substr($firstPrice, 1);
+//			else {
+//				$pcs = ceil(($total_weight - $base) / $additional);
+//
+//				$shipfee = intval(substr($additionalPrice, 1) * $pcs) + intval(substr($firstPrice, 1));
+//			}
+			$base = floatval($ship_price['first']);//首重
+			$additional = floatval($ship_price['additional']);
 			$firstPrice = $ship_price['price'];
 			$additionalPrice = $ship_price['additional_price'];
 			if ($total_weight <= $base)
@@ -914,7 +935,7 @@ class CartAction extends BaseAction
 			else {
 				$pcs = ceil(($total_weight - $base) / $additional);
 
-				$shipfee = intval(substr($additionalPrice, 1) * $pcs) + intval(substr($firstPrice, 1));
+				$shipfee = floatval(substr($additionalPrice, 1) * $pcs) + floatval(substr($firstPrice, 1));
 			}
 			$this->ajaxReturn($shipfee);
 		}
@@ -959,8 +980,8 @@ class CartAction extends BaseAction
 
 				}
 				//实际上是重量决定了运费
-				$base = intval($ship_price['first']);//首重
-				$additional = intval($ship_price['additional']);
+				$base = floatval($ship_price['first']);//首重
+				$additional = floatval($ship_price['additional']);
 				$firstPrice = $ship_price['price'];
 				$additionalPrice = $ship_price['additional_price'];
 				if ($total_weight <= $base)
@@ -968,7 +989,7 @@ class CartAction extends BaseAction
 				else {
 					$pcs = ceil(($total_weight - $base) / $additional);
 
-					$shipfee = intval(substr($additionalPrice, 1) * $pcs) + intval(substr($firstPrice, 1));
+					$shipfee = floatval(substr($additionalPrice, 1) * $pcs) + floatval(substr($firstPrice, 1));
 				}
 				//相同的也倒一遍，不同的则直接就刷新了
 				//不然就再次遍历,如果不一致 则只改键即可
@@ -1017,7 +1038,7 @@ class CartAction extends BaseAction
 				$info_last[0]=$nowproduct_id;
 				//然后将新的信息存到cookie里对应新的id
 				$address_infonowid="address_info"."-".$nowproduct_id;
-				cookie($address_infonowid,$info_last,3600);
+				cookie($address_infonowid,$info_last,C('COOKIE_TIME'));
 				$this->ajaxReturn(cookie($address_infonowid));
 				//如果我们在第二个订单的地址位置直接选择第一个订单所用的地址，则这时候就会出现一个问题，第二个订单是可以被写入正确信息的，
 				//但是如何确定第二个订单的已选择三个字 显示在第一个地址的右边呢？ 因为第一个地址里面存的Productid是第一个订单的，如何让第二个订单找到这个地址呢？ 难道必须引入一个addressid?（暂时没有要求 显示已选择）
@@ -1053,7 +1074,7 @@ class CartAction extends BaseAction
 			}
 			error_log("print address arr".json_encode($address_arr));
 
-			cookie("address_arr",serialize($address_arr),3600);
+			cookie("address_arr",serialize($address_arr),C('COOKIE_TIME'));
 //			$this->ajaxReturn(json_encode(cookie($address_info)));
 			$this->ajaxReturn(json_encode(cookie("address_arr")));
 			//前端的地址显示最好改成从cookie里面拿取的，如果cookie过期了 就没有地址了
@@ -1107,6 +1128,7 @@ class CartAction extends BaseAction
 			foreach ($order_id_arr as $k => $val) {
 				$order_id = $val;
 				$orderid .= $val;
+
 //				$data['designwinner_id']=$k;
 				$where['orderid'] = $order_id;
 				//存之前先判断当前order_id是否为空 不过如果为空 也找不到数据库记录 所以也不影响 ，但是可以给顾客返回一个错误提示
@@ -1118,15 +1140,30 @@ class CartAction extends BaseAction
 				$rs = array('status' => 0, 'msg' => 'Submitted Failure!');
 				$model->rollback();
 				echo json_encode($rs);
+				error_log("failed to save email address"."\r\n",3,"/tmp/error/errors.log");
 			} else {
 				$model->commit();
-				error_log("email data have beed saved"."\r\n",3,"/tmp/error/errors.log");
+				error_log("email data have been saved"."\r\n",3,"/tmp/error/errors.log");
 //				$this->ajaxReturn('存到数据库成功'.json_encode($record));
 			}
 
-
-
-
+//			foreach($order_id_arr as $k=>$val){
+//				$order_id=$val;
+//				$order_info = M('design_order')->where('orderid =\'' . $order_id . '\'')->find();
+//				$this->sendmail($order_info['email'], $order_info);
+//			}
+			// 因为cookie存在本地所以不能再notify中删除
+			//modify order_qty
+			$order_qty_arr = cookie('order_qty_arr');
+			$qtystr=urlencode(serialize($order_qty_arr));
+//			$qtystr="sfsfsfsfsf";
+			//遍历购物车 将已经支付了的商品从购物车列表里删掉
+			$cartlist = cookie('cart_list');
+			foreach ($cartlist as $k => $v) {
+				//update session cart
+				$id = $k;
+				$this->delfromCart($id);
+			}
 
 
 
@@ -1154,7 +1191,8 @@ class CartAction extends BaseAction
 				$pp_info['no_shipping'] = '1';
 				$pp_info['no_note'] = '1';
 				$pp_info['cancel_return'] = 'http://webshop.allocacoc.com/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面
-				$pp_info['notify_url'] = 'http://webshop.allocacoc.com/Cart/paypal_notify/orderid/' . $orderid . '/';
+//				$pp_info['notify_url'] = 'http://webshop.allocacoc.com/Cart/paypal_notify/orderid/' . $orderid . '/';
+				$pp_info['notify_url'] = 'http://webshop.allocacoc.com/Cart/paypal_notify/orderid/' . $orderid . '/qtystr/'.$qtystr.'/';
 
 				//'http://www.domain.com/index.php/design/paypal_notify/orderid/'.$order_id;// Paypal会将指定 invoice 的订单的状态定时发送到此URL(Paypal的此操作，是paypal的服务器和我方商城的服务器点对点的通信，用户感觉不到）
 				//notify_url=http%3A%2F%2Fwebshop.allocacoc.com%2FCart%2Fpaypal_notify%2Fordesrid%2F2016100857f87e4e543c0%2F&rm=2
@@ -1273,8 +1311,8 @@ class CartAction extends BaseAction
 				$total += $v;//重新计算新购物车中未购买的商品数量
 			}
 		}
-		cookie('cart', $newcart);//新的购物车把老的覆盖掉
-		cookie('qtytotal', $total);//便于更新新购物车 Cart/index.html 上的pcs
+		cookie('cart', $newcart,C('COOKIE_TIME'));//新的购物车把老的覆盖掉
+		cookie('qtytotal', $total,C('COOKIE_TIME'));//便于更新新购物车 Cart/index.html 上的pcs
 	}
 
 /*
@@ -1349,7 +1387,7 @@ class CartAction extends BaseAction
 		// 由于这个文件只有被Paypal的服务器访问，所以无需考虑做什么页面什么的，这个页面不是给人看的，是给机器看的
 		//$order_id = (int) $_REQUEST['orderid'];
 		$orderid = $_GET['orderid'];
-		error_log("here notify"."\r\n"."and orderid is:".$_GET['orderid'],3,"/tmp/error/errors.log");
+		error_log(time()."here notify"."\r\n"."and orderid is:".$_GET['orderid'],3,"/tmp/error/errors.log");
 		$order_id_arr = str_split($orderid, 21);
 		error_log("order arr: ".json_encode($order_id_arr)."\r\n",3,"/tmp/error/errors.log");
 		//这个标示用来区分是不是所有的订单都支付了
@@ -1449,46 +1487,36 @@ class CartAction extends BaseAction
 					 * 判断订单金额
 					 * 判断货币类型
 					 */
-					error_log('here verified',3,"/tmp/error/errors.log");
+					error_log(time().'here verified',3,"/tmp/error/errors.log");
 					if (($_POST['payment_status'] != 'Completed' && $_POST['payment_status'] != 'Pending')) {
 						// 如果有任意一项成立，则终止执行。由于是给机器看的，所以不用考虑什么页面。直接输出即可
 						error_log('payment status is fail'."\r\n",3,"/tmp/error/errors.log");
 						exit('fail');
 					} else {// 如果验证通过，则证明本次请求是合法的
+
 						error_log('payment status is succ'."\r\n",3,"/tmp/error/errors.log");
 						// motify payflag
-						foreach ($order_id_arr as $order_id) {
-							$order_info = M('design_order')->where('orderid =\'' . $order_id . '\'')->find();
-							$result = M('design_order')->where('orderid=\'' . $order_id . '\'')->setField('payflag', 1);
-							if (!$result) {
-								error_log("PayFlag modify error: fail to modify flag, order is " . $order_id ."\r\n",3,"/tmp/error/errors.log");
-								exit('fail');
-							}
-							//mail to customer
-							$this->sendmail($order_info['email'], $order_info);
-						}
 
-						//modify order_qty
-						$order_qty_arr = cookie('order_qty_arr');
-						$model = M('design_winner');
-						foreach ($order_qty_arr as $k => $val) {
-							$product = $model->where('id=' . $k)->find();
-							$order_qty = $product['order_qty'];
-							$order_qty += $val;
-							$result = $model->where('id=' . $k)->setField('order_qty', $order_qty);
-							if (!$result) {
-								error_log("Design winner quantity modify error: fail to modify order_qty(design_winner), product id is " . $k . "quantity is :" . $val ."\r\n",3,"/tmp/error/errors.log");
-							}else{
-								error_log("Productid is".$k.",Design winner quantity modify success,"."quantity is :" . $val ."\r\n",3,"/tmp/error/errors.log");
-							}
-						}
-						//遍历购物车 将已经支付了的商品从购物车列表里删掉
-						$cartlist = cookie('cart_list');
-						foreach ($cartlist as $k => $v) {
-							//update session cart
-							$id = $k;
-							$this->delfromCart($id);
-						}
+						error_log("order arr: ".json_encode($order_id_arr)."and orderid is:".$_GET['orderid']."\r\n",3,"/tmp/error/errors.log");
+
+
+						$this->sendmail($order_id_arr);
+
+//						error_log("qty_arr_serialize is:".$_GET['qtystr']."\r\n",3,"/tmp/error/errors.log");
+//						$order_qty_arr=unserialize(stripslashes($_GET['qtystr']));
+//						$model = M('design_winner');
+//						error_log("start to modify design winner qty"."\r\n"."order_qty_arr is:".json_encode($order_qty_arr),3,"/tmp/error/errors.log");
+//						foreach ($order_qty_arr as $k => $val) {
+//							$product = $model->where('id=' . $k)->find();
+//							$order_qty = $product['order_qty'];
+//							$order_qty += $val;
+//							$result = $model->where('id=' . $k)->setField('order_qty', $order_qty);
+//							if (!$result) {
+//								error_log("Design winner quantity modify error: fail to modify order_qty(design_winner), product id is " . $k . "quantity is :" . $val ."\r\n",3,"/tmp/error/errors.log");
+//							}else{
+//								error_log("Productid is".$k.",Design winner quantity modify success,"."quantity is :" . $val ."\r\n",3,"/tmp/error/errors.log");
+//							}
+//						}
 
 						exit('success');
 					}
@@ -1503,8 +1531,9 @@ class CartAction extends BaseAction
 		/**
 		 * param:$order_info:design_order
 		 */
-	public function sendmail($email, $order_info)
+	public function sendmail($order_id_arr)
 		{
+//			error_log('start to send email, the email address is:'.$email.', orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
 			import("@.ORG.PHPMailer");
 			$mail = new PHPMailer();
 
@@ -1520,20 +1549,50 @@ class CartAction extends BaseAction
       */
 
 			$mail->IsSMTP(); // send via SMTP
-			$mail->Host = "mail.allocacoc.com"; // SMTP servers
+//			$mail->Host = "mail.allocacoc.com"; // SMTP servers
+			$mail->Host = "smtp.exmail.qq.com"; // SMTP servers
 			$mail->SMTPAuth = true; // turn on SMTP authentication
-			$mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
-			$mail->Password = "egx-7VW-Y4o-Bps"; // SMTP password
-			$mail->From = "designhouse.orders@allocacoc.com"; // 发件人邮箱
+//			$mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
+			$mail->Username = "leo.li@allocacoc.com.cn"; // SMTP username 注意：普通邮件认证不需要加 @域名
+//			$mail->Password = "egx-7VW-Y4o-Bps"; // SMTP password
+			$mail->Password = "Liyonghui890"; // SMTP password
+			$mail->From = "leo.li@allocacoc.com.cn"; // 发件人邮箱
 			$mail->FromName = "allocacoc"; // 发件人 ,比如 中国资金管理网
 			$mail->CharSet = "GB2312"; // 这里指定字符集！
 			$mail->Encoding = "base64";
-			$mail->AddAddress($email, ''); // 收件人邮箱和姓名
+			$mail->WordWrap = 80; // 设置每行字符串的长度
+			//$mail->Body = "Thank you for order our product, You payed successfully. We will send products to You as soon as possible.<br> Allocacoc.";
 			$mail->AddReplyTo("", "allocacoc");
 			$mail->IsHTML(true); // send as HTML
 			$mail->Subject = "Thanks for order our product, from Allocacoc";
 
+			foreach ($order_id_arr as $order_id) {
+				$order_info = M('design_order')->where('orderid =\'' . $order_id . '\'')->find();
+				$result = M('design_order')->where('orderid=\'' . $order_id . '\'')->setField('payflag', 1);
+				$product = M('design_winner')->where('id='. $order_info['designwinner_id'])->find();
+				$order_qty = $product['order_qty'];
+				$order_qty+= $order_info['qty'];
+				$result2 = M('design_winner')->where('id=' .$order_info['designwinner_id'])->setField('order_qty', $order_qty);
+				if(!$result || !$result2)
+				{
+					$statusflag=0;
+					error_log("PayFlag and qty modified error: fail to modify pay flag, order is ".$order_id." qty is ".$order_info['qty']."\r\n",3,"/tmp/error/errors.log");
 
+				}else{
+					error_log('orderid is:'.$order_id.'pay flag and qty have been changed successfully'."\r\n",3,"/tmp/error/errors.log");
+				}
+				$mail->AddAddress($order_info['email'], ''); // 收件人邮箱和姓名
+				$this->generateEmail($order_info, $content);
+				$mail->Body = $content;
+				$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
+
+				if (!$mail->Send()) {
+					error_log('send error:' . $mail->ErrorInfo.', the email address is:'.$order_info['email'].'orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
+				}else{
+					error_log('The confirmation email have been send successfully, the email address is:'.$order_info['email'].'orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
+				}
+
+			}
 			/*
             $mail->IsSMTP(); // send via SMTP
             $mail->Host = C('MAIL_SMTP_SERVER'); // SMTP servers
@@ -1551,20 +1610,76 @@ class CartAction extends BaseAction
             $mail->Subject = C('MAIL_SUBJECT');
             */
 
-
-			$mail->WordWrap = 80; // 设置每行字符串的长度
-			//$mail->Body = "Thank you for order our product, You payed successfully. We will send products to You as soon as possible.<br> Allocacoc.";
-			$this->generateEmail($order_info, $content);
-
-			$mail->Body = $content;
-
-			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
-			if (!$mail->Send()) {
-				error_log('send error:' . $mail->ErrorInfo);
-			}
-
-
 		}
+//	public function sendmail($email, $order_info)
+//		{
+//			error_log('start to send email, the email address is:'.$email.', orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
+//			import("@.ORG.PHPMailer");
+//			$mail = new PHPMailer();
+//
+//			/*
+//      $mail->IsSMTP(); // send via SMTP
+//      $mail->Host = "smtp.exmail.qq.com"; // SMTP servers
+//      $mail->SMTPAuth = true; // turn on SMTP authentication
+//      $mail->Username = "tell@allocacoc.com.cn"; // SMTP username 注意：普通邮件认证不需要加 @域名
+//      $mail->Password = "powercube123"; // SMTP password
+//      $mail->From = "tell@allocacoc.com.cn"; // 发件人邮箱
+//      $mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
+//      $mail->Password = "egx-7VW-Y4o-Bps"; // SMTP password
+//      */
+//
+//			$mail->IsSMTP(); // send via SMTP
+////			$mail->Host = "mail.allocacoc.com"; // SMTP servers
+//			$mail->Host = "smtp.exmail.qq.com"; // SMTP servers
+//			$mail->SMTPAuth = true; // turn on SMTP authentication
+////			$mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
+//			$mail->Username = "leo.li@allocacoc.com.cn"; // SMTP username 注意：普通邮件认证不需要加 @域名
+////			$mail->Password = "egx-7VW-Y4o-Bps"; // SMTP password
+//			$mail->Password = "Liyonghui890"; // SMTP password
+//			$mail->From = "leo.li@allocacoc.com.cn"; // 发件人邮箱
+//			$mail->FromName = "allocacoc"; // 发件人 ,比如 中国资金管理网
+//			$mail->CharSet = "GB2312"; // 这里指定字符集！
+//			$mail->Encoding = "base64";
+//			$mail->AddAddress($email, ''); // 收件人邮箱和姓名
+//			$mail->AddReplyTo("", "allocacoc");
+//			$mail->IsHTML(true); // send as HTML
+//			$mail->Subject = "Thanks for order our product, from Allocacoc";
+//
+//
+//			/*
+//            $mail->IsSMTP(); // send via SMTP
+//            $mail->Host = C('MAIL_SMTP_SERVER'); // SMTP servers
+//            $mail->SMTPAuth = true; // turn on SMTP authentication
+//            $mail->Username = C('MAIL_USERNAME'); // SMTP username 注意：普通邮件认证不需要加 @域名
+//            $mail->Password = C('MAIL_PASSWD'); // SMTP password
+//            $mail->From = C('MAIL_FROM'); // 发件人邮箱
+//            $mail->FromName = C('MAIL_FROMNAME'); // 发件人 ,比如 中国资金管理网
+//            $mail->CharSet = C('MAIL_CHARSET'); // 这里指定字符集！
+//            $mail->Encoding = C('MAIL_ENCODING');
+//            $mail->AddAddress($email,''); // 收件人邮箱和姓名
+//            $mail->AddAddress(C('MAIL_ORDER'),'');
+//            $mail->AddReplyTo("",C('MAIL_REPLYTO'));
+//            $mail->IsHTML(true); // send as HTML
+//            $mail->Subject = C('MAIL_SUBJECT');
+//            */
+//
+//
+//			$mail->WordWrap = 80; // 设置每行字符串的长度
+//			//$mail->Body = "Thank you for order our product, You payed successfully. We will send products to You as soon as possible.<br> Allocacoc.";
+//			$this->generateEmail($order_info, $content);
+//
+//			$mail->Body = $content;
+//
+//			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
+//
+//			if (!$mail->Send()) {
+//				error_log('send error:' . $mail->ErrorInfo."\r\n",3,"/tmp/error/errors.log");
+//				return false;
+//			}else{
+//				error_log('The confirmation email have been send successfully, the email address is:'.$email.'orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
+//				return true;
+//			}
+//		}
 
 
 		// generate mail content for order, including customer info,shipping address,product list ,etc.
@@ -1628,16 +1743,16 @@ class CartAction extends BaseAction
 															</tr>
 														</thead>';
 
-			$detaillist = M('design_orderdetail')->where('orderid=\'' . $order_info['orderid'] . '\'')->select();
+			$detaillist = M('design_suborder')->where('orderid=\'' . $order_info['orderid'] . '\'')->select();
 			foreach ($detaillist as $detail) {
 				$content .=
 					' <tbody class="">
 									  	<tr class="">
-									  		<td style="text-align:left;vertical-align:middle;border:1px solid #eee;word-wrap:break-word" class="">' . $detail['product_name'] . '<br class="">
+									  		<td style="text-align:left;vertical-align:middle;border:1px solid #eee;word-wrap:break-word" class="">' . $detail['winner_name'] . '<br class="">
 									  			<small class="">Type/Color: ' . $detail['type_name'] . '</small>
 									  		</td>
 									  		<td style="text-align:left;vertical-align:middle;border:1px solid #eee" class="">' . $detail['qty'] . '</td>
-									  		<td style="text-align:left;vertical-align:middle;border:1px solid #eee" class=""><span class="">' . '$' . $detail['price'] . '</span></td>
+									  		<td style="text-align:left;vertical-align:middle;border:1px solid #eee" class=""><span class="">' .  $detail['price'] . '</span></td>
 									  	</tr>
 									  </tbody>';
 			}
@@ -1648,7 +1763,7 @@ class CartAction extends BaseAction
 													  	
 													  	<tr class="">
 													  		<th scope="row" colspan="2" style="text-align:left;border:1px solid #eee" class="">Shipping</th>
-													  		<td style="text-align:left;border:1px solid #eee" class=""><span class="">' . '$' . $order_info['shipfee'] . '</span>&nbsp;</td>
+													  		<td style="text-align:left;border:1px solid #eee" class=""><span class="">' . $order_info['shipfee'] . '</span>&nbsp;</td>
 													  	</tr>
 													  	<tr class="">
 													  		<th scope="row" colspan="2" style="text-align:left;border:1px solid #eee" class="">Payment Method</th>
@@ -1656,7 +1771,7 @@ class CartAction extends BaseAction
 													  	</tr>
 													  	<tr class="">
 													  		<th scope="row" colspan="2" style="text-align:left;border:1px solid #eee" class="">Order Total</th>
-													  		<td style="text-align:left;border:1px solid #eee" class=""><span class="">' . '$' . $order_info['total'] . '</span> </td>
+													  		<td style="text-align:left;border:1px solid #eee" class=""><span class="">' . $order_info['total'] . '</span> </td>
 													  	</tr>
 													  </tfoot>
 												  </table>
@@ -1720,6 +1835,7 @@ class CartAction extends BaseAction
 </html>
 ';
 
+			error_log('start to send email, the email content have been edited:'."\r\n",3,"/tmp/error/errors.log");
 
 		}
 

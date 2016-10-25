@@ -1,7 +1,4 @@
-<style>
-.footer{background-color:#884697;}
-.footer .country {BACKGROUND-COLOR: #884697;}
-</style>
+
 <include file="Home:DN_header" />
 <include file="Home:DNnav"/>
 <link rel="stylesheet" type="text/css" href="../Public/css/cart_checkout_content.css"/>
@@ -21,24 +18,24 @@
 		</div>
 
 <!--payment-->
-		<div id="payment" style="margin-top:30px;width:90%;margin-left:5%;">
-			<img src="../Public/image/checkout_icon2.png" style="width:28px;height:22px;float:left;margin-left:10px;" />
-			<font style="font-size:16px;font-weight:bold;color:#884697;margin-left:8px;">Payment</font>
+		<div id="payment" style="margin-top:54px;width:100%;">
+			<!--<img src="../Public/image/checkout_icon2.png" style="width:28px;height:22px;float:left;margin-left:10px;" />-->
+			<font style="font-size:16px;font-weight:bold;color:#333333;margin-left:75px;">Payment</font>
 		</div>
 
 <!-- payment-2 -->
 		<!--<div class="h"></div>-->
 		<div id="payment-2">
-			<div class="shipping-div" style="margin:0px auto;width:100%;margin-top:20px;">
-				<font style="font-size:14px;font-weight:bold;font-color:#666666;">Choose the bank</font>
+			<div class="shipping-div" style="width:100%;margin-top:20px;margin-left:25px;">
+				<font style="font-size:14px;font-weight:bold;font-color:#666666;">Choose payment method</font>
 			</div>
 
-			<div style="margin:0px auto;width:100%; height:200px;margin-top: 20px;">
+			<div style="margin:0px auto;width:100%; height:200px;margin-top: 30px;margin-left:25px;">
 					<label style="width:550px;">
 						<input type="radio" name="paytype"  style="margin-right:8px;" value="1" checked=true onclick="changetype(1);"/>
-						<img width=113px height=29px src="../Public/image/paypal.jpg" />
+						<img width=160px height=40px src="../Public/image/paypal.jpg" />
 					</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<!--<label>-->
+					<!--<label style="width:550px;margin-left:8px;>-->
 						<!--<input type="radio" name="paytype"   value="2" style="margin-right:8px;" onclick="changetype(2);"/>-->
 					  <!--<img src="../Public/image/stripecards.png" />-->
 					<!--</label>-->
@@ -46,38 +43,20 @@
 		</div>
 	<!--  end payment-2 -->
 
-
-
-	<!-- payment2 info area -->
-		<!--<div  id="cardinfo">-->
-			<!--<div style="margin-top:22px;height:50px;">-->
-				<!--<font style="font-size:14px;font-color:#666666;">	cardNo</font>&nbsp;-->
-			<!--<input type="text" style="width:290px;"  id="cardno" name="cardno" class="card-input" placeholder="card number"/>-->
-			<!--&nbsp;&nbsp;-->
-			<!--<font style="font-size:14px;font-color:#666666;">	expiredate</font>&nbsp;-->
-			<!--<input type="text"   id="expmonth" name="expmonth" class="card-input" placeholder="expmonth"/>&nbsp;-->
-			<!--/ &nbsp;<input type="text"   id="expyear" name="expyear" class="card-input" placeholder="expyear"/>-->
-			<!--&nbsp;&nbsp;-->
-			<!--<font style="font-size:14px;font-color:#666666;">	cvc</font>&nbsp;-->
-			<!--<input type="text"  id="cvc" name="cvc" class="card-input"/>-->
-			<!--</div >-->
-		<!--</div>-->
-
 	<!--receipt-->
-	<div id="receipt">
-		  <img src="../Public/image/checkout_icon3.png" style="width:17px;height:22px;float:left;margin-left:10px;"/>
-		  <font style="font-size:16px;font-weight:bold;color:#884697;margin-left:10px;">Receipt</font>
-	</div>
+		<div id="receipt">
+			  <font style="font-size:16px;font-weight:bold;color:#333333;margin-left:75px;">Receipt</font>
+		</div>
 	<div id="receipt-2">
-		<div style="margin:0px auto;width:100%;height:140px;margin-top:10px;">
-			<div style="width:52%;height:140px;float:left;">
-				<font style="font-family:'Century Gothic';font-size:14px;font-color:#666666;font-weight:bold;">Electronic receipt of purchase </font>
-			  <font style="font-family:'Century Gothic';font-size:14px;font-color:#888888;"><br>This receipt will be sent to you once the order has been confirmed. This receipt can be regarded as an official document and can be used for product warranty ans maintenance requests.</font>
+		<div style="margin:0px auto;width:100%;height:140px;margin-top:20px;margin-left:25px;">
+			<div style="width:510px;height:140px;float:left;">
+				<div><font style="font-family:'Century Gothic';font-size:14px;font-color:#666666;font-weight:bold;">Electronic receipt of purchase </font></div>
+				<div style="margin-top:-10px;width:480px;"><font style="font-family:'Century Gothic';font-size:14px;color:#666666;"><br>This receipt will be sent to you after the order is shipped to your e-mail address. This receipt can be regarded as official documents and can be used for product warranty and maintenance requests.</font></div>
 			</div>
 
-			<div style="height:140px; width:45%;margin-left:3%;margin-top:40px;float:right;">
-			  <font style="font-family:'Century Gothic';font-size:14px;">Mail *</font>
-			  <input name="email"  id="email"type="text" class="shipping-input" style="width:250px;" value="your mail address"
+			<div style="height:140px; width:390px;margin-left:60px;margin-top:30px;float:right;">
+			  <font style="font-family:'Century Gothic';font-size:14px;padding:0 ;margin: 0;color:#666666;">Mail *</font>
+			  <input name="email"  id="email" type="text" class="shipping-input" value="your mail address"
 			  onfocus="if (value =='your mail address'){value ='';this.style.color='#333'}" onblur="if (value ==''){ value='your mail address';this.style.color='#999'}"/>
 		  </div>
 
@@ -86,8 +65,8 @@
 
 <!--下面为订单信息-->
 	<div id="confire">
-				  <img src="../Public/image/checkout_icon4.png" style="width:22px;height:20px;float:left;margin-left:10px;"/>
-				  <font style="font-size:16px;font-weight:bold;color:#884697;padding-left:5px;">Order Confirmation</font>
+				  <!--<img src="../Public/image/checkout_icon4.png" style="width:22px;height:20px;float:left;margin-left:10px;"/>-->
+				  <font style="font-size:16px;font-weight:bold;color:#333333;margin-left:25px;">Order Confirmation</font>
 	</div>
 
   	<div id='OrderConfirmation'>
@@ -95,19 +74,21 @@
 			<volist name="cartlist" id="v1">
 
 				<li class="order" id="{$Think.lang.$key}">
-					<div class="total_info">
-						<span>Product: $
+
+					<div class="total_info" id="total_info--{$Think.lang.$key}">
+						<span>Product:
 							<font class="sp" id="productfee--{$Think.lang.$key}"></font>
 						</span>
-						<span>Shipping fee: $
+						<span>Shipping fee:
 							<font class="sp" id="shipfee{$Think.lang.$key}"></font>
 						</span>
-						<span>Total: $
+						<span style="margin-right:8px;">Total:
 							<font class="sp" id="total{$Think.lang.$key}"></font>
 						</span>
 					</div>
 
-					<div class="product_list">
+
+					<div class="product_list" id="product_list--{$Think.lang.$key}">
 						<volist name="v1" id="vo">
 							<!--<input id="product_fee{$Think.lang.$key}" type="hidden" value="{$vo['productfee']}"/>-->
 							<!--<input id="total_fee{$Think.lang.$key}" type="hidden" value="{$vo['total']}"/>-->
@@ -116,7 +97,7 @@
 							<div class="suborder" id="suborder{$vo['productid']}--{$vo['typeid']}" >
 
 								<div class="image" >
-									<img src="{$vo['background_img']}" style="width:100px;height:75px;margin-top:22px;"/>
+									<img src="{$vo['background_img']}" style="width:78px;height:60px;margin-top:30px;"/>
 								</div>
 
 
@@ -131,27 +112,25 @@
 
 										<li>
 
-												<notempty name="vo['typetitle']">
+										<notempty name="vo['typetitle']">
 											<span class="product_type">
 												<!--<notempty name="vo['type_pic']"> Type:<img src="{$vo['type_pic']}" style="width:10px;height:10px;"/></notempty>-->
-												Type:<font style="margin-left:5px;">{$vo['typetitle']}</font>
+												<font>{$vo['typetitle']}</font> size
 											</span>
 													<span class="t"></span>
-													<else />
-													<span style="float: left;width:40px;padding-left:5px;height:60px;line-height:100px;"></span>
-												</notempty>
+											<span style="float: left;width:10px;height:60px;line-height:100px;"></span>
+										</notempty>
 
 											<span class="product_qty" >Qty:<font>{$vo['qty']}</font></span>
 										</li>
 									</ul>
 								</div>
-
-
 							</div>
-
 						</volist>
 					</div>
+
 				</li>
+
 				<li>
 					<div class="h"></div>
 				</li>
@@ -164,22 +143,22 @@
 							<font class="sp" id="items"></font>
 							pcs
 						</span>
-						<span>Shipping: $
+						<span>Shipping:
 							<font class="sp" id="shipping"></font>
 						</span>
-						<span>Total: $
+						<span>Total:
 							<font class="sp" id="total_fee"></font>
 						</span>
 					</div>
 					<div id="pay">
-						<input type="button" id="buy" style="margin:0px auto;background-image:url(../Public/image/checkout_1.1.png);
-							   font-size: 18px;font-weight: bold;color:#FFF;background-color: transparent;
-							   width:265px;height:50px;" value="Go to payment" />
+						<input type="button" id="buy" style="margin:0px auto;background:#874597;border-radius:20px;
+							   font-size: 14px;font-weight: lighter;color:#FFF;
+							   width:150px;height:35px;line-height:30px;cursor: pointer" value="Check out" />
 					</div>
 				</div>
 			</li>
 		</ul>
-  
+
   </div>
 
 
@@ -195,7 +174,7 @@
 		<div style="margin:0px auto;margin-top:30px;">
 			<font style="font-size:20px;color:#884697;"> Congratulations! </font>
 		</div>
-		<div id="succinfo" style="text-align:left;margin:5px auto;margin-top:30px;padding:40px;font-size:14px;font-color:#666666;">	
+		<div id="succinfo" style="text-align:left;margin:5px auto;margin-top:30px;padding:40px;font-size:14px;color:#666666;">
 			
 		</div>
 		
@@ -235,6 +214,12 @@
 <script type="text/javascript">
 	$(document).ready(function()
 	{
+		$(".total_info").each(function(){
+			str=$(this).next().height()+"px";
+			$(this).css({"height":str,"line-height":str});
+		});
+
+
 			document.getElementById("pathguide").innerHTML +=' > '+ "check out";
 			//document.getElementById("shop_img").src='../Public/image/shop_unselect.png';
 			//首先拿到所有类名为order的元素，取他们的id为str
@@ -246,22 +231,25 @@
 				productid=strs[0];
 				productfee=strs[1];
 				shipfee=strs[2];
+//				alert(shipfee);
+				shipfee=parseFloat(shipfee).toFixed(2);
 				totalfee=strs[3];
+				totalfee=parseFloat(totalfee).toFixed(2);
 				productfeeid="productfee"+"--"+this.id;
 				shipfeeid="shipfee"+this.id;
 				totalfeeid="total"+this.id;
-				document.getElementById(productfeeid).innerHTML=productfee;
-				document.getElementById(shipfeeid).innerHTML=shipfee;
-				document.getElementById(totalfeeid).innerHTML=totalfee;
-				total_shipping+=parseInt(shipfee);
-				total_fee+=parseInt(totalfee);
+				document.getElementById(productfeeid).innerHTML="$ "+productfee;
+				document.getElementById(shipfeeid).innerHTML="$ "+shipfee;
+				document.getElementById(totalfeeid).innerHTML="$ "+totalfee;
+				total_shipping+=parseFloat(shipfee);
+				total_fee+=parseFloat(totalfee);
 
 
 			});
 			num=$(".order").length;
 			document.getElementById("items").innerHTML=num;
-			document.getElementById("shipping").innerHTML=total_shipping;
-			document.getElementById("total_fee").innerHTML=total_fee;
+			document.getElementById("shipping").innerHTML="$ "+total_shipping;
+			document.getElementById("total_fee").innerHTML="$ "+total_fee.toFixed(2);
 	});
 		
 	var rs = 1;	
@@ -300,7 +288,7 @@
 				if(this.value==''){
 					rs = 0;
 
-					alert('Please enter a valid mailbox!')
+					alert('Please enter a valid e-mail address (For example: abcd@allocacoc.com)')
 
 				}
 				if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))) {
@@ -311,7 +299,7 @@
 					//window.location.hash = "#msgbox";
 //					scrollTo(400,100);
 
-					alert('Please enter a valid mailbox! For example: abcd@allocacoc.com');
+					alert('Please enter a valid e-mail address (For example: abcd@allocacoc.com)');
 
 				}
 
@@ -518,10 +506,3 @@
 	}
 </script>
 	
-<style type="text/css">
-
-.card-input{padding-left:5px;height:40px;width:50px;font-size:12px;font-color:#999999;margin:0px auto;margin-left:5px;border:1px solid #CCC;background-color:#EEE;}
-
-.shipping-input{padding-left:10px;height:30px;margin:0px auto;width:500px;margin-left:50px;border:1px solid #CCC;
-	font-size:12px;color:#999999;background-color:#EEE;}
-</style>

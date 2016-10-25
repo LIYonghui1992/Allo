@@ -1159,7 +1159,7 @@ class DesignNestAction extends BaseAction {
 		$map['status'] = 1;
 		$designwinner_id = $_GET['id'];
 		$map['designwinner_id'] = intval($designwinner_id);	
-	
+		//这里面拿到类型图
 		$type_list = M('designwinner_price') -> where($map) -> select();
 		
 		
@@ -1369,6 +1369,7 @@ class DesignNestAction extends BaseAction {
   		$price = $winner[0]['price'];//产品单价
   
   		$typename='';
+		$typepic='';
   		if($typeid!=0)
   		{
   			$map['id'] = $typeid;
@@ -1705,12 +1706,13 @@ class DesignNestAction extends BaseAction {
                  * 判断订单金额
                  * 判断货币类型
                  */
+				error_log('here verified',3,"/tmp/error/errors.log");
                 if(($_POST['payment_status'] != 'Completed' && $_POST['payment_status'] != 'Pending')  ) {
                     // 如果有任意一项成立，则终止执行。由于是给机器看的，所以不用考虑什么页面。直接输出即可
-                    error_log('payment status is fail');
+                    error_log('payment status is fail'."\r\n",3,"/tmp/error/errors.log");
                     exit('fail');
                 } else {// 如果验证通过，则证明本次请求是合法的
-                	error_log('payment status is succ');
+                	error_log('payment status is succ'."\r\n",3,"/tmp/error/errors.log");
                 	
                 
                     $result = M('design_order')->where('orderid=\''. $order_id.'\'')->setField('payflag',1);
@@ -1722,15 +1724,16 @@ class DesignNestAction extends BaseAction {
                     
                     if(!$result || !$result2)
                     {
-                    	error_log("PayFlag modify error: fail to modify flag, order is ".$order_id."\n");
+                    	error_log("PayFlag modify error: fail to modify pay flag, order is ".$order_id."\r\n",3,"/tmp/error/errors.log");
                     	exit('fail');
-                    }
+                    }else{
+						error_log('orderid is:'.$order_id.'pay flag have been changed successfully'."\r\n",3,"/tmp/error/errors.log");
+					}
                     //mail to customer
                     $mail = M('design_order')->where('orderid=\''. $order_id.'\'')->find();
-                    error_log('$mail:'.$mail['email']);
-                    error_log('$order_info:'.json_encode($order_info));
+                    error_log('$mail:'.$mail['email']."\r\n",3,"/tmp/error/errors.log");
+                    error_log('$order_info:'.json_encode($order_info)."\r\n",3,"/tmp/error/errors.log");
                     $this->sendmail($mail['email'],$order_info);
-            
                     exit('success');
                 }
             } else {
@@ -1899,11 +1902,13 @@ class DesignNestAction extends BaseAction {
       */
      
       $mail->IsSMTP(); // send via SMTP 
-      $mail->Host = "mail.allocacoc.com"; // SMTP servers 
-      $mail->SMTPAuth = true; // turn on SMTP authentication 
-      $mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名 
-      $mail->Password = "egx-7VW-Y4o-Bps"; // SMTP password  
-      $mail->From = "designhouse.orders@allocacoc.com"; // 发件人邮箱       
+//      $mail->Host = "mail.allocacoc.com"; // SMTP servers
+      $mail->Host = "smtp.exmail.qq.com"; // SMTP servers
+      $mail->SMTPAuth = true; // turn on SMTP authentication
+//      $mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
+      $mail->Username = "leo.li@allocacoc.com.cn"; // SMTP username 注意：普通邮件认证不需要加 @域名
+      $mail->Password = "Liyonghui890"; // SMTP password
+      $mail->From = "leo.li@allocacoc.com.cn"; // 发件人邮箱
    
       
       
@@ -1927,9 +1932,11 @@ class DesignNestAction extends BaseAction {
       
       $mail->AltBody ="To view the message, please use an HTML compatible email viewer!"; 
       if(!$mail->Send()) 
-      { 
-      	error_log('send error:'.$mail->ErrorInfo);     	
-      }
+      {
+		  error_log('send error:' . $mail->ErrorInfo."\r\n",3,"/tmp/error/errors.log");
+      }else{
+		  error_log('The confirmation email have been send successfully, the email address is:'.$email.'orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
+	  }
 			
 		
 

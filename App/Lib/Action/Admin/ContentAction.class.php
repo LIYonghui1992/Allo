@@ -243,7 +243,7 @@ class ContentAction extends AdminbaseAction
 
 
 
-			$this->assign ( 'jumpUrl','java5t 7897script:history.go(-1);');
+			$this->assign ( 'jumpUrl','javascript:history.go(-1);');
 
 
 
