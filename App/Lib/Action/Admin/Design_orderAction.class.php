@@ -64,11 +64,136 @@ class Design_orderAction extends AdminbaseAction {
    }
    
    function insert() { 
-	   
-	   R('Admin/Content/'.ACTION_NAME);
-	   
+	   $flag=1;
+//	   R('Admin/Content/'.ACTION_NAME);
+	   $model=new Model();
+	   $model->startTrans();
+	   $suborder_data=array();
+	   $createtime=$_POST['createtime'];
+	   if(!empty($createtime)){
+		   $createtime=strtotime($createtime);
+	   }else{
+		   $createtime=time();
+	   }
+	   $orderid=$_POST['orderid'];
+	   if(empty($orderid)){
+		   $orderid = $this->build_order_no();//拿到一个微秒的ID
+	   }
+	   $order_id=$orderid;
+	   $suborder_data['status']=$_POST['status'];
+	   $suborder_data['country']=$_POST['country'];
+	   $suborder_data['createtime']=$createtime;
+	   $suborder_data['orderid']=$order_id;
+	   $suborder_data['designwinner_id']=$_POST['designwinner_id'];
+	   $suborder_data['winner_name']=$_POST['winner_name'];
+	   $suborder_data['qty']=$_POST['qty'];
+	   $suborder_data['type_name']=$_POST['typename'];
+	   $suborder_data['total']=$_POST['price'];//这个是价格
+
+	   $total=floatval(substr($_POST['price'],1));
+	   $qty=intval($_POST['qty']);
+//	   if(preg_match('//',$price,$m)){
+//			$total=$m[0];
+//	   }
+	   //将价格分离出来$120 为120
+	   $price=round($total/$qty,2);
+	   $suborder_data['price']="$".$price;
+	   $where=array();
+	   $where['designwinner_id']=$_POST['designwinner_id'];
+	   $where['type_name']=$_POST['typename'];
+
+	   $typeid=$model->table(C('DB_PREFIX')."designwinner_price")->where($where)->getField('id');
+	   if(empty($typeid)){
+			$typeid='0';
+	   }
+	   $suborder_data['type_id']=$typeid;
+	   $result1=$model->table(C('DB_PREFIX')."design_suborder")->add($suborder_data);
+	   if($result1=="false"){
+		   $flag=0;
+	   }
+
+
+
+
+	   $order_data=array();
+	   $order_data['status']='0';
+	   $order_data['country']=$_POST['country'];
+	   $order_data['userid']=$_SESSION['userid'];
+	   $order_data['username']=$_SESSION['username'];
+	   $order_data['createtime']=$createtime;
+	   $order_data['first_name']=$_POST['first_name'];
+	   $order_data['last_name']=$_POST['last_name'];
+	   $order_data['company']=$_POST['company'];
+	   $order_data['address']=$_POST['address'];
+	   $order_data['zip']=$_POST['zip'];
+	   $order_data['email']=$_POST['email'];
+	   $order_data['phone']=$_POST['phone'];
+	   $order_data['designwinner_id']=$_POST['designwinner_id'];
+	   $order_data['qty']=$_POST['qty'];
+	   $order_data['winner_name']=$_POST['winner_name'];
+	   $order_data['address2']=$_POST['address2'];
+	   $order_data['price']=$_POST['price'];
+	   $order_data['total']=$_POST['total'];
+	   $order_data['shipfee']=$_POST['shipfee'];
+	   $order_data['payflag']=$_POST['payflag'];
+	   $order_data['orderid']=$_POST['orderid'];
+	   $order_data['paytype']=$_POST['paytype'];
+	   $order_data['city']=$_POST['city'];
+
+	   $where1['orderid']=$order_id;
+	   $count=$model->table(C('DB_PREFIX')."design_order")->where($where1)->count();
+	   $result2=true;
+	   $result3=true;
+	   if($count>0){
+		//要在原有的基础上加上 地址什么的相同信息作更新
+		   $data['updatetime']=time();
+		   $data['status']='0';
+		   $data['userid']=$_SESSION['userid'];
+		   $data['username']=$_SESSION['username'];
+		   $add_money=floatval(substr($_POST['price'],1));
+		   $original_price=$model->table(C('DB_PREFIX')."design_order")->where($where1)->getField('price');
+		   $original_price=floatval(substr($original_price,1));
+		   $result_price=$original_price+$add_money;
+		   $data['price']="$".$result_price;
+		   $original_total=$model->table(C('DB_PREFIX')."design_order")->where($where1)->getField('price');
+		   $original_total=floatval(substr($original_total,1));
+		   $result_total=$original_total+$add_money;
+		   $data['total']="$".$result_total;
+
+		   $result2=$model->table(C('DB_PREFIX')."design_order")->where($where1)->setField($data);
+
+		   if(!empty($_POST['qty'])){
+			   $add_qty=intval($_POST['qty']);
+			   $result3=$model->table(C('DB_PREFIX')."design_order")->where($where1)->setInc('qty',$add_qty);
+		   }
+
+	   }else{
+		   //否则创建新的订单
+		   $order_data['orderid']=$order_id;
+		   $result2=$model->table(C('DB_PREFIX')."design_order")->add($order_data);
+	   }
+//	   echo $result2." ".$result3;
+//	   exit;
+
+	   if(!$result2||!$result3){
+			$flag=0;
+	   }
+
+//	   echo $result2." ".$result3." ".$flag;
+//	   exit;
+	   if($flag!=0){
+		   $model->commit();
+		   $this->success("success");
+	   }else{
+		   $model->rollback();
+		   $this->error("Sorry,save failed!");
+	   }
+
    }
-   
+	function build_order_no()
+	{
+		return date('Ymd') . uniqid();
+	}
    function update() { 
 	   
 	   R('Admin/Content/'.ACTION_NAME);
@@ -179,7 +304,6 @@ class Design_orderAction extends AdminbaseAction {
   		} else {
   			$order = ! empty ( $sortBy ) ? $sortBy : $id;
   		}
-
   		if (isset ( $_REQUEST ['sort'])) {
   			$_REQUEST ['sort']=='asc' ? $sort = 'asc' : $sort = 'desc';
   		} else {
@@ -315,7 +439,8 @@ class Design_orderAction extends AdminbaseAction {
   		$this->display ();
   	}
   	
-
+  	
+  	
   	function export_order(){
   		
   		//error_log(json_encode($_GET));
@@ -447,7 +572,288 @@ class Design_orderAction extends AdminbaseAction {
       exit;    
           					 
   	}
+  	
+  	
+  	
+  	/**
+  	** backup, Leo update this function
+  	*/
+  	function export_order_20161021(){
+  		
+  		//error_log(json_encode($_GET));
+  		import("@.ORG.PHPExcel");
+  		
+  		
+  		$status_array = array(0=>"not approved",1=>"approved");
+  		$payflag_array = array(0=>"not paid",1=>"paid");
+  		$paytype_array = array(1=>"paypal",2=>"card");
+  		
+  		
+  		$objPHPExcel = new PHPExcel();
+  		 
+  		$objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+							 ->setLastModifiedBy("Maarten Balliauw")
+							 ->setTitle("Office 2007 XLSX Test Document")
+							 ->setSubject("Office 2007 XLSX Test Document")
+							 ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+							 ->setKeywords("office 2007 openxml php")
+							 ->setCategory("Test result file");
+			$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);		
+      $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(100);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(100);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(100);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(100);
+      
+      $objPHPExcel->setActiveSheetIndex(0)  
+            ->setCellValue('A1', 'id')
+            ->setCellValue('B1', 'status')
+            ->setCellValue('C1', 'createtime')
+            ->setCellValue('D1', 'country')
+            ->setCellValue('E1', 'city')
+            ->setCellValue('F1', 'first_name')
+            ->setCellValue('G1', 'last_name')
+            ->setCellValue('H1', 'company')
+            ->setCellValue('I1', 'address')
+            ->setCellValue('J1', 'zip')
+            ->setCellValue('K1', 'email')
+            ->setCellValue('L1', 'phone')
+            ->setCellValue('M1', 'product_name')
+            ->setCellValue('N1', 'qty')
+            ->setCellValue('O1', 'address2')          
+            ->setCellValue('P1', 'price')           
+            ->setCellValue('Q1', 'shipfee') 
+            ->setCellValue('R1', 'total')                      
+            ->setCellValue('S1', 'type/version')             
+            ->setCellValue('T1', 'payflag')
+            ->setCellValue('U1', 'orderNo')
+            ->setCellValue('V1', 'paytype '); 
+      //winner_name,email,id
+      if($_GET['winner_name'])
+        $where['winner_name']=array('eq',$_GET['winner_name']);        
+      if($_GET['email'])
+        $where['email']=array('eq',$_GET['email']);
+      if($_GET['id'])
+        $where['id']=array('eq',$_GET['id']);
+        
+      $orders = M('design_order')->where($where)->select();
 
+      for ($i = 0, $len = count($orders); $i < $len; $i++){
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('A' . ($i + 2), $orders[$i]['id']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('B' . ($i + 2), $status_array[$orders[$i]['status']]);
+        $objPHPExcel->getActiveSheet(0)->setCellValue('C' . ($i + 2), date('Y-m-d H:i:s',($orders[$i]['createtime'])) );//date('Y-m-d H:i:s',($sys_logs[$i]['createtime']))
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('D' . ($i + 2), $orders[$i]['country']);       	
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('E' . ($i + 2), $orders[$i]['city']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('F' . ($i + 2), $orders[$i]['first_name']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('G' . ($i + 2), $orders[$i]['last_name']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('H' . ($i + 2), $orders[$i]['company']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('I' . ($i + 2), $orders[$i]['address']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('J' . ($i + 2), $orders[$i]['zip']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('K' . ($i + 2), $orders[$i]['email']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('L' . ($i + 2), $orders[$i]['phone']);
+      	
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('M' . ($i + 2), $orders[$i]['winner_name']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('N' . ($i + 2), $orders[$i]['qty']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('O' . ($i + 2), $orders[$i]['address2']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('P' . ($i + 2), $orders[$i]['price']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('Q' . ($i + 2), $orders[$i]['shipfee']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('R' . ($i + 2), $orders[$i]['total']);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('S' . ($i + 2), $orders[$i]['typename']);      	      	
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('T' . ($i + 2), $payflag_array[$orders[$i]['payflag']]);
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('U' . ($i + 2), $orders[$i]['orderid']);      	
+      	$objPHPExcel->getActiveSheet(0)->setCellValue('V' . ($i + 2), $paytype_array[$orders[$i]['paytype']]);	
+      } 
+             
+      $objPHPExcel->getActiveSheet()->setTitle('design_order');
+
+      $objPHPExcel->setActiveSheetIndex(0);
+        
+      // Redirect Output To A Client’S Web Browser (Excel5)
+      header('content-Type: Application/Vnd.Ms-Excel;charset=utf-8;');
+      //Header('content-Disposition: Attachment;Filename="Inventory_Log.Xls"');
+      header('content-Disposition: Attachment;Filename="Inventory_Log.Csv"');
+       
+      header('cache-Control: Max-Age=0');
+      // If You're Serving To Ie 9, Then The Following May Be Needed
+      header('cache-Control: Max-Age=1');
+      
+      // If You're Serving To Ie Over Ssl, Then The Following May Be Needed
+      header ('expires: Mon, 26 Jul 1997 05:00:00 Gmt'); // Date In The Past
+      header ('last-Modified: '.Gmdate('d, D M Y H:I:S').' Gmt'); // Always Modified
+      header ('cache-Control: Cache, Must-Revalidate'); // Http/1.1
+      header ('pragma: Public'); // Http/1.0
+        
+      //$Objwriter = PHPExcel_IOFactory::Createwriter($Objphpexcel, 'excel5');
+      
+      $Objwriter = PHPExcel_IOFactory::Createwriter($objPHPExcel, 'CSV');        
+      //error_log(json_encode($Objwriter));
+      
+      $Objwriter->save('php://output');
+      exit;    
+          					 
+  	}
+
+	/**
+	 * 删除
+	 *
+	 */
+
+	function delete(){
+		$flag=1;
+		$name = MODULE_NAME;
+//		$model = M ( $name );
+		$model=new Model();
+		$model->startTrans();
+		$pk = $model->table(C('DB_PREFIX') . 'design_order')->getPk ();
+		$id = $_REQUEST [$pk];
+		$where['id']=$id;
+		$orderid=$model->table(C('DB_PREFIX') . 'design_order')->where($where)->getField("orderid");
+		$where1['orderid']=$orderid;
+		error_log(time()."delete_order is".$orderid);
+		$result2=$model->table(C('DB_PREFIX') . 'design_suborder')->where($where1)->delete();
+		$result1=$model->table(C('DB_PREFIX') . 'design_order')->delete($id);
+		if(false!==$result1&&false!==$result2){
+			$model->commit();
+			$flag=1;
+		}else{
+			$model->rollback();
+			$flag=0;
+		}
+
+		$model = M ( $name );
+		if (isset ( $id )) {
+			if($flag==1){
+				if(in_array($name,$this->cache_model)) savecache($name);
+				if($this->moduleid){
+					$fields =  $model->getDbFields();
+					//var_dump($fields);
+					delattach(array('moduleid'=>$this->moduleid,'id'=>$id));
+					if($fields['keywords']){
+						$olddata  = $model->field('keywords')->find($id);
+						$where['name']=array('in',$olddata['keywords']);
+						$where['moduleid']=array('eq',$this->moduleid);
+						if(APP_LANG)$where['lang']=array('eq',LANG_ID);
+						M('Tags')->where($where)->setDec('num');
+						M('Tags_data')->where("id=".$id)->delete();
+					}
+				}
+				if($name=="Language"){
+					savecache('Language');
+				}
+
+				if($name=="Country"){
+					savecache('Country');
+				}
+
+				if($name=="Product_model"){
+					savecache('Product_model');
+				}
+
+				if($name=="Product_group"){
+					savecache('Product_group');
+				}
+
+				if($name=="Product"){
+					savecache('Product');
+				}
+
+				if($name=="Version"){
+					savecache('Version');
+				}
+
+				if($name=="Design"){
+					savecache('Design');
+				}
+
+				if($name=="Design_years"){
+					savecache('Design_years');
+				}
+				if($name=="Design_winner"){
+					savecache('Design_winner');
+				}
+
+				if($name=="Download"){
+					savecache('Download');
+				}
+
+				if($name=="Download_two"){
+					savecache('Download_two');
+				}
+
+				if($name=='Order')M('Order_data')->where('order_id='.$id)->delete();
+				$this->success(L('delete_ok'));
+			}else{
+				$this->error(L('delete_error').': '.$model->getDbError());
+			}
+		}else{
+			$this->error (L('do_empty'));
+		}
+	}
+
+	/**
+	 * 批量删除
+	 *
+	 */
+
+	function deleteall(){
+		$flag=1;
+		$name = MODULE_NAME;
+		$model=new Model();
+		$model->startTrans();
+//		$model = M ( $name );
+		$ids=$_POST['ids'];
+		if(!empty($ids) && is_array($ids)){
+			foreach($ids as $id){
+				$where['id']=$id;
+				$orderid=$model->table(C('DB_PREFIX') . 'design_order')->where($where)->getField("orderid");
+				$where1['orderid']=$orderid;
+				error_log(time()."delete_order is".$orderid);
+				$result2=$model->table(C('DB_PREFIX') . 'design_suborder')->where($where1)->delete();
+				$result1=$model->table(C('DB_PREFIX') . 'design_order')->delete($id);
+				if(false!==$result1&&false!==$result2){
+					$flag=1;
+				}else{
+					$flag=0;
+				}
+			}
+			if($flag==1){
+				$model->commit();
+			}else{
+				$model->rollback();
+			}
+
+			$id=implode(',',$ids);
+//			if(false!==$model->delete($id)){
+			$model = M ( $name );
+			if($flag==1){
+				if(in_array($name,$this->cache_model)) savecache($name);
+				if($this->moduleid){
+					$fields =  $model->getDbFields();
+					delattach("moduleid=$this->moduleid and id in($id)");
+					if($fields['keywords']){
+						$olddata  = $model->field('keywords')->where("id in($id)")->select();
+						foreach((array)$olddata as $r){
+							$where['name']=array('in',$r['keywords']);
+							$where['moduleid']=array('eq',$this->moduleid);
+							if(APP_LANG)$where['lang']=array('eq',LANG_ID);
+							M('Tags')->where($where)->setDec('num');
+						}
+						M('Tags_data')->where("id in($id)")->delete();
+						M('Tags')->where('num<=0')->delete();
+					}
+				}
+				if($name=='Order')M('Order_data')->where('order_id in('.$id.')')->delete();
+				$this->success(L('delete_ok'));
+			}else{
+				$this->error(L('delete_error').': '.$model->getDbError());
+			}
+		}else{
+			$this->error(L('do_empty'));
+		}
+	}
 }
 
 

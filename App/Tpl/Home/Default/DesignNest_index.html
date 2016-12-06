@@ -28,52 +28,117 @@
 </div>
 -->
 
-<div class="picslide" style="height: 679px;margin-top:0px;">
-    <div class="bd flexslider" id="problem_img" style="height: 670px;">
-      <ul class="slides" style="height: 679px;">
-        <volist name="promotion_list" id="vo">
-          <li style="z-index: 900;height:679px; display: none; background: url({$vo['img']}) 50% 0% no-repeat;">
+<div class="picslide" style="height: 675px;width:100%;min-width:1280px;margin-top:0px;">
+    <div class="bd flexslider" id="problem_img" style="height: 675px;width:100%;">
+      <ul class="slides" style="height: 675px;width:100%;">
+        <volist name="promotion_list" id="vo"> 
+        	       	       	
+          <li style="z-index: 900;height:679px; width:100%;display: none; background: url({$vo['img']}) 50% 0% no-repeat;"<notempty name="vo['link']"> onclick="javascript:window.open('{$vo['link']}');"</notempty> >
+  		    </li>	
+  		    <!--
+  		    <li style="z-index: 900;height:675px; width:100%;display: none; background: url({$vo['img']}) 50% 0% no-repeat;">
   		  	<notempty name="vo['link']"> <a href="{$vo['link']}"></a> </notempty> 
   		  </li>	
+  		  -->
         </volist>
       </ul>
     </div>
   </div>
 
 
-<div style="width:100%; min-width:1280px;margin: 0 auto;margin-top:670px;height: 380px; background: url(../Public/image/dn_index_bg.jpg) 50% 0% no-repeat; "> <!--background: #4a215d; -->
-	<div style="width:1080px;height:300px;margin:0px auto;padding:40px 0px;"> <!--background: #af61bd; -->
-		<p><font style="color:#fff;font-size:18px;font-weight:bold;">What is DesignNest?</font></p>
-		
-		<hr style="height:2px;width:50px;border:none;border-top:3px solid #fff;float:left;" />
-		
-		<font style="color:#fff;font-size:14px;line-height:2;">
-		<br/>
-		Our DesignNest is a unique opportunity for designers to get their products onto the shelves of stores worldwide.
-		<br/>
-   In contrary to traditional crowdfunding services we provide more than just the platform.We provide a complete solution and support from initial idea to selling the actual products in retail stores.
-   <br/>
-   4 key advantages we offer:
-   <br/>
-   1. Design Knowledge   2. Sourcing   3. Production & Assembly   4. Distribution & Sales   5. Lower access barrier
-   <br/>
-   Finally there is a chance for a product to leave the drawing board and come into existence.
-   <br/>
-	 </font>	
-		<div class="b-more">
-    	<a href="javascript:findmore({$design_challenge['id']});">
-    		<font class="more">find out more</font> 
-    	</a>
-       
-    </div>  
-    <div class="b-more" style="margin-left:50px;">
-    	<a href="{:U('DesignNest/submit_design')}">
-    		<font class="more">submit your design</font> 
-    	</a>
-       
-    </div>  
-	</div>
+<div style="width:100%; min-width:1280px;margin: 0 auto;margin-top:670px;height: 313px; background: url(../Public/image/dn_index_bg.jpg) 50% 0% no-repeat; "> <!--background: #4a215d; -->
+	<div style="width:1080px;margin:0 auto;padding:0px;">
+		<div style="float:left;width:490px;height:220px;margin-top:33px;"> <!--background: #af61bd; -->
+			<div style="width:405px;">
+				<p><font style="color:#fff;font-size:16px;font-weight:bold;">What is DesignNest?</font></p>
+				<hr style="height:2px;width:50px;border:none;border-top:3px solid #fff;float:left;" />
+				<font style="color:#fff;font-size:12px;line-height:21px;width:404px;">
+					<br/>
+					Our DesignNest is a unique opportunity for designers to get their products onto the shelves of stores worldwide.
+					<br/>
+					In contrary to traditional crowdfunding services we provide more than just the platform.We provide a complete solution and support from initial idea to selling the actual products in retail stores.
+					<br/>
+				</font>
+			</div>
+			<div style="width:440px;padding:0px;">
+				<div class="b-more">
+					<a href="javascript:findmore({$design_challenge['id']});">
+						<font class="more">find out more</font>
+					</a>
+				</div>
+				<div class="b-more" style="margin-left:40px;">
+					<a href="{:U('DesignNest/submit_design')}">
+						<font class="more">submit your design</font>
+					</a>
+				</div>
+			</div>
+		</div>
 
+		<div style="float:left; width:590px; margin-top:80px;padding:0px;">
+			<div style="width:100%;padding:0px;">
+				<font style="font-weight:bold;color:#fff;font-size:12px;">
+					5 key advantages we offer:
+				</font>
+			</div>
+			<div style="width:590px;margin-top:10px; padding:0px;">
+				<div style="float:left;width:95px;">
+					<div style="height:30px;margin-left:-6px;">
+						<img src="../Public/image/icon.png"/>
+					</div>
+					<div style=";margin-top:8px;line-height: 12px;">
+						<font style="color:#fff;font-size:12px;font-weight: bold">Design Knowledge</font>
+					</div>
+				</div>
+
+				<div class="t" style="float:left;width:1px;margin-left:1px;background:#C181CD;height:60px;"></div>
+				<div style="float:left;width:120px;">
+					<div style="height:30px;margin-left:7px;">
+					<img src="../Public/image/icon2.png"/>
+					</div>
+					<div style="margin-left:15px;;margin-top:8px;line-height: 12px;">
+						<font style="color:#fff;font-size:12px;font-weight: bold;">Sourcing</font>
+					</div>
+				</div>
+				<div class="t" style="float:left;width:1px;margin-left:1px;background:#C181CD;height:60px;"></div>
+				<div style="float:left;width:132px;">
+					<div style="height:30px;margin-left:12px;">
+					<img src="../Public/image/icon3.png"/>
+					</div>
+					<div style="margin-left:20px;;margin-top:8px;line-height: 12px;">
+						<font style="color:#fff;font-size:12px;font-weight: bold;">Production & Assembly</font>
+					</div>
+				</div>
+				<div class="t" style="float:left;width:1px;margin-left:1px;background:#C181CD;height:60px;"></div>
+
+				<div style="float:left;width:125px;">
+					<div style="height:30px;margin-left:9px;">
+						<img src="../Public/image/icon4.png"/>
+					</div>
+					<div style="margin-left:15px;;margin-top:8px;line-height: 12px;">
+						<font style="color:#fff;font-size:12px;font-weight: bold;">Distribution & Sales</font>
+					</div>
+				</div>
+
+				<div class="t" style="float:left;width:1px; margin-left:1px;background:#C181CD;height:60px;"></div>
+
+				<div style="float:left;width:105px;">
+					<div style="height:30px;margin-left:13px;">
+						<img src="../Public/image/icon5.png"/>
+					</div>
+					<div style="margin-left:13px;margin-top:8px;line-height: 12px;">
+						<font style="color:#fff;font-size:12px;font-weight: bold;">Lower access barrier</font>
+					</div>
+				</div>
+			</div>
+			<div style="clear:both;height:10px;"></div>
+			<div >
+				<font style="font-size:12px;color:#fff;">
+					Finally there is a chance for a product to leave the drawing board and come into existence.
+				</font>
+
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="fmian">
@@ -197,7 +262,7 @@
   </div>
   
   
-    <div style="width:100%;min-width:1280px;margin-top:50px;margin-bottom:-30px;padding-top:35px;background-color:#FAFAFA;">
+    <div style="width:100%;height:745px;min-width:1280px;margin-top:50px;margin-bottom:-30px;padding-top:35px;background-color:#FAFAFA;">
     	<div style="margin:0px auto;width:1080px;">
     		<div  class="designtitle"  >  
 	        <span><font style="font-weight:bold;font-size:18px;color:#333333;">Successful Projects<br></font> </span>              
@@ -205,58 +270,58 @@
          </div>  
       
          <div class="list_design clearfix">
-      	<ul>
-      		
-      		<volist name="past_fund_list" id="vo" key="k">
-      			<li>
-      				<div class="product">
-          			<div style="width:253px; height:195px;"> 
-                	 		<a href="{:U('DesignNest/detail',array('id'=>$vo['id']))}">
-                      <img src="{$vo.background_img}" style="width:253px; height:195px;" />
-                     </a>
-                </div>
-                	 	 
-                <div style="width:220px;height:65px;padding-left:15px;margin-top:10px;">                     	 
-                       <strong><font class="p-font">{$vo.title}</font></strong>                                              
-                        <font class="font_developer"><br>{$vo['developer']}</font>
-                </div>
-                     
-                <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;">                 	
-                     	<ul style="line-height:30px;">
-                     		<font class="p-font3" style="font-size:14px;vertical-align:top;">{$vo.price|substr=0,1}</font>
-                        <font class="p-font3" style="vertical-align:top;" >{$vo.price|substr=1}</font>
-                        <font class="p-font3" style="font-size:20px;vertical-align:top;">{$vo.price_cent}</font>
-                  
-    					        </ul>                  	
-                </div>
-                                   
-                    
-                <div style="border:1px solid #DDD; border-radius:10px; width:88%;overflow:hidden;margin-left:15px;margin-top:15px;">
-                      <span class="span_target" style="width:{$vo['fake_order_qty']/$vo['funding_goal']*100}%;"></span>
-                </div>
-                    
-                <div style="margin:0px auto; width:220px;height:20px;margin-top:3px;margin-right:10px;text-align:right;">
-                       
-                       <font class="pcs_font">{$vo['fake_order_qty']}/{$vo['funding_goal']} pcs ({$vo.price|substr=0,1}{$vo.target_money})</font>
-                       <font class="p-font2">required </font>
-                </div>
-                
-                <div style="margin:0px auto; width:180px;height:20px;margin-bottom:5px;margin-right:10px;text-align:right;">
-                       
-                       <font class="pcs_font">{$vo['dayleft']} days</font>
-                       
-                </div>
-                     
-                <div class="list_order">
-                     	 <a href="javascript:godetail({$vo['id']});" >
-                        <font class="detail_link">Pre-order now</font> 
+        	<ul>
+        		
+        		<volist name="past_fund_list" id="vo" key="k">
+        			<li>
+        				<div class="product">
+            			<div style="width:253px; height:195px;"> 
+                  	 		<a href="{:U('DesignNest/detail',array('id'=>$vo['id']))}">
+                        <img src="{$vo.background_img}" style="width:253px; height:195px;" />
                        </a>
-                </div>
-          		</div>
-      			</li>
-      		</volist>
-      		
-      	</ul>
+                  </div>
+                  	 	 
+                  <div style="width:220px;height:65px;padding-left:15px;margin-top:10px;">                     	 
+                         <strong><font class="p-font">{$vo.title}</font></strong>                                              
+                          <font class="font_developer"><br>{$vo['developer']}</font>
+                  </div>
+                       
+                  <div style="margin:0px auto; width:180px;height:30px;margin-left:15px;">                 	
+                       	<ul style="line-height:30px;">
+                       		<font class="p-font3" style="font-size:14px;vertical-align:top;">{$vo.price|substr=0,1}</font>
+                          <font class="p-font3" style="vertical-align:top;" >{$vo.price|substr=1}</font>
+                          <font class="p-font3" style="font-size:20px;vertical-align:top;">{$vo.price_cent}</font>
+                    
+      					        </ul>                  	
+                  </div>
+                                     
+                      
+                  <div style="border:1px solid #DDD; border-radius:10px; width:88%;overflow:hidden;margin-left:15px;margin-top:15px;">
+                        <span class="span_target" style="width:{$vo['fake_order_qty']/$vo['funding_goal']*100}%;"></span>
+                  </div>
+                      
+                  <div style="margin:0px auto; width:220px;height:20px;margin-top:3px;margin-right:10px;text-align:right;">
+                         
+                         <font class="pcs_font">{$vo['fake_order_qty']}/{$vo['funding_goal']} pcs ({$vo.price|substr=0,1}{$vo.target_money})</font>
+                         <font class="p-font2">required </font>
+                  </div>
+                  
+                  <div style="margin:0px auto; width:180px;height:20px;margin-bottom:5px;margin-right:10px;text-align:right;">
+                         
+                         <font class="pcs_font">{$vo['dayleft']} days</font>
+                         
+                  </div>
+                       
+                  <div class="list_order">
+                       	 <a href="javascript:godetail({$vo['id']});" >
+                          <font class="detail_link">Pre-order now</font> 
+                         </a>
+                  </div>
+            		</div>
+        			</li>
+        		</volist>
+        		
+        	</ul>
          </div>
     	</div>
     	
@@ -299,10 +364,12 @@
 	});
 	*/
 	$(function(){
+		/*
 	if($(".flexslider").width()<=1280)
 	{
-	   $(".flexslider").width(1080);
+	   $(".flexslider").width(1280);
 	}
+	*/
 	$("#problem_img").flexslider({
 	    animation:"slide",
 	    slideshowSpeed: 5000,
@@ -379,8 +446,8 @@
 <style type="text/css">
 	.footer{background-color:#884697}
 	.footer .country {BACKGROUND-COLOR: #884697;}
-	.flexslider{width:1008;height:360px;margin:1px auto;padding:1px;}	
-	.flex-viewport{padding-left:5px;padding-right:5px;}
+	/*.flexslider{width:1008;height:360px;margin:1px auto;padding:1px;}	
+	.flex-viewport{padding-left:5px;padding-right:5px;}*/
 	.products{margin:0px auto;margin-left:2px;margin-right:2px;width:994px;height:360px;}	
 	/*.product {height: 350px;width: 220px;margin-right: 50px;border: 1px solid #DDD;}/*float: left;position: relative;*/ 
 	.product {height: 420px;width: 253px;border: 1px solid #DDD;}
@@ -476,13 +543,12 @@
 
 .b-more {
 	margin-top: 20px;
-	margin-left: 3px;
-	height: 58px;
-	width: 280px;
+	height: 41px; /*58*/
+	width: 200px;/*280*/
 	background-image: url(../Public/image/more_bg.png);
 	
 	text-align:center;
-	line-height:58px;
+	line-height:38px;/*58*/
 	float:left;
 }
 
@@ -495,7 +561,7 @@
 
 }*/
 .more {
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: bold;	
 	color: #fff;
 }

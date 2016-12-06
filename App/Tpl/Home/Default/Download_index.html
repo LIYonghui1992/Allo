@@ -18,7 +18,7 @@
 				</a>
 							
 				
-				<div class="haha" id="{$vo['id']}_div" style="visibility:hidden;border:1px solid #DDD;background-color:#FFF;margin-top:12px;z-index:999;position: absolute;filter£ºalpha(opacity=90);opacity: 0.9;">					
+				<div class="haha" id="{$vo['id']}_div" style="visibility:hidden;border:1px solid #DDD;background-color:#FFF;margin-top:12px;z-index:999;position: absolute;filterï¿½ï¿½alpha(opacity=90);opacity: 0.9;">					
 					<em></em>   
           <span></span>
 					<div class="container2" style="z-index:999;width:100px;padding:10px;background-color:#FFF;max-height:160px; overflow: hidden;">
@@ -63,11 +63,11 @@
 			<div class="box" >
 				<img src="{$vo['back_img']}" class="back_img" id="{$vo['id']}" onclick="javascript:show_file('{$vo['file_path']}','{$vo['tags']}','{$vo['title']}');" />
 				<div class="file_title">
-					
+
 					<a href="{$vo['file_path']}"><div style="width:26px;height:26px;margin-top:15px;background:url(../Public/image/download_big.png);float:right;"></div></a>
-					
+
 					 <!-- /download.php?filepath={$vo['back_img']}javascript:download_pic("{$vo['back_img']}");-->
-					<p style="font-size:14px;color:#555;line-height:25px;width:200px;">{$vo['title']}</p>
+					<p class="product_title" style="font-size:14px;color:#555;line-height:25px;width:200px;">{$vo['title']}</p>
 					<!--
 					<notempty name="vo['tags']">
 						<p style="font-size:12px;color:#999;">
@@ -231,13 +231,17 @@ line-height: 0;border-color:transparent transparent #fff transparent;border-styl
   {		
     document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
     		+'<a href="{:U(\'Download/index\')}">'+"{$Think.lang.DOWNLOADS}"+'</a> ';
-    		
+
+	  //æ–°åŠ ä¿®æ”¹
+	  if($(".box").width()>300){
+		  $(".product_title").width(370);
+	  }
   } );
   
   function keyDown(e) {
     var ev= window.event||e;
   
-    //13ÊÇ¼üÅÌÉÏÃæ¹Ì¶¨µÄ»Ø³µ¼ü
+    //13ï¿½Ç¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½Ä»Ø³ï¿½ï¿½ï¿½
     if (ev.keyCode == 13) {
      search();
     }

@@ -20,7 +20,7 @@
 			<td width="10%" >submit time</td><td width="90%" >{$idea.createtime|date="Y.m.d",### }</td>
 	</tr>
   <tr>
-			<td width="10%" >desc</td><td width="90%" >{$idea.product_desc}</td>
+			<td width="10%" >desc</td><td width="90%" >{$idea.project_desc}</td>
 	</tr>
 	<tr>
 			<td width="10%" >video</td><td width="90%" ><a href="{$idea.videourl}">{$idea.videourl}</a></td>
@@ -82,3 +82,8 @@
 <script>
 $("#nav  ul").hide();
 </script>
+
+<style>
+	ol{list-style-type:decimal;margin:5px;}
+	ul{list-style:disc inside;margin:5px;}
+</style>

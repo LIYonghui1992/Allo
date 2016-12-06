@@ -27,9 +27,6 @@ if(!defined("App")) exit("Access Denied");
 
 
 class BaseAction extends Action
-
-
-
 {
 
 
@@ -111,10 +108,14 @@ class BaseAction extends Action
 
 				}
 
-				define('LANG_NAME', $lang);
-				
-
-				define('LANG_ID', $this->Lang[$lang]['id']);
+				if(empty($this->Lang[$lang]['id'])){//var_dump("sssssssss");
+					define('LANG_NAME', "en");
+					define('LANG_ID', 9);
+					$lang = "en";
+				}else{
+					define('LANG_NAME', $lang);
+					define('LANG_ID', $this->Lang[$lang]['id']);
+				}
 
 
 

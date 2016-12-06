@@ -9,7 +9,9 @@
 <link rel="stylesheet" href="../Public/artDialog-master/css/ui-dialog.css">
 <script src="../Public/artDialog-master/dist/dialog-min.js"></script>
 <link rel="stylesheet" type="text/css" href="../Public/css/cart_index_content.css"/>
-
+<!--<link rel="stylesheet" href="..Public/css/other.css">-->
+<!--<link rel="stylesheet" href="..Public/css/jquery-ui.css" />-->
+<!--<script src="..Public/js/jquery-ui.js"></script>-->
 
 <include file="Home:DN_header" />
 <include file="Home:DNnav"/>
@@ -23,6 +25,7 @@
 			</div>
 		</div>
 <!--从这里开始-->
+
 		<div id="cart_list">
 			<form action="{:U('Cart/checkout')}" method="post" id="form1">
 				<empty name="cart_save">
@@ -53,9 +56,11 @@
 							<!--<div style="float:left; margin-left: 42px; margin-top:20px;"> <input class="chk_1" type="checkbox" id="all" style="vertical-align:middle;"/><label for="all" style="vertical-align:middle;margin-top:-10px;"></label><font style="margin-left:5px;font-size: 16px;color:#666666;font-weight: bold;"> {$Think.lang.ALL}</font> </div>-->
 						<!--</div>-->
 						<div style="float:right;width:905px;height:30px;background: white;">
-							<div  style="float:left; margin-left: 40px; margin-top:20px;">
-								<div id="all" style="float:left;width:10px;height:10px;border-radius:50px;background:#874597;"></div>
-								<div style="float:left;margin-top:-5px;margin-left:15px;"><font style="margin-left:5px;font-size: 16px;color:#666666;font-weight: bold;"> {$Think.lang.ALL}</font></div>
+							<div  style="float:left; margin-left: 40px; margin-top:12px;">
+								<div style="float:left;width:16px;height:16px;border-radius:50px;border:#dddddd solid 1px;">
+								<div id="all" style="margin:0 auto; margin-top:4px;width:8px;height:8px;border-radius:50px;background:#874597;"></div>
+								</div>
+								<div style="float:left;margin-top:-2px;margin-left:9px;"><font style="font-size: 16px;color:#666666;font-weight: bold;"> all</font></div>
 							</div>
 						</div>
 					</div>
@@ -67,9 +72,9 @@
 							<ul>
 								<li><span >Product: $</span><span id="product_fee{$Think.lang.$key}">{$Think.lang.$key}</span></li>
 								<li><span >Shipping fee: </span><span id="shipfee{$Think.lang.$key}">-</span></li>
-								<li><a id="address{$Think.lang.$key}"  href="javascript:add_address({$Think.lang.$key});" ><font > Add address > </font></a></li>
+								<li><a class="add_address_but" id="address{$Think.lang.$key}"  href="javascript:void(0);" onclick="add_address({$Think.lang.$key})" ><font > Add address > </font></a></li>
 
-								<li class="address_des"><span id="address_des{$Think.lang.$key}" style="display: none;"></span></li>
+								<li><span class="address_des" id="address_des-{$Think.lang.$key}" style="display: none;"></span></li>
 								<!--这里给一个默认的国家id 初始化的时候可以先根据这个id计算运费-->
 								<li><input type="text" id="record_countryid{$Think.lang.$key}" style="display:none" value=""></li>
 							</ul>
@@ -81,12 +86,14 @@
 
 									<div class="suborder" id="suborder{$vo['productid']}--{$vo['typeid']}" >
 										<div class="checkbox" >
-												<div class="checkboxstyle" id="checkboxstyle{$vo['productid']}--{$vo['typeid']}" style="margin-top:30px;margin-left:20px;width:10px;height:10px;border-radius:50px;" onclick="javascript:changebackground('{$vo['productid']}--{$vo['typeid']}');">
-													<input  class="chk_2" name="{$vo['productid']}--{$vo['typeid']}" type="checkbox" id="checkbox{$vo['productid']}--{$vo['typeid']}" value="{$vo['productid']}--{$vo['typeid']}--{$vo['price']}--{$vo['qty']}" />
+											<div style="margin-top:30px;margin-left:20px;width:16px;height:16px;border-radius:50px;border:#dddddd solid 1px; ">
+												<div class="checkboxstyle" id="checkboxstyle{$vo['productid']}--{$vo['typeid']}" style="margin:0 auto;margin-top:4px;width:8px;height:8px;border-radius:50px;" onclick="javascript:changebackground('{$vo['productid']}--{$vo['typeid']}');">
+													<input  style="visibility: hidden;" class="chk_2" name="{$vo['productid']}--{$vo['typeid']}" type="checkbox" id="checkbox{$vo['productid']}--{$vo['typeid']}" value="{$vo['productid']}--{$vo['typeid']}--{$vo['price']}--{$vo['qty']}" />
 												</div>
+											</div>
 										</div>
 
-										<div class="image" >
+										<div class="image" style="-moz-user-select: none;-ms-user-select: none;-webkit-user-select: none;user-select: none" >
 											<img src="{$vo['background_img']}" style="width:78px;height:60px;"/>
 										</div>
 
@@ -184,7 +191,7 @@
 
 	<!--这里是填写地址的弹出框-->
 
-	<div id="shipping-2">
+	<div id="shipping-2" style="border:0;">
 		<div style="margin-left: 20px;">
 			<div class="shipping-div" style="margin-top:15px;">
 				<img src="../Public/image/checkout_icon1.png" style="width:16px;height:23px;float:left;margin-top:-5px;"/>
@@ -192,13 +199,13 @@
 			</div>
 			<div class="shipping-div">
 				<div class="shipping-field"><font style="font-size:12px; width:50px;">Name*</font></div>
-				<input name="firstname" id="firstname"  type="text" class="shipping-input" style="width:240px;" value="First Name" onfocus="if (value =='First Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='First Name';this.style.color='#999'}"/>
-				<input name="lastname" type="text" id="lastname" class="shipping-input" style="width:238px; margin-left:10px;" value="Last Name" onfocus="if (value =='Last Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Last Name';this.style.color='#999'}"/>
+				<input name="First name" id="firstname"  type="text" class="shipping-input" style="width:240px;" value="First Name" onfocus="if (value =='First Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='First Name';this.style.color='#999'}"/>
+				<input name="Last name" type="text" id="lastname" class="shipping-input" style="width:238px; margin-left:10px;" value="Last Name" onfocus="if (value =='Last Name'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Last Name';this.style.color='#999'}"/>
 			</div>
 
 			<div class="shipping-div">
 				<div class="shipping-field"><font style="font-size:12px;width:50px;">Phone*</font></div>
-				<input name="phone" id="phone" type="text" class="shipping-input"  value="Your Phone Number"
+				<input name="Phone number" id="phone" type="text" class="shipping-input"  value="Your Phone Number"
 					   onfocus="if (value =='Your Phone Number'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Your Phone Number';this.style.color='#999'}"/>
 			</div>
 			<div class="shipping-div">
@@ -208,15 +215,15 @@
 			</div>
 			<div class="shipping-div">
 				<div class="shipping-field"><font style="font-size:12px;">Address*</font></div>
-				<input name="address" id="address" type="text" class="shipping-input"  value="Address"
+				<input name="Address" id="address" type="text" class="shipping-input"  value="Address"
 					   onfocus="if (value =='Address'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Address';this.style.color='#999'}"/>
 			</div>
 
 			<div class="shipping-div">
 				<div class="shipping-field"><font style="font-size:12px;">PostalCode*</font></div>
-				<input name="postcode" id="postcode" type="text" class="shipping-input" style="width:240px;" value="Postal Code"
+				<input name="Postcode" id="postcode" type="text" class="shipping-input" style="width:240px;" value="Postal Code"
 					   onfocus="if (value =='Postal Code'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='Postal Code';this.style.color='#999'}"/>
-				<input name="city" type="text" id="city" class="shipping-input" style="width:238px;margin-left:10px;" value="City"
+				<input name="City" type="text" id="city" class="shipping-input" style="width:238px;margin-left:10px;" value="City"
 					   onfocus="if (value =='City'){value ='';this.style.color='#333'}" onblur="if (value ==''){value='City';this.style.color='#999'}"/>
 			</div>
 
@@ -241,6 +248,10 @@
 </div>
 
 <script>
+	$.ajaxSetup (
+			{
+				async: false
+			});
 	$(document).ready(function()
 	{
 //		document.getElementById("pathguide").innerHTML +=' > '+ "{$Think.lang.CART}";
@@ -385,7 +396,7 @@
 		var dia;
 		function add_address(productid){
 //			alert(productid);
-
+//			$(".add_address_but").attr("disable","disable");
 			flag=0;
 			document.getElementById("record_productid").value=productid;
 			//拿到当前cookie里面存的地址，然后解析分为多个子地址，进行判断，如果有地址则弹窗选择，没有地址则弹窗填写
@@ -396,9 +407,8 @@
 
 			$.post(url,data,function (data,status) {
 				if(status=="success") {
-//					alert(data);
 					if(data=="false"){ //false说明为空， 没有任何一个地址，则直接跳出填写页面
-						addnew_address(1,0);//默认传个1 则没有数据的时候 默认第一个改名为1
+						addnew_address(0);
 						return;
 					}
 					var record_num=0;//这个是用来记录当前的所有cookie里已经存的历史地址中，有没有一条是和当前的productid一样的。
@@ -406,15 +416,19 @@
 					// 2.如果没有record_num=0; 就为0,而address+ 这里用地址的总条数+1。(第二个参数)
 					var obj=eval(data);
 				str="<div style='clear: both; margin:0;padding:0;'></div>";
-				str+="<div style='width:330px;background:whitesmoke;'>";
+				str+="<div style='width:330px;background:whitesmoke; border-top-left-radius: 5px;border-top-right-radius: 5px;border-bottom-left-radius: 5px;border-bottom-right-radius:5px;'>";
 //					str+="<div style='width:300px; padding:0;margin:0 auto;'>";
 					var k=0;
 					for(var i=0;i<obj.length;i++){
 						k=i+1;
+							str+="<div style='margin:0px;padding:0px;height:0px;position:relative;top:10px;left:300px;'>";
+//							str+="<span><a href='javascript:update_address("+obj[i][10]+");'>修改</a></span>";
+							str+="<span><a href='javascript:void(0);' onclick='delete_address("+obj[i][10]+")'><img src='../Public/image/x.png' /></a></span></div>";
 
-							str+="<div  style='width:330px;margin:0 auto;'class='select_address_color' id='select_add"+obj[i][0]+"'  onclick='javascript:select_add("+obj[i][0]+","+obj[i][8]+","+k+");' >";
+							str+="<div  style='width:330px;margin:0 auto; border-top-left-radius: 5px;border-top-right-radius: 5px;border-bottom-left-radius: 5px;border-bottom-right-radius:5px;' class='select_address_color' id='select_add"+obj[i][10]+"'  onclick='javascript:select_add("+obj[i][10]+","+obj[i][8]+","+k+");' >";
 								str+="<div style='width: 330px;height:15px;'></div>";
 								str+="<div style='width:300px; margin:0 auto;' >";
+//
 									str+="<img src='../Public/image/checkout_icon1.png' style='width:16px;height:20px;float:left;'/>";
 									str+="<font style='font-size:14px;font-weight:bold;color:#874597;margin-left: 10px;float: left;'>address"+" "+k+"</font>";
 								str+="</div>";
@@ -429,42 +443,30 @@
 												str+="<b>Country: </b>"+obj[i][7]+"<br/>";
 												str+=" <b>PostalCode: </b>"+obj[i][9]+"<br/>";
 
+
 								str+="</div>";
 								str+="<div style='height: 15px;'></div>";
 							str+="</div>";
 						str+="<div style='clear: both;'></div>";
-						if(productid==obj[i][0]){
-							record_num=i+1;
 
-						}
 					}
 //					alert(record_num+" "+obj.length);
 //					str+="</div>";
 					str+="<div style='height:1px;border-bottom-color: #dddddd; border-bottom-width: 1px;border-bottom-style: solid;width:300px;margin:0 auto;'></div>";
 					str+="<div style='width:300px;height:50px; margin:0 auto;'>";
-						str+="<a href='javascript:addnew_address("+record_num+","+obj.length+");'>";
+						str+="<a href='javascript:void(0);' onclick='addnew_address("+obj.length+")'>";
 						str+="<font style='font-size:16px;font-weight:bold;color:#874597;line-height:50px;' >"+"+ add new address"+"</font>";
 						str+="</a>";
 					str+="</div>";
 
 				str+="</div>";
-
+//				str="<div style='clear: both; margin:0;padding:1px;'></div>";
 						 dia=dialog({
 							 title:false,
 							 padding:0,
 							 align:'right bottom',
-//							 width:300,
-//							 align:'bottom',
-//							 cancel:function(){},
-//							 cancelValue:"取消",
 							 id:'choose_address',
-//							 follow:document.getElementById("record_address_dialog"+productid),
 							 quickClose:true
-//							 lock:true,
-//							 drag:true
-//							 background:"white",
-//							 opacity:0.9
-//							 fixed:true
 						});
 						dia.content(str);
 						dia.show(document.getElementById("address"+productid));
@@ -479,16 +481,18 @@
 		 * 4. change address flag, example: address 1
 		 * 5. record address status: have address in this order
 		 **/
-		function select_add(productid,countryid,record_num){
+		function select_add(addressid,countryid,record_num){
+			$(".add_address_but").each(function(){
+				$(this).attr("disable","disable");
+			});
 			nowproductid=$("#record_productid").val();
 			var url="{:U('Cart/save_address')}";
-			data={stat:2,product_id:productid,nowproduct_id:nowproductid};
+			data={stat:2,address_id:addressid,nowproduct_id:nowproductid};
 			$.post(url,data,function (data,status) {
 				if(status=="success"){
-//					show_address(nowproductid);
-					address_des_id="address_des"+nowproductid;
-//					document.getElementById(address_des_id).style.display="block";
-					document.getElementById(address_des_id).innerHTML="address have been added";
+					//标记当前选中的是cookie中哪个地址 data=addressid
+					address_des_id="address_des"+"-"+nowproductid;
+					document.getElementById(address_des_id).innerHTML=data;
 
 					//让顾客知道选的是哪个
 					address_id="address"+nowproductid;
@@ -501,34 +505,139 @@
 					$("#"+record_countryid).val(countryid);//记录的存上修改后的国家，方便点checkout的时候和调数量的时候使用
 //					alert(data);
 					dialog.get('choose_address').close();
+					$(".add_address_but").each(function(){
+						$(this).removeAttr("disabled");
+					});
+//					$(".add_address_but").removeAttr("disabled");
 				}
 
 			});
+		}
+	/**
+	 *	1.要把地址更改掉
+	 * 2.要把选择这个地址的其他商品对应的也更改掉
+	 *
+	 * */
+		function update_address(addressid){
+
+		}
+		function delete_address(addressid){
+			//在这之前要先判断都有哪些订单选择了这个地址
+			//如果我从A订单打开这个界面，但是我修改的确实B地址 怎么办、
+			//如果没有任何一个订单选择了这个地址，那么直接删除就好
+			//其实 只需要发送一次Post 到后台把地址给从地址库中删除即可
+			//但是前端的也全部遍历设置为空
+//
+//			$(".add_address_but").attr("disable","disable");
+			$(".add_address_but").each(function(){
+				$(this).attr("disable","disable");
+			});
+			var url="{:U('Cart/save_address')}";
+			data={stat:4,address_id:addressid};
+			$.post(url,data,function (data,status) {
+				if(status=="success") {
+//							alert(data);
+					var address_arr=new Array();
+					address_arr=eval(data);
+						$(".address_des").each(function (){
+							var info = this.id.split("-");
+							productid = info[1];
+							if($(this).text()==addressid) {
+								//标记当前选中的是cookie中哪个地址 data=addressid
+								address_des_id="address_des"+"-"+productid;
+								document.getElementById(address_des_id).innerHTML='';
+
+								//让顾客知道选的是哪个
+								address_id="address"+productid;
+								str="<font> Add address > </font>";
+								document.getElementById(address_id).innerHTML=str;//还原回去
+
+								//记录国家设置为空，运费归0
+								countryid="";
+								record_countryid="record_countryid"+productid;//找到记录当前国家
+								$("#"+record_countryid).val(countryid);
+
+								var shipfeeid="shipfee"+productid;
+								document.getElementById(shipfeeid).innerHTML="-";
+							}else{
+								//从返回的新地址库里找，能找到的就设置为新的编号，不能找到的就不管了，因为默认为空的
+								for(var i=0;i<address_arr.length;i++) {
+									other_address_id = address_arr[i][10];
+									if($(this).text()==other_address_id){
+										var k = i+1;
+										address_id="address"+productid;
+										str="<font>"+"address"+k+" ></font>";
+										document.getElementById(address_id).innerHTML=str;
+									}
+								}
+							}
+						});
+					dialog.get('choose_address').close();
+//					$(".add_address_but").removeAttr("disabled");
+					$(".add_address_but").each(function(){
+						$(this).removeAttr("disabled");
+					});
+				}
+			});
+
+			recalculate();
+
+//			$(".address_des").each(function (){
+////				alert($(this).text());
+//				if($(this).text()==addressid){
+//					var info=this.id.split("-");
+//					productid=info[1];
+//					data={stat:4,address_id:addressid,product_id:productid};
+//					$.post(url,data,function (data,status) {
+//						if(status=="success") {
+//							flag=0;
+//							//标记当前选中的是cookie中哪个地址 data=addressid
+//							address_des_id="address_des"+"-"+productid;
+//							document.getElementById(address_des_id).innerHTML='';
+//
+//							//让顾客知道选的是哪个
+//							address_id="address"+productid;
+//							str="<font> Add address > </font>";
+//							document.getElementById(address_id).innerHTML=str;//还原回去
+//
+//							//记录国家设置为空，运费归0
+//							countryid="";
+//							record_countryid="record_countryid"+productid;//找到记录当前国家
+//							$("#"+record_countryid).val(countryid);
+//
+//							var shipfeeid="shipfee"+productid;
+//							document.getElementById(shipfeeid).innerHTML="-";
+//							recalculate();
+//							dialog.get('choose_address').close();
+//
+////							alert(data);
+//						}
+//
+//					});
+//				}
+//			});
+
+
+
 		}
 		/**
 		 * 添加地址窗口
 		 *
 		 *
 		 * */
-		function addnew_address(record_num,k){
+		function addnew_address(k){
+
 			var Dia=dialog({
-//				width:300,
 				title:false,
-//				height:100,
 				id: 'shake-demo',
 				quickClose:true,
 				lock: true,
 				fixed: true,
 				ok: function () {
-					save_address(record_num,k);
+					save_address(k);
 				},
 				okValue: 'OK'
-//				cancelValue:'Cancel',
-//				cancel: function () {
-//					alert('cancel');
-//				}
 			});
-//			Dia.title(document.getElementById('shipping'));
 			Dia.content(document.getElementById('shipping-2'));
 			Dia.show();
 			//新地址添加完要执行 弹出的窗口刷新，并且显示已选择
@@ -564,7 +673,11 @@
 		 * 5. record address status: have address in this order
 		 *
 		 **/
-		function save_address(record_num,k){
+		function save_address(k){
+//			$(".add_address_but").attr("disable","disable");
+			$(".add_address_but").each(function(){
+				$(this).attr("disable","disable");
+			});
 			//如果没有选国家，则会按照默认上次的国家计算一遍
 			if(k!=0){
 				dia.close();
@@ -572,7 +685,7 @@
 
 			var result = checkinput();
 			if(!result){
-				return false;
+				return;
 			}
 			//应该考虑 先存到cookie里，保存成功了 再计算运费和改变国家
 			productid=$("#record_productid").val();
@@ -597,31 +710,19 @@
 			var data={info:arr};
 			$.post(url,data,function (data,status) {
 				if(status=="success"){
-					if(record_num!=0){
-						address_id="address"+productid;
-						str="<font>"+"address"+record_num+" ></font>";
-						document.getElementById(address_id).innerHTML=str;//这里的record_num为数字 所以要组合起来
-					}else{
-//						alert(k);
 						var i = k+1;
 						address_id="address"+productid;
 						str="<font>"+"address"+i+" ></font>";
-						document.getElementById(address_id).innerHTML=str;//这里的record_num为数字 所以要组合起来
-					}
+						document.getElementById(address_id).innerHTML=str;
 
-					address_des_id="address_des"+productid;
-//					document.getElementById(address_des_id).style.display="block";
-					document.getElementById(address_des_id).innerHTML="address have been added";
-
-
-//					alert(data);
-					//改为存完地址 刷新浮动窗！！！！
-//					show_address(productid);
+					address_des_id="address_des"+"-"+productid;
+					document.getElementById(address_des_id).innerHTML=data;
+//					$(".add_address_but").removeAttr("disabled");
+					$(".add_address_but").each(function(){
+						$(this).removeAttr("disabled");
+					});
 				}
 			});
-
-
-
 		}
 
 
@@ -633,8 +734,7 @@
 		$("#shipping-2 input[type='text']").each(function(index, element) {
 			//既不能为空，也不能为默认值
 			//如果必填的里面有空报false
-			if (this.value == '' && (this.name != 'company' && this.name != 'cardno'
-					&& this.name != 'expmonth' && this.name != 'cvc' && this.name != 'expyear'))
+			if (this.value == '' && (this.name != 'company'))
 			{
 				rs = 0;
 				//tip(this.name+' cannot be empty!');
@@ -645,12 +745,12 @@
 				return false;
 			}
 
-			if( (this.name == 'firstname' && this.value == 'First Name') ||
-					(this.name == 'lastname' && this.value == 'Last Name') ||
-					(this.name == 'phone' && this.value == 'Your Phone Number') ||
-					(this.name == 'address' && this.value == 'Address') ||
-					(this.name == 'postcode' && this.value == 'Postal Code') ||
-					(this.name == 'city' && this.value == 'City'))
+			if( (this.name == 'First name' && this.value == 'First Name') ||
+					(this.name == 'Last name' && this.value == 'Last Name') ||
+					(this.name == 'Phone number' && this.value == 'Your Phone Number') ||
+					(this.name == 'Address' && this.value == 'Address') ||
+					(this.name == 'Postcode' && this.value == 'Postal Code') ||
+					(this.name == 'City' && this.value == 'City'))
 			{  rs = 0;
 //				document.getElementById("msg").innerHTML = this.name+' cannot be empty!';
 //				document.getElementById("msgbox").style.display="block";
@@ -670,8 +770,12 @@
 			alert("Please select your country!");
 			return false;
 		}
+		if(rs==0){
+			return false;
+		}else{
+			return true;
+		}
 
-		return true;
 	}
 
 
@@ -751,8 +855,8 @@
 			var flag=0;
 			num=$(".checkbox :checkbox[checked]:visible").length;
 			if(num==0){
-				alert("Sorry, you haven't selected any items!");
-				return false;
+				alert("You have not selected any items, please select some and try again!");
+				return;
 			}
 			$(".checkbox :checkbox[checked]:visible").each(function(i){
 				var info = this.value.split("--");
@@ -760,13 +864,13 @@
 				var typeid = info[1];
 				var price = info[2].substring(1);
 				var qty=info[3];
-				address_des_id="address_des"+productid;
+				address_des_id="address_des"+"-"+productid;
 
 				if(document.getElementById(address_des_id).textContent==""){
 					flag=1;
 //					document.getElementById("tips").innerHTML="Sorry， please input your address!";
 //					document.getElementById("tips").style.display="block";
-					alert("Sorry，please add your address!");
+					alert("Please add a shipping address!");
 					return false;
 				}
 
@@ -775,7 +879,7 @@
 				shipfeeid="shipfee"+productid;
 				productfee=document.getElementById(product_feeid).textContent;
 				if(document.getElementById(shipfeeid).textContent=="-"){
-					return false;
+					return;
 				}
 				shipfee=(document.getElementById(shipfeeid).textContent).substring(1);
 				document.getElementById(checkboxid).value+="--"+productfee+"--"+shipfee;
@@ -795,21 +899,25 @@
 		$("#all").click(function(){
 			if(statusall==1){
 				statusall=0;
-				$(this).css({"background":"#874597","width":"10px","height":"10px","border":"0px"});
+				$(this).css({"background":"#874597"});
+				$(":checkbox").prop("checked", true);
 				$(":checkbox").attr("checked", true);
+
 				$(".checkboxstyle").each(function(){
 
-					$(this).css({"background":"#874597","width":"10px","height":"10px","border":"0px"});
+					$(this).css({"background":"#874597"});
 
 				});
 				recalculate();
 
 			}else{
 				statusall=1;
-				$(this).css({"background":"","width":"8px","height":"8px","border":"solid rgb(100,100,100) 1px"});
+				$(this).css({"background":""});
+				$(":checkbox").prop("checked", false);
 				$(":checkbox").attr("checked", false);
+
 				$(".checkboxstyle").each(function(){
-					$(this).css({"background":"","width":"8px","height":"8px","border":"solid rgb(100,100,100) 1px"});
+					$(this).css({"background":""});
 				});
 //			  	pcs=0;
 			  	total=0.00;
@@ -1016,13 +1124,15 @@
 //		alert(checkboxid);
 		if($("#"+checkboxid).attr('checked')){
 //			alert("取消选中");
+			$("#"+checkboxid).prop("checked", false);
 			$("#"+checkboxid).attr("checked", false);
 
-			$("#"+checkboxstyleid).css({"background":"","width":"8px","height":"8px","border":"solid rgb(100,100,100) 1px"});
+			$("#"+checkboxstyleid).css({"background":""});
 		}else{
 //			alert("执行选中");
+			$("#"+checkboxid).prop("checked", true);
 			$("#"+checkboxid).attr("checked", true);
-			$("#"+checkboxstyleid).css({"background":"#874597","width":"10px","height":"10px","border":"0px"});
+			$("#"+checkboxstyleid).css({"background":"#874597"});
 
 		}
 		var shipfeeid="shipfee"+productid;

@@ -51,8 +51,44 @@ $config	= array(
 
 		'TMPL_EXCEPTION_FILE' => APP_PATH.'/Tpl/Home/Default/Public/exception.html',
 
-		'SHOW_PAGE_TRACE'=>true,
+		'SHOW_PAGE_TRACE'=>false,
 
+//支付宝配置参数
+		'alipay_config'=>array(
+//			'partner' =>'2088611221573217',   //这里是你在成功申请支付宝接口后获取到的PID； 别人的
+//			'key'=>'3qm4goiqs7y7cifw0vdp6hgti15boqyj',//这里是你在成功申请支付宝接口后获取到的Key 别人的
+			'partner' =>'2088521231413200',   //这里是你在成功申请支付宝接口后获取到的PID；  正式的 美元账户
+			'key'=>'1foalpsf6la6ugsnrhs9752zda3ojbmy',//这里是你在成功申请支付宝接口后获取到的Key  正式的 美元账户
+//			'partner' =>'2088101122136241',   //这里是你在成功申请支付宝接口后获取到的PID；  沙盒
+//			'key'=>'760bdzec6y9goq7ctyx96ezkz78287de',//这里是你在成功申请支付宝接口后获取到的Key 沙盒
+			'sign_type'=>strtoupper('MD5'),
+			'input_charset'=> strtolower('utf-8'),
+			'cacert'=> getcwd().'/cacert.pem',
+			'transport'=> 'https',
+			'service' => 'create_forex_trade',
+//			"service" => "create_direct_pay_by_user",
+		),
+		//以上配置项，是从接口包中alipay.config.php 文件中复制过来，进行配置；
+
+		'alipay'   =>array(
+			//这里是卖家的支付宝账号，也就是你申请接口时注册的支付宝账号
+//			'seller_email'=>'arthur.limpens@allocacoc.com',
+//			'seller_email'=>'overseas_kgtest@163.com', //测试的账号
+	//这里是异步通知页面url，提交到项目的Pay控制器的notifyurl方法；
+//			'notify_url'=>'http://webshop.allocacoc.com/Cart/notifyurl',
+			'notify_url'=>'http://www.allocacoc.com/Cart/notifyurl',
+	//这里是页面跳转通知url，提交到项目的Pay控制器的returnurl方法；
+//			'return_url'=>'http://webshop.allocacoc.com/Cart/returnurl',
+			'return_url'=>'http://www.allocacoc.com/Cart/returnurl',
+	//支付成功跳转到的页面，我这里跳转到项目的User控制器，myorder方法，并传参payed（已支付列表）
+//			'successpage'=>'User/myorder?ordtype=payed',
+//			'successpage'=>'http://webshop.allocacoc.com/Cart/index',
+			'successpage'=>'http://www.allocacoc.com/Cart/index',
+	//支付失败跳转到的页面，我这里跳转到项目的User控制器，myorder方法，并传参unpay（未支付列表）
+//			'errorpage'=>'User/myorder?ordtype=unpay',
+//			'errorpage'=>'http://webshop.allocacoc.com/Cart/index',
+			'errorpage'=>'http://www.allocacoc.com/Cart/index',
+		),
 
 );
 $stripe = array(
@@ -61,16 +97,17 @@ $stripe = array(
 );
 $paypal = array(
 	'PAYPAL_IPN_URL'=>'https://www.sandbox.paypal.com/cgi-bin/webscr',
-	'PAYPAL_GATEWAY'=>'https://www.sandbox.paypal.com/cgi-bin/webscr?',
+	'PAYPAL_GATEWAY'=>'https://www.paypal.com/cgi-bin/webscr?',
+	'PAYPAL_TEST_GATEWAY'=>'https://www.sandbox.paypal.com/cgi-bin/webscr?',
 	'PAYPAL_FORMALGATEWAY'=>'https://www.paypal.com/cgi-bin/webscr?',
-	'PAYPAL_ACCOUNT'=>'jing.wang@allocacoc.com.cn',
+	'PAYPAL_ACCOUNT'=>'arthur.limpens@allocacoc.com',
 	'PAYPAL_CMD'=>'_xclick',
 	'PAYPAL_ITEM_NAME'=>"orderNo:",
-	'PAYPAL_RETURN'=>'http://webshop.allocacoc.com/Product/index.html',
+	'PAYPAL_RETURN'=>'http://www.allocacoc.com/Cart/index.html',
 	'PAYPAL_CHARSET'=>'utf-8',
 	'PAYPAL_NO_SHIPPING'=>'1',
 	'PAYPAL_NO_NOTE'=>'1',
-	'PAYPAL_CANCEL_RETURN'=>'http://webshop.allocacoc.com/Product/index.html',
+	'PAYPAL_CANCEL_RETURN'=>'http://www.allocacoc.com/Cart/index.html',
 	'PAYPAL_NOTIFY_URL'=>'http://webshop.allocacoc.com/Cart/paypal_notify/orderid/',
 	'PAYPAL_RM'=>'2',
 );
@@ -92,6 +129,7 @@ $tax = array(
 	'EXCL_VAT'=>'excl VAT',
 	'INCL_VAT'=>'incl VAT'
 );
+
 return array_merge($database, $config ,$sys_config,$paypal,$stripe,$mail,$tax);
 
 ?>

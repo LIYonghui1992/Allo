@@ -16,8 +16,9 @@ if (!defined("App"))
 class IndexAction extends BaseAction {
 
 	public function index() {
-		$this -> redirect(__ROOT__."/Index/detail");
-				exit ;
+
+		$this -> redirect('Index/detail');
+		exit ;
 
 		//国家id
 
@@ -43,11 +44,12 @@ class IndexAction extends BaseAction {
 
 		$this -> display();
 
-
 	}
 
-	public function detail() {;
+	public function detail() {
+//		phpinfo();
 		//国家id
+
 		$country_id = $_COOKIE['allocacoc_country_id'];
 
 		//国家默认型号
@@ -59,14 +61,19 @@ class IndexAction extends BaseAction {
 		$product_model = M('product_model') -> where('id=' . $product_model_id) -> find();
 
 		$banners = explode(':::', $product_model['main']);
+
 		foreach ($banners as $k => $v) {
 
 			$banners[$k] = strstr($v, '|', TRUE);
 
 		}
+
 		$imglist = implode(',', $banners);
+
 		$this -> assign('banners', $banners);
+
 		$this -> assign('imglist', $imglist);
+
 		$this -> display();
 
 	}

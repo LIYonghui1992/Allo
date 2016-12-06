@@ -35,10 +35,10 @@
 						<input type="radio" name="paytype"  style="margin-right:8px;" value="1" checked=true onclick="changetype(1);"/>
 						<img width=160px height=40px src="../Public/image/paypal.jpg" />
 					</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<!--<label style="width:550px;margin-left:8px;>-->
-						<!--<input type="radio" name="paytype"   value="2" style="margin-right:8px;" onclick="changetype(2);"/>-->
-					  <!--<img src="../Public/image/stripecards.png" />-->
-					<!--</label>-->
+					<label style="width:550px;margin-left:18px;">
+						<input type="radio" name="paytype"   value="2" style="margin-right:8px;" onclick="changetype(2);"/>
+						<img src="../Public/image/alipay-logo.jpg" width="41px" height="40px" />
+					</label>
 			</div>
 		</div>
 	<!--  end payment-2 -->
@@ -251,10 +251,9 @@
 			document.getElementById("shipping").innerHTML="$ "+total_shipping;
 			document.getElementById("total_fee").innerHTML="$ "+total_fee.toFixed(2);
 	});
-		
-	var rs = 1;	
+
+	var rs = 1;
 	var token;
-	var type;
 	var pay_type=1;
 	function closeart(dialogid)
 	{
@@ -265,40 +264,23 @@
 	{
 		if (paytype == 2){
 			pay_type=2;
-			document.getElementById('cardinfo').style.display="block";
-		}
-		else{
+		}else{
 			pay_type=1;
-			document.getElementById('cardinfo').style.display="none";
 		}
 
 	}
 
 	function checkinput_email(){
 		$("input[type='text']").each(function(index, element) {
-//			if(pay_type==2){
-//				if(this.value==''&&(this.name=='cardno'||this.name=='expmonth'||this.name=='expyear'||this.name=='cvc')){
-//					rs = 0;
-//					alert( 'Master of VISA card information cannot be empty!');
-//					return false;
-//				}
-//			}
-
 			if (this.name == 'email') {
 				if(this.value==''){
 					rs = 0;
 
-					alert('Please enter a valid e-mail address (For example: abcd@allocacoc.com)')
+					alert('Please enter a valid e-mail address!')
 
 				}
 				if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.value))) {
 					rs = 0;
-					//tip('Please enter a valid mailbox!');
-//					document.getElementById("msg").innerHTML = 'Please enter a valid mailbox! For example: abcd@allocacoc.com!';
-//					document.getElementById("msgbox").style.display="block";
-					//window.location.hash = "#msgbox";
-//					scrollTo(400,100);
-
 					alert('Please enter a valid e-mail address (For example: abcd@allocacoc.com)');
 
 				}
@@ -314,54 +296,15 @@
 
 	}
 
+
 	$(function() {
-
 		$("#buy").click(function() {
-
 			var result = checkinput_email();
-//			alert(result);
 			if(!result){
 				rs=1;
 				return false;
 			}
-			//if pay using card, check card input first
-			type = 1;
-//			var paytype = document.getElementsByName("paytype");
-//			for(var i=0;i<paytype.length;i++){
-//				if(paytype[i].checked)
-//					type = paytype[i].value;
-//			}
-			//点击提交的时候 首先判断输入的卡的信息是否为空
-//			if(type==2)
-//			{
-//				if(document.getElementById("cardno").value=='' || document.getElementById("expmonth").value==''
-//						|| document.getElementById("expyear").value=='' || document.getElementById("cvc").value=='')
-//				{
-//					document.getElementById("msg").innerHTML = 'please input card info !';
-//					document.getElementById("msgbox").style.display="block";
-//					scrollTo(400,100);
-//					return false;
-//				}
-//
-//			}
-
-			//if pay using card,generate stripe token first
-//			if(type==2)
-//			{
-//				Stripe.setPublishableKey('{:C('STRIPE_PK')}');//'pk_test_u1F10fuUigV8J5gnJjvsAgHg'
-//				//根据提供的卡的信息在stripe.js 库中创建一个令牌
-//				Stripe.card.createToken({
-//					number: document.getElementById("cardno").value,
-//					cvc: document.getElementById("cvc").value,
-//					exp_month: document.getElementById("expmonth").value,
-//					exp_year: document.getElementById("expyear").value
-//				}, stripeResponseHandler);
-//			}
-
-			if(type==1) {
-				submitPay();
-
-			}
+			submitPay();
 		});
 	});
 
@@ -392,33 +335,39 @@
 		{
 			return false;
 		}
-//		alert("here");
+		var url = "{:U('Cart/submit_order')}";
+		var paytype = document.getElementsByName("paytype");
+		for(var i=0;i<paytype.length;i++){
+			if(paytype[i].checked)
+				pay_type = paytype[i].value;
+		}
+		var data =  {
+			paytype:pay_type,
+			email:document.getElementById("email").value
+		};
+		$.post(url,data,function(data,status){
 
-			//record into database[ajax],then pay
-			var url = "{:U('Cart/submit_order')}";
-//			var price = '{$price}';
-			var data =  {
-//				stripetoken: token,
-//				cardno: document.getElementById("cardno").value,
-//				expmonth: document.getElementById("expmonth").value,
-//				expyear: document.getElementById("expyear").value,
-//				cvc: document.getElementById("cvc").value,
-				paytype:type,
-				email:document.getElementById("email").value};
-		  $.post(url,data,function(data){
-//			  alert(data.paymenturl);
-					if(data.status != 1){
-						fail(data['msg']);
-						return false;
-					}
-					else//open paypal url,
-					{
-						if(type==1)
-						  window.location = data.paymenturl; //alert(data.paymenturl);
-						if(type==2)
-						  congratulation();
-					}
-			},"json");
+			if(status!="success"){
+				fail(data['msg']);
+				return false;
+			}
+			else//open paypal url,
+			{
+				if(data.status!="1"){
+					alert("Order has expired, please try to add the purchase again!");
+//					alert(data);
+					window.location = '/DesignNest/index';
+				}else{
+					if(pay_type==1)
+						window.location = data.paymenturl; //alert(data.paymenturl);
+					if(pay_type==2)
+						document.write(data.paymenturl);
+				}
+//					document.write(data);
+//					alert(data);
+//						  congratulation();
+			}
+		},"json");
 	}
 
 	//tip user that pay successfully

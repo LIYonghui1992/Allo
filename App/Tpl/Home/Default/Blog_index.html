@@ -26,8 +26,9 @@ a:active  { text-decoration:none;color:#CBCBCB;}
 				</ul>
 			<!-- 选择语言结束 -->
 			</div>
+
 			<div class="blog_l" style="width:100%">
-	     <ul id="new_fairs">
+	     	<ul id="new_fairs">
 		    <volist name="blogs" id="vo" >		
 				<li style="width:220px;margin:20px 20px 20px 20px;float:left">
 					<a href="javascript:;" data-id="{$vo.id}" data-title="{$vo.title}" class="lists">	
@@ -37,7 +38,8 @@ a:active  { text-decoration:none;color:#CBCBCB;}
 								<font style="font-size:14px;color:#444;">{$vo.title|str_cut=24}</font>
 								</p>
 								<p class="date" style="height:20px"><font> {$vo.updatetime|date="Y.m.d",###}</font></p>
-								<p class="article" style="text-align:justify;line-height:24px;height:110px;margin-top:5px;font-size:14px;">{$vo.article_text|str_cut=114}</p>
+								<p class="article" style="text-align:justify;line-height:24px;height:110px;margin-top:5px;font-size:14px;">{$vo.article_text|str_cut=114}
+								</p>
 								<p  style="line-height:18px;color:#09C;height:18px;font-size:14px">
 								Read more >		
 								</p>
@@ -45,269 +47,295 @@ a:active  { text-decoration:none;color:#CBCBCB;}
 					</a>
 				</li>
 			</volist>
-    </ul>
-</div>
-	</div>
+    		</ul>
+			</div>
 		</div>
-		<div class="nodata"></div> 
-		<div id="loading" class="loading-wrap"></div> 
-		<div id="load_img" style="width:32px;margin:0px auto;margin-top:30px;display:none;">
+	</div>
+
+	<div class="nodata"></div>
+	<div id="loading" class="loading-wrap"></div>
+	<div id="load_img" style="width:32px;margin:0px auto;margin-top:30px;display:none;">
 	<img src="../Public/image/loading.gif">
-       </div>
-		 <input type="hidden" value="{$get_category}" id="get_cate" />
-		 <input type="hidden" value="{$get_lang}" id="lang" />
-         <input type="hidden" value="{$get_type}" id="article_type" />
-		<div id="detail"></div>
+	</div>
+	<input type="hidden" value="{$get_category}" id="get_cate" />
+	<input type="hidden" value="{$get_lang}" id="lang" />
+	<input type="hidden" value="{$get_type}" id="article_type" />
+	<div id="detail" style="display: none;"></div>
+</div>
 <script type="text/javascript" src="../Public/js/masonry/masonry.pkgd.js"></script>
 <script type="text/javascript" src="../Public/js/masonry/masonry.pkgd.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="../Public/js/easyscroll/mousewheel.js"></script>
 <script type="text/javascript"  charset="utf-8" src="../Public/js/easyscroll/easyscroll.js"></script>
+<link rel="stylesheet" href="../Public/artDialog-master/css/ui-dialog.css">
+<script src="../Public/artDialog-master/dist/dialog-min.js"></script>
 <script type="text/javascript">
+	$(document).ready(function()
+	{
+		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
+				+'<a href="{:U(\'Blog/index\')}">'+"{$Think.lang.BLOG}"+'</a> ';
+
+	} );
 	function change_lang(lang,num){
 		var category = document.getElementById('get_cate').value;
 		window.location.href="/Blog/index/category/"+category+"/m_lang/"+lang+"/type/"+num;
 	}
-</script>
-<script type="text/javascript">
-  $(document).ready(function()
-   {		
-    		document.getElementById("pathguide").innerHTML += '<img src="../Public/image/arrow_footer.png"/>'
-    		+'<a href="{:U(\'Blog/index\')}">'+"{$Think.lang.BLOG}"+'</a> ';
-    		
-    } );
-</script>
 
 
-<script type="text/javascript">
-   
-$(function(){ 
-	 
-    var i = 1; //设置当前页数 
-    var stau = 0;
-   // console.log(winH);971
-   //console.log(i);
-     //滚动事件
-    var loading = $("#loading").data("on", false);//通过给loading这个div增加属性on，来判断执行一次json请求
-    $(window).scroll(function () { 	
-    if(loading.data("on")) return; 
-    var aa = $(document).height() - $(this).scrollTop() - $(this).height();
-        if(aa<2){ 
-        	loading.data("on", true).fadeIn(); //在这里将on设为true来阻止继续的ajax请求  
-        	document.getElementById("load_img").style.display="block";
+	$(function(){
 
-       //准备传到后台的数据
-       var data_new ={};
-           data_new ={
-           lang:9,
-       	   page:i,
-       	   category:document.getElementById("get_cate").value,
-       	   type:document.getElementById("article_type").value,
-       };
+		var i = 1; //设置当前页数
+		var stau = 0;
+		// console.log(winH);971
+		//console.log(i);
+		//滚动事件
+		var loading = $("#loading").data("on", false);//通过给loading这个div增加属性on，来判断执行一次json请求
+		$(window).scroll(function () {
+			if(loading.data("on")) return;
+			var aa = $(document).height() - $(this).scrollTop() - $(this).height();
+			if(aa<2){
+				loading.data("on", true).fadeIn(); //在这里将on设为true来阻止继续的ajax请求
+				document.getElementById("load_img").style.display="block";
 
+				//准备传到后台的数据
+				var data_new ={};
+				data_new ={
+					lang:9,
+					page:i,
+					category:document.getElementById("get_cate").value,
+					type:document.getElementById("article_type").value
+				};
 
-       $.getJSON("/Home/Blog/get_page",data_new,function(json){ 
-                if(json){ 
-                    var str = ""; 
-                    $.each(json,function(index,array){             
-                     str = "<li style='width:220px;margin:20px 20px 20px 20px;float:left'>";
-                     str += "<a class=\'lists\' href='javascript:get_info("+array['id']+");'data-id='"+array['id']+"' data-title='"+array['title']+"' >";
-                     str += "<div class=\'blog_small\' style='width:240px;height:380px;float:left'>";                
-                     str += "<img style='width:240px;height:150px;' src='"+array['background_image']+"'>"; 
-                     str += "<p class=\'title\' style='font-size:14px;color:#444;margin-top:10px;height:20px'>"+"<font>"+ array['title'].gbtrim(30,'...')+"</font>"+"</p>";	
-                     str += "<p class=\'date\' style='height:20px'>"+transformPHPTime(array['updatetime']) +"</p>";   
-                     str += "<p class=\'article\' style='height:110px;text-align:justify;line-height:24px;margin-top:5px;font-size:14px;'>"+array['article_text'].gbtrim(122,'...')+"</p>";
-                   	 str += "<p style='line-height:18px;color:#09C;height:18px;font-size:14px'>"+"Read more >"+"</p>";
-                     str += "</div>";
-                     str += "</a>";
-                     str += "</li>";  
-                        // alert(str);
-                        $("#new_fairs").append(str); 
-
-                    }); 
-                     i++;
-                     loading.data("on", false);   
-                }else{ 
-                    document.getElementById("load_img").style.display="none";
-                } 
-            }); 
-
-        }; 
-    }); 
-}); 
-
-String.prototype.gblen = function() { 
-var len = 0; 
-for (var i=0; i<this.length; i++) { 
-if (this.charCodeAt(i)>127 || this.charCodeAt(i)==94) { 
-len += 2; 
-    } else { 
-       len ++; 
-     } 
-   } 
-      return len; 
-} 
-String.prototype.gbtrim = function(len, s) { 
-		var str = ''; 
-		var sp = s || ''; 
-		var len2 = 0; 
-		for (var i=0; i<this.length; i++) { 
-		if (this.charCodeAt(i)>127 || this.charCodeAt(i)==94) { 
-			len2 += 2; 
-			} else { 
-		len2 ++; 
-		} 
-} 
-		if (len2 <= len) { 
-		return this; 
-			} 
-			len2 = 0; 
-		len = (len > sp.length) ? len-sp.length: len; 
-		for (var i=0; i<this.length; i++) { 
-		if (this.charCodeAt(i)>127 || this.charCodeAt(i)==94) { 
-		len2 += 2; 
-				} else { 
-				len2 ++; 
-				} 
-				if (len2 > len) { 
-			str += sp; 
-			break; 
-			} 
-			str += this.charAt(i); 
-					} 
-					return str; 
-			} 
-
- function transformPHPTime(time) 
-
-{
-　　　　var date = new Date(time * 1000);
-　　　　
-    Y = date.getFullYear() + '.';
-　　　　M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
-　　　　D = (date.getDate() + 1 < 10 ? '0'+(date.getDate()) : date.getDate()) ;
-　　　　h = date.getHours() + ':';
-　　　　m = date.getMinutes() + ':';
-　　　　s = date.getSeconds();
- 
-　　　　return Y+M+D;
-}
-</script>
-<script type="text/javascript">
-     function get_info(new_id) {
-                    show = 1;
-					var id = new_id;
-					var url = "{:U('Blog/detail')}";
-					var html = '';
-                    
-                   $.post(url, {id: id},function(data){
-
-							if (data.stauts == 1) {
-								var window_height = $(window).height();
-								if(window_height<800)
-								{
-									maxHeight=window_height*0.7;
-									_top=0;
-									_width='80%';
-								}else{
-									maxHeight='600px';
-									_top='115px';
-									_width='60%';
-								}
-								html = "<div class='detail_con' id='blog_header'>"+
-								    "<h1>" + data.title + "</h1>" +
-								    "<h2>by&nbsp;"+ data.author+"&nbsp-&nbsp" + data.updatetime + "</h2>" +
-									"<h3><img id='expanded_image' src=" + data.expanded_image + ' style="margin-top:10px;margin-bottom:10px;"></h3></div>';
-								$('#detail').html(html+"<div class='detail_con' id='blog_detail'><p>" + data.article_text + "</p></div>");
-								$('#detail').css('maxHeight',maxHeight);
-								$('#detail').css('overflow', 'auto');
-								art.dialog({
-									title: data.title,
-									content: document.getElementById('detail'),
-									width: _width,
-									top:_top,
-									lock:true,
-									fixed: true,
-									close: function() {
-										$('#detail').html('');
-										show = 0;
-									}
-								});
-							};
-					},"json");
-     };
-
-
-</script>
-		<script type="text/javascript">
-			//detail 弹出框
-			var show = 0;
-			$(function() {
-				$(".lists").click(function() {
-					// alert("click事件开始");
-					if(show ==1)
-					  return;
-					  
-					show = 1;
-					var id = $(this).data("id");
-					var title = $(this).data("title");
-					var url = "{:U('Blog/detail')}";
-					var html = '';
-                 
-					
-					$.post(url, {id: id},function(data) {
-							if (data.stauts == 1) {
-								var window_height = $(window).height();
-								if(window_height<800)
-								{
-									maxHeight=window_height*0.7;
-									_top=0;
-									_width='80%';
-								}else{
-									maxHeight='600px';
-									_top='115px';
-									_width='60%';
-								}
-								html = "<div class='detail_con' id='blog_header'>"+
-								    "<h1>" + data.title + "</h1>" +
-								    "<h2>by&nbsp;"+ data.author+"&nbsp-&nbsp" + data.updatetime + "</h2>" +
-									"<h3><img id='expanded_image' src=" + data.expanded_image + ' style="margin-top:10px;margin-bottom:10px;"></h3></div>';
-								$('#detail').html(html+"<div class='detail_con' id='blog_detail'><p>" + data.article_text + "</p></div>");
-								$('#detail').css('maxHeight',maxHeight);
-								$('#detail').css('overflow', 'auto');
-								art.dialog({
-									title: data.title,
-									content: document.getElementById('detail'),
-									width: _width,
-									top:_top,
-									lock:true,
-									fixed: true,
-									close: function() {
-										$('#detail').html('');
-										show = 0;
-									}
-								});
-							}
-					},"json");
-				});
-				$("#sub").click(function() {
-					
-					var rs = 1;
-					if($('#title').val() == ''){
-						rs = 2;
-						alert("The search content cannot be empty!");
-						return false;
+				$.getJSON("/Home/Blog/get_page",data_new,function(json){
+					if(json){
+						var str = "";
+						$.each(json,function(index,array){
+							str = "<li style='width:220px;margin:20px 20px 20px 20px;float:left'>";
+							str += "<a class=\'lists\' href='javascript:get_info("+array['id']+");'data-id='"+array['id']+"' data-title='"+array['title']+"' >";
+							str += "<div class=\'blog_small\' style='width:240px;height:380px;float:left'>";
+							str += "<img style='width:240px;height:150px;' src='"+array['background_image']+"'>";
+							str += "<p class=\'title\' style='font-size:14px;color:#444;margin-top:10px;height:20px'>"+"<font>"+ array['title'].gbtrim(30,'...')+"</font>"+"</p>";
+							str += "<p class=\'date\' style='height:20px'>"+transformPHPTime(array['updatetime']) +"</p>";
+							str += "<p class=\'article\' style='height:110px;text-align:justify;line-height:24px;margin-top:5px;font-size:14px;'>"+array['article_text'].gbtrim(122,'...')+"</p>";
+							str += "<p style='line-height:18px;color:#09C;height:18px;font-size:14px'>"+"Read more >"+"</p>";
+							str += "</div>";
+							str += "</a>";
+							str += "</li>";
+							// alert(str);
+							$("#new_fairs").append(str);
+						});
+						i++;
+						loading.data("on", false);
 					}else{
-						if(rs == 1){
-							$('form').submit();
-						}else{
-							return false;
-						}
+						document.getElementById("load_img").style.display="none";
 					}
 				});
-			});
-			function detail_close(){
-					$('#detail').fadeOut();
 			}
-		</script>
+		});
+	});
+
+
+
+	String.prototype.gblen = function() {
+		var len = 0;
+		for (var i=0; i<this.length; i++) {
+			if (this.charCodeAt(i)>127 || this.charCodeAt(i)==94) {
+				len += 2;
+			} else {
+				len ++;
+			}
+		}
+		return len;
+	}
+	String.prototype.gbtrim = function(len, s) {
+		var str = '';
+		var sp = s || '';
+		var len2 = 0;
+		for (var i=0; i<this.length; i++) {
+			if (this.charCodeAt(i)>127 || this.charCodeAt(i)==94) {
+				len2 += 2;
+			} else {
+				len2 ++;
+			}
+		}
+		if (len2 <= len) {
+			return this;
+		}
+		len2 = 0;
+		len = (len > sp.length) ? len-sp.length: len;
+		for (var i=0; i<this.length; i++) {
+			if (this.charCodeAt(i)>127 || this.charCodeAt(i)==94) {
+				len2 += 2;
+			} else {
+				len2 ++;
+			}
+			if (len2 > len) {
+				str += sp;
+				break;
+			}
+			str += this.charAt(i);
+		}
+		return str;
+	}
+
+	function transformPHPTime(time)
+
+	{
+		var date = new Date(time * 1000);
+
+		Y = date.getFullYear() + '.';
+		M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
+		D = (date.getDate() + 1 < 10 ? '0'+(date.getDate()) : date.getDate()) ;
+		h = date.getHours() + ':';
+		m = date.getMinutes() + ':';
+		s = date.getSeconds();
+
+		return Y+M+D;
+	}
+	function get_info(new_id) {
+		show = 1;
+		var id = new_id;
+		var url = "{:U('Blog/detail')}";
+		var html = '';
+
+		$.post(url, {id: id},function(data){
+
+			if (data.stauts == 1) {
+				var window_height = $(window).height();
+				if(window_height<800)
+				{
+					maxHeight=window_height*0.7;
+					_top=0;
+					_width='80%';
+				}else{
+					maxHeight='600px';
+					_top='115px';
+					_width='60%';
+				}
+				html = "<div class='detail_con' id='blog_header'>"+
+						"<h1>" + data.title + "</h1>" +
+						"<h2>by&nbsp;"+ data.author+"&nbsp-&nbsp" + data.updatetime + "</h2>" +
+						"<h3><img id='expanded_image' src=" + data.expanded_image + ' style="margin-top:10px;margin-bottom:10px;"></h3></div>';
+				$('#detail').html(html+"<div class='detail_con' id='blog_detail'><p>" + data.article_text + "</p></div>");
+				$('#detail').css('maxHeight',maxHeight);
+				$('#detail').css('overflow', 'auto');
+				art.dialog({
+					title: data.title,
+					content: document.getElementById('detail'),
+					width: _width,
+					top:_top,
+					lock:true,
+					fixed: true,
+					close: function() {
+						$('#detail').html('');
+						show = 0;
+					}
+				});
+			}
+		},"json");
+	}
+
+	//detail 弹出框
+	var show = 0;
+	$(function() {
+		$(".lists").click(function() {
+			// alert("click事件开始");
+			if(show ==1)
+				return;
+
+			show = 1;
+			var id = $(this).data("id");
+			var title = $(this).data("title");
+			var url = "{:U('Blog/detail')}";
+			var html = '';
+
+
+			$.post(url, {id: id},function(data) {
+				if (data.stauts == 1) {
+					var window_height = $(window).height();
+					if(window_height<800)
+					{
+						maxHeight=window_height*0.7;
+						_top=0;
+						_width='80%';
+					}else{
+						maxHeight='600px';
+						_top='115px';
+						_width='60%';
+					}
+					html = "<div class='detail_con' id='blog_header'>";
+						html+="<div>";
+								html+="<div style='float:left;'>";
+								html+="<h1>" + data.title + "</h1>";
+								html+="<h2>by&nbsp;"+ data.author+"&nbsp-&nbsp" + data.updatetime + "</h2>";
+								html+="</div>";
+						html+="</div>";
+//						html+="<div style='float:right;'>";
+//						html+="<input type='text' style='width:310px;border:1px #DDDDDD solid;visibility:hidden; margin-right:20px;'  id='show_detail'  value='http://www.allocacoc.com/Blog/details/id/"+id+"'readonly='readonly' />";
+//						html+="<img src='../Public/image/share.jpg' style='cursor:pointer;margin-right:10px;' onclick='javascript:select_copy();'/>";
+//						html+="</div>";
+						html+="<div style='float:right;'>";
+						html+="<img src='../Public/image/share.jpg' style='cursor:pointer;margin-right:10px;' onclick='javascript:select_copy();'/>";
+						html+="</div>";
+						html+="<div style='float:right;'>";
+						html+="<input type='text' style='width:310px;height: 23px; border:1px #DDDDDD solid;display:none; margin-right:20px;'  id='show_detail'  value='http://www.allocacoc.com/Blog/details/id/"+id+"'readonly='readonly' />";
+						html+="</div>";
+
+						html+="<div style='clear:both;'>";
+						html+="<h3><img id='expanded_image' src=" + data.expanded_image + ' style="margin-top:10px;margin-bottom:10px;"></h3>';
+						html+="<div class='detail_con' id='blog_detail'><p>" + data.article_text + "</p></div>";
+						html+="</div>";
+					html+="</div>";
+					$('#detail').html(html);
+					$('#detail').css('maxHeight',maxHeight);
+					$('#detail').css('overflow', 'auto');
+					art.dialog({
+						title: data.title,
+						content: document.getElementById('detail'),
+						width: _width,
+						top:_top,
+						lock:true,
+						fixed: true,
+						close: function() {
+							$('#detail').html('');
+							show = 0;
+						}
+					});
+				}
+			},"json");
+		});
+		$("#sub").click(function() {
+
+			var rs = 1;
+			if($('#title').val() == ''){
+				rs = 2;
+				alert("The search content cannot be empty!");
+				return false;
+			}else{
+				if(rs == 1){
+					$('form').submit();
+				}else{
+					return false;
+				}
+			}
+		});
+	});
+	function select_copy(){
+		$("#show_detail").slideToggle();
+//		$("#show_detail").css("visibility","visible");
+//		const range = document.createRange();
+//		range.selectNode(document.getElementById('show_detail'));
+//		const selection = window.getSelection();
+//		if(selection.rangeCount > 0) selection.removeAllRanges();
+//		selection.addRange(range);
+		var i=document.getElementById("show_detail");
+		i.select();
+		document.execCommand('copy');
+	}
+	function detail_close(){
+		$('#detail').fadeOut();
+	}
+</script>
+
+
 
 

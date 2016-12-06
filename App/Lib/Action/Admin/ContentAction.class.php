@@ -22,9 +22,9 @@ class ContentAction extends AdminbaseAction
     {
         parent::_initialize();
         $module =$this->module[$this->moduleid]['name'];
+		//echo $module;//Design_order
         $this->dao = D($module);
         $fields = F($this->moduleid.'_Field');
-
     		foreach($fields as $key => $res){
     			$res['setup']=string2array($res['setup']);
     			$this->fields[$key]=$res;    
@@ -33,10 +33,9 @@ class ContentAction extends AdminbaseAction
     		unset($fields);
     
     		unset($res);
-    
+
+//			var_dump($this->fields);
     		$this->assign ('fields',$this->fields);
-
-
     }
 
 
@@ -73,7 +72,7 @@ class ContentAction extends AdminbaseAction
 
 		$this->assign ( 'form', $form );
 
-		$template =  file_exists(THEME_PATH.MODULE_NAME.'_edit.html') ? MODULE_NAME.':edit' : 'Content:edit';		
+		$template =  file_exists(THEME_PATH.MODULE_NAME.'_edit.html') ? MODULE_NAME.':edit' : 'Content:edit';
 
 		$this->display ( $template);
 
@@ -110,6 +109,7 @@ class ContentAction extends AdminbaseAction
 
 
 		$template =  file_exists(THEME_PATH.MODULE_NAME.'_edit.html') ? MODULE_NAME.':edit' : 'Content:edit';
+
 		
 		$this->display ( $template);
 
@@ -267,12 +267,11 @@ class ContentAction extends AdminbaseAction
 
 		$_POST['updatetime'] = $_POST['createtime'];	
 
-     $_POST['userid'] = $module ? $userid : $_SESSION['userid'];
+		$_POST['userid'] = $module ? $userid : $_SESSION['userid'];
 
 		$_POST['username'] = $module ? $username : $_SESSION['username'];
 
 		if($_POST['style_color']) $_POST['style_color'] = 'color:'.$_POST['style_color'];
-
 
 		if($_POST['style_bold']) $_POST['style_bold'] =  ';font-weight:'.$_POST['style_bold'];
 

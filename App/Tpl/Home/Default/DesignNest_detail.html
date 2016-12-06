@@ -33,7 +33,7 @@
 					
 					<div style="width:430px;height:340px;margin-top:10px;">
 						<img id="scrollpic" src="{$fund['expanded_img']}" style="width:400px;height:320px;padding-left:20px;"  />
-						<li id="start"></li>
+						<li style="list-style-type:none;" id="start"></li>
 					</div>
 										
 				</div>
@@ -44,7 +44,7 @@
 				
 				
 				<form>
-				<div id="top-right" style="width:580px;height:500px; float:right">
+				<div id="top-right" style="width:580px;height:400px; float:right">
 					<ul>
 						 <font style="font-size:30px;font-weight:bold;"> {$fund['title']}  </font>
 
@@ -178,10 +178,13 @@
 			<notempty name="fund['videourl']">
 				<div style="margin:0px auto;margin-top:10px;width:1080px;margin-bottom:5px;border-bottom: 1px solid #CCC;">
 			  </div>
-			    
-  			<div id="info" style="margin:0px auto;margin-top:1px;width:1080px;margin:20px 0px;background-color:#363636;">  				   				 
-  				  <div style="width:608px;margin:0px auto;">{$fund['videourl']|stripslashes}</div>
-  			</div>
+
+  			<!--<div id="info" style="margin:0px auto;margin-top:1px;width:1080px;margin:20px 0px;background-color:#363636;">  				   				 -->
+  				  <!--<div style="width:608px;margin:0px auto;">{$fund['videourl']|stripslashes}</div>-->
+  			<!--</div>-->
+				<div id="info" style="margin:0px auto;margin-top:1px;width:1080px;margin:20px 0px;background-color:#363636;height:auto;">
+					<div style="width:608px;margin:0px auto;height:auto;">{$fund['videourl']|stripslashes}</div>
+				</div>
 			</notempty>
 		
 

@@ -1,5 +1,6 @@
-
-
+<!--
+<div style="width:100%;height:30px;background:#874597;"></div>
+-->
 <!--<div style="width:auto;height:30px;background: #884697;min-width: 1280px;">-->
 	<!--<div style="width:1040px;height: auto;margin: 0 auto;padding: 0">-->
 			<!--<div style="float:right;">-->
@@ -9,27 +10,25 @@
 			<!--</div>-->
 	<!--</div>-->
 <!--</div>-->
-<div style="height:100px;min-width: 1280px;">
-	<div style="width:1080px;height: auto;margin: 0 auto;padding: 0">
-		<div style="width:30%;float:left;height:92px;margin-top:7px;">
-			<div style="float:left;"><a href="{:U('DesignNest/index')}"><img src="../Public/image/DN_logo_s.jpg" ></a></div>
-			<div style="float:left;margin-top:22px;"><font style=" margin-left:5px; color:#884697;">a crowdfunding platform</font></div>
-		</div>
 
-
-		<div style="width:300px;float:right;margin-top:32px;height:33px;border:1px solid #DDD;background-color:#FAFAFA;border-radius:25px;-moz-border-radius:25px;">
-			<div style="float:right;margin:0px auto;margin-right:15px;margin-top:8px;border-left:1px solid #DDD;width:30px;">
-				<img src="../Public/image/search.png" style="float:right;" onclick="search();"/>
-			</div>
-			<div style="width:230px;float:left;margin-top:8px;">
-				<input id="search_tag" type="text" style="background:transparent;width:230px;padding-left:15px;font-size:12px;color:#999;"
-					   value="<notempty name="keyword">{$keyword} <else/>Insert tag to find...</notempty>"
-				onblur="if(value ==''){ value = 'Insert tag to find...';this.style.color='#999';}"
-				onfocus="if (value =='Insert tag to find...'){value ='';this.style.color='#333';}"
-				onkeydown="keyDown(event);" />
-			</div>
-		</div>
+<div style="width:100%;min-width:1080px;height:100px;">
+	<div style="width:100px;float:left;margin-left:55px;height:92px;margin-top:7px;">
+			<a href="{:U('DesignNest/index')}"><img src="../Public/image/DN_logo_s.png" height="85px"></a>
 	</div>
+	
+	
+	<div style="width:300px;float:right;margin-top:32px;margin-right:50px;height:33px;border:1px solid #DDD;background-color:#FAFAFA;border-radius:25px;-moz-border-radius:25px;"> 
+		<div style="float:right;margin:0px auto;margin-right:15px;margin-top:8px;border-left:1px solid #DDD;width:30px;">
+   	   	 <img src="../Public/image/search.png" style="float:right;" onclick="search();"/>
+   	</div>
+   	<div style="width:230px;float:left;margin-top:8px;"> 
+   	   	<input id="search_tag" type="text" style="background:transparent;width:230px;padding-left:15px;font-size:12px;color:#999;" 
+   	    value="<notempty name="keyword">{$keyword} <else/>Insert tag to find...</notempty>" 
+   	   onblur="if(value ==''){ value = 'Insert tag to find...';this.style.color='#999';}"
+   	    onfocus="if (value =='Insert tag to find...'){value ='';this.style.color='#333';}"
+   	    onkeydown="keyDown(event);" />
+   	</div>
+	</div>  
 </div>
 
 

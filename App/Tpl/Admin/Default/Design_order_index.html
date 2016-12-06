@@ -2,6 +2,7 @@
 
   <tr>
 
+
     <td class="search"><form action="{:U($module_name.'/index')}" method="get">
 
         <input type="hidden" name="g" value="{$Think.GROUP_NAME}" />
@@ -14,8 +15,8 @@
 
         <select name="searchtype" id="searchtype">
         	
-          <if condition="$fields['winner_name']"><option value="winner_name"
-            <eq  name="searchtype" value='winner_name'>selected="selected"</eq>
+          <if condition="$fields['winner_name']">
+            <option value="winner_name"<eq  name="searchtype" value='winner_name'>selected="selected"</eq>
             >designwinner_name
             </option>
           </if>
@@ -362,6 +363,7 @@ function export_order(){
 	 var index=myselect.selectedIndex ; // selectedIndex�����������ѡ�����index
 
 	 var searchtype = myselect.options[index].value;// myselect.options[index].text;
+//  alert(searchtype);
   //  alert(index);
 	 var title=document.getElementById("title").value;
 

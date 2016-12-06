@@ -68,7 +68,7 @@
       </div> 
       
       
-      <div class="list_design clearfix">
+      <div class="list_design clearfix">      	
       	<ul id="product_list">
       		
       		<volist name="fund_list" id="vo" key="k">
@@ -121,7 +121,16 @@
       		</volist>
       		
       	</ul>
+      	      	
       </div>
+      
+      <div id="loading_content" style="margin:0px auto;margin-top:30px;width:1080px;height:85px;">		  		
+  			<div style="height:45px;width:235px;background-color:#884697;text-align:center;border-radius:45px;margin:0px auto;" >
+  		    <a href="javascript:load_more();" > 
+  		  	 <font style="font-size:16px;font-weight: bold;color:#FFF;line-height:45px;">load more</font>
+  		    </a> 		
+        </div>  
+    	</div>
       
      
       
@@ -168,7 +177,9 @@
     				document.getElementById("sort_img_1").src = '../Public/image/sort_desc_grey.png';
     				document.getElementById("sort_img_1").style.marginTop='0px';
     			}
-    		} 
+    		}
+    		
+    		document.getElementById("curr_count").value = 16; 
     } );
 </script>
 
@@ -220,18 +231,24 @@
   */
   
   $(window).scroll(function(){
+  	//alert("height:"+$(document).height() +",scrolltop:" +$(this).scrollTop()+",cu height:"+  $(this).height());
      if ($(document).height() - $(this).scrollTop() - $(this).height()<100) {
-     	var temp1 = parseInt(document.getElementById("curr_count").value );
-     	var temp2 = parseInt(document.getElementById("count").value) ;
-
-	    if( temp1< temp2){
-        document.getElementById("loading").style.display="block";
-        ajax_load_data();
-      }
+     	load_more();
      }
   });
    
-   
+  function load_more(){
+  	
+  	var temp1 = parseInt(document.getElementById("curr_count").value );
+   	var temp2 = parseInt(document.getElementById("count").value) ;
+
+    if( temp1< temp2){
+      document.getElementById("loading").style.display="block";
+      ajax_load_data();
+    }else{
+    	document.getElementById("loading_content").style.display="none";
+    }
+  }
    
   function ajax_load_data()
   {

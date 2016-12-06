@@ -9,12 +9,22 @@
  *
  
  */
-ini_set( "error_log",  "D:/tmp/logs/".date('d').".log");//设置保存错误日志的地址
 require_once(ROOT.'/Stripe/init.php');
 if(!defined("App")) exit("Access Denied");
 
 class CartAction extends BaseAction
 {
+	/**
+	 * alipay api function
+	 */
+	//在类初始化方法中，引入相关类库
+	public function _initialize() {
+		vendor('Alipay.Corefunction');
+		vendor('Alipay.Md5function');
+		vendor('Alipay.Notify');
+		vendor('Alipay.Submit');
+	}
+
 	/**
 	 * add to cart
 	 */
@@ -344,142 +354,6 @@ class CartAction extends BaseAction
 
 
 
-//    public function updateCart()
-//    {
-////		$this->ajaxReturn("这里");
-//    	if (IS_POST)
-//    	{
-//    		$productid = intval($_POST['productid']);
-//    		$typeid = intval($_POST['typeid']);
-//    		if($_POST['action']=='add')
-//    		{
-//    			$qty = intval($_POST['qty']);
-//
-//    			$exist = 0;
-//    			if(session('cart'))
-//    			{
-//    				$cart = session('cart');
-//    				foreach ($cart as $k=>$v)
-//    				{
-//    					if($v['productid']==$productid && $v['typeid']==$typeid)
-//    					{
-//    						$exist = 1;
-//    						$qty = intval($v['qty']) + $qty;
-//    						$cart[$k]['qty'] =  $qty;
-//    					}
-//    				}
-//
-//    				if($exist == 0)
-//    				{
-//    					  $cart[] = array('productid'=>$productid,'qty'=>$qty,'typeid'=>$typeid);
-//    				}
-//
-//
-//    			}
-//    			else
-//    			{
-//    					  $cart[] = array('productid'=>$productid,'qty'=>$qty,'typeid'=>$typeid);
-//    			}
-//
-//    			$total = 0;
-//    			foreach ($cart as $k=>$v)
-//    			{
-//    				$total = intval($v['qty']) + $total;
-//    			}
-//    			session('qtytotal',$total);
-//    			//error_log(json_encode($cart));
-//    			session('cart',$cart);
-//
-//    			$data = array('stauts' => 1, 'qty' => $total);
-//
-//
-//  				echo json_encode($data);
-//
-//  				exit ;
-//
-//    		}
-////
-////
-//    		if($_POST['action']=='update')
-//    		{
-//  				$qty = intval($_POST['qty']);
-//
-//    			if(session('cart'))
-//    			{
-//    				$cart = session('cart');
-//    				foreach ($cart as $k=>$v)
-//    				{
-//    					if($v['productid']==$productid && $v['typeid']==$typeid)
-//    					{
-//    						$cart[$k]['qty'] =  $qty;
-//    					}
-//    				}
-//    				$total = 0;
-//    				foreach ($cart as $k=>$v)
-//      			{
-//      				$total = intval($v['qty']) + $total;
-//      			}
-//      			session('qtytotal',$total);
-//      			//error_log(json_encode($cart));
-//      			session('cart',$cart);
-//
-//      			//if typeid not null, find price of type
-//      			if($typeid == -1)
-//      			{
-//      				$product = M('design_winner')->where('id='.$productid)->find();
-//      				$price = $product['price'];
-//      			}
-//
-//      			if($typeid != -1)
-//      			{
-//      				$version = M('designwinner_price')->where('id='.$typeid)->find();
-//      				$price = $version['price'];
-//      			}
-//
-//
-//      			$data = array('stauts' => 1, 'qty' => $total,'subtotal'=>$this->getTotal($price,$qty));
-//      			//error_log(json_encode($data));
-//  				  echo json_encode($data);
-//  				  exit ;
-//      		}
-//
-//    		}
-//
-//    		if($_POST['action']=='del')
-//    		{
-//    			if(session('cart'))
-//    			{
-//    				$cart = session('cart');
-//    				$newcart = array();
-//    				foreach ($cart as $k=>$v)
-//    				{
-//    					if($v['productid']!=$productid || $v['typeid']!=$typeid )
-//    					{
-//    						$newcart[] = $v;
-//    					}
-//    				}
-//
-//
-//    				$total = 0;
-//    				foreach ($newcart as $k=>$v)
-//      			{
-//      				$total = intval($v['qty']) + $total;
-//      			}
-//      			session('qtytotal',$total);
-//      			//error_log(json_encode($cart));
-//      			session('cart',$newcart);
-//      			$data = array('stauts' => 1, 'qty' => $total);
-//  				  echo json_encode($data);
-//  				  exit ;
-//      		}
-//
-//
-//
-//    		}
-//
-//    	}
-//    }
-
 
 	//check stock,and change stock qty, if not paid, update stock
 	function checkStock($cart, &$msg)
@@ -679,7 +553,7 @@ class CartAction extends BaseAction
 
 		if ($flag == 0) {
 			$model->rollback();
-			$msg = 'Sorry, Something wrong, please delete your browser cookies and try again later!';
+			$msg = 'Sorry, something went wrong, please delete your browser cookies and try again later！';
 			return false;
 		} else {
 			$model->commit();
@@ -839,7 +713,7 @@ class CartAction extends BaseAction
 			$countryid = $ids[4];
 			$ship_price = M('ship_price_new')->where(array('id' => $countryid))->find();
 			if (empty($ship_price)) {
-				$rs = array('stauts' => 0, 'msg' => 'Sorry, We Cannot ship product to your country now!');
+				$rs = array('stauts' => 0, 'msg' => 'Sorry, We currently are not able to ship to your country yet!');
 				echo json_encode($rs);
 				exit;
 			}
@@ -902,7 +776,7 @@ class CartAction extends BaseAction
 //				exit;
 				$ship_price = M('ship_price_new')->where(array('id' => $countryid))->find();
 				if (empty($ship_price)) {
-					$rs = array('stauts' => 0, 'msg' => 'Sorry, We Cannot ship product to your country now!');
+					$rs = array('stauts' => 0, 'msg' => 'Sorry, we currently are not able to ship to your country yet!');
 					echo json_encode($rs);
 					exit;
 				}
@@ -951,7 +825,7 @@ class CartAction extends BaseAction
 				$productid=$ids[0];//必须
 				$address_infoid="address_info"."-".$productid;
 				$info=cookie($address_infoid);
-				$countryid=$info[8];//必须
+				$countryid=$info[8];//必须 这个地址id是现场取得
 
 				$product_fee=$ids[1];
 				$ship_fee=$ids[2];
@@ -963,7 +837,7 @@ class CartAction extends BaseAction
 					$qty=$value['qty'];//必须
 					$ship_price = M('ship_price_new')->where(array('id' => $countryid))->find();
 					if (empty($ship_price)) {//选中的国家 表里面没有
-						$rs = array('stauts' => 0, 'msg' => 'Sorry, We Cannot ship product to your country now!');
+						$rs = array('stauts' => 0, 'msg' => 'Sorry, we currently are not able to ship to your country yet!');
 						error_log("check_ship_fee".json_encode($rs));
 
 //					echo json_encode($rs);
@@ -999,9 +873,7 @@ class CartAction extends BaseAction
 				foreach($val as $key=>$value){
 					$new_cart[$k][$key]=$value;
 				}
-
 			}
-
 		}
 //		dump($new_cart);
 		return $new_cart;
@@ -1010,28 +882,29 @@ class CartAction extends BaseAction
 
 	public function save_address(){
 //		cookie("address_arr",null);
+		//$address_arr 用来存地址的，只要是添加的地址都保存下来 为二维数组array(array(productid countryid countryname postcode firstname lastname phone...))
 		$address_arr=array();
 		$arr=unserialize(cookie("address_arr"));
 //		$this->ajaxReturn(json_encode($arr));
 		if(!empty($arr)){//不为空
 			$address_arr=$arr;
 		}
-		error_log("read address arr:".json_encode($arr));
+		error_log("read address arr:".json_encode($arr)."empty is false");
 
 		if(IS_POST){
-
 			if(isset($_POST['stat'])&&$_POST['stat']==1){
+				if(count($arr)==0){
+					$this->ajaxReturn("false");
+				}
 				$this->ajaxReturn(json_encode($arr));
 			}else if(isset($_POST['stat'])&&$_POST['stat']==2){
 				$nowproduct_id=$_POST['nowproduct_id'];//这是是需要新添加的地址
-				$product_id=$_POST['product_id'];//这个是选中的地址productid
-//				$address_infoid="address_info"."-".$product_id;
-//				$info_last=cookie($address_infoid);
-//				$info_last[0]=$nowproduct_id;//修改它里面的productid为新的
+				$address_id=$_POST['address_id'];//这个是选中的地址time()
+
 
 				//先拿到原始的，点击连接选中的那个地址的信息，这个信息是在address_arr里
 				foreach($address_arr as $val){
-					if($val[0]==$product_id){
+					if($val[10]==$address_id){
 						$info_last=$val;
 					}
 				}
@@ -1039,51 +912,48 @@ class CartAction extends BaseAction
 				//然后将新的信息存到cookie里对应新的id
 				$address_infonowid="address_info"."-".$nowproduct_id;
 				cookie($address_infonowid,$info_last,C('COOKIE_TIME'));
-				$this->ajaxReturn(cookie($address_infonowid));
+				$this->ajaxReturn($info_last[10]);
 				//如果我们在第二个订单的地址位置直接选择第一个订单所用的地址，则这时候就会出现一个问题，第二个订单是可以被写入正确信息的，
 				//但是如何确定第二个订单的已选择三个字 显示在第一个地址的右边呢？ 因为第一个地址里面存的Productid是第一个订单的，如何让第二个订单找到这个地址呢？ 难道必须引入一个addressid?（暂时没有要求 显示已选择）
 
 				//现在的问题 就是如何确定 当用户点击添加地址 ，并且地址只有一条的时候 ，如何让第三个订单在第一个地址的右边显示已选择，因为一二三 这三个订单公用一个地址。
+			}else if(isset($_POST['stat'])&&$_POST['stat']==3){
+
+			}else if(isset($_POST['stat'])&&$_POST['stat']==4){
+//				$product_id=$_POST['product_id'];
+				$address_id=$_POST['address_id'];//这个是选中的地址time()
+				foreach($address_arr as &$val){
+					if($val[10]==$address_id){
+						$val=array();
+					}
+				}
+				$address_arr=array_filter($address_arr);
+				$address_arr=array_values($address_arr);
+				if(count($address_arr)==0){
+					cookie("address_arr",null);
+				}else{
+					cookie("address_arr",serialize($address_arr),C('COOKIE_TIME'));
+				}
+
+//				$address_infonowid="address_info"."-".$product_id;
+//				cookie($address_infonowid,null);
+				//返回删完之后的新数组
+				$this->ajaxReturn(json_encode($address_arr));
 			}
 
-			//添加新地址的时候，默认就更新了上次的地址
 			$info=$_POST['info'];
 			$productid=$info[0];
+			$info[10]=time();
 			$address_info="address_info"."-".$productid;
-			cookie($address_info,$info,3600);
-
-//			$firstname=$info[1];
-//			$lastname=$info[2];
-//			$phone=$info[3];
-//			$company=$info[4];
-//			$address=$info[5];
-//			$city=$info[6];
-//			$country=$info[7];//第7个是国家的名字
-//			$postcode=$info[9];
-//			$str=$company.",".$address.",".$city.",".$country.",".$firstname.",".$lastname.",".$phone.",".$postcode;
-			//这里要遍历判断，如果是新的地址就要加进去，不是新的订单就执行更新
-			$flag=0;
-			foreach($address_arr as &$val){
-				if($val[0]==$productid){
-					$val=$info;
-					$flag=1;
-				}
-			}
-			if($flag==0){ //如果没有这条则加入新的
-				$address_arr[]=$info;//二维数组
-			}
+			cookie($address_info,$info,C('COOKIE_TIME'));
+			$address_arr[]=$info;
 			error_log("print address arr".json_encode($address_arr));
 
 			cookie("address_arr",serialize($address_arr),C('COOKIE_TIME'));
 //			$this->ajaxReturn(json_encode(cookie($address_info)));
-			$this->ajaxReturn(json_encode(cookie("address_arr")));
+			$this->ajaxReturn($info[10]);
 			//前端的地址显示最好改成从cookie里面拿取的，如果cookie过期了 就没有地址了
-
-
 		}
-
-
-
 	}
 
 	/**
@@ -1109,10 +979,8 @@ class CartAction extends BaseAction
 //			$this->ajaxReturn($countryid." ".$info." ".$country);
 
 			//calculate  total price，according to session data
-			$total = cookie('allo_pay_total');
-//			$total = cookie('totalprice'); //这里应该是总的要支付得
-//			$shipfee = cookie('allo_shipfee');//这里是总运费
-//			$price_total = cookie('allo_total');//这里是物品的总价格
+//			$total = cookie('allo_pay_total');
+			$total = 0;
 			$data = array(
 //				'zip' => trim($_POST['zip']),
 				'email' => trim($_POST['email']),
@@ -1124,6 +992,9 @@ class CartAction extends BaseAction
 				'updatetime' => time());
 			//多条订单 通过遍历 ，然后对每一条订单都写入顾客信息
 			$order_id_arr = cookie('order_id_arr');
+			if(empty($order_id_arr)){
+				$this->ajaxReturn(json_encode($order_id_arr));
+			}
 			$orderid = "";
 			foreach ($order_id_arr as $k => $val) {
 				$order_id = $val;
@@ -1132,20 +1003,28 @@ class CartAction extends BaseAction
 //				$data['designwinner_id']=$k;
 				$where['orderid'] = $order_id;
 				//存之前先判断当前order_id是否为空 不过如果为空 也找不到数据库记录 所以也不影响 ，但是可以给顾客返回一个错误提示
+				$order_fee=$model->table(C('DB_PREFIX').'design_order')->where($where)->getField('total');
+				if(empty($order_fee)){
+					$flag=0;
+				}
+				error_log("order_fee".$order_fee."\n");
+				$order_fee=floatval(substr($order_fee,1));
+				$total+=$order_fee;
 				$flag = $model->table(C('DB_PREFIX') . 'design_order')->where($where)->save($data);
 			}
+
 //      		$order_id =  cookie('allo_order_id');
 			//如果order id是存在cookie里 则我要先根据时间进行一个判断 ，不然在表格中存的这条订单 order id 一条就是空的了
 			if (!$flag || $flag < 1) {
-				$rs = array('status' => 0, 'msg' => 'Submitted Failure!');
+				$rs = array('status' => 0, 'msg' => 'Failed to submit!');
 				$model->rollback();
 				echo json_encode($rs);
-				error_log("failed to save email address"."\r\n",3,"/tmp/error/errors.log");
 			} else {
 				$model->commit();
-				error_log("email data have been saved"."\r\n",3,"/tmp/error/errors.log");
+				error_log("email data have been saved");
 //				$this->ajaxReturn('存到数据库成功'.json_encode($record));
 			}
+			error_log("total_fee".$total."\n");
 
 //			foreach($order_id_arr as $k=>$val){
 //				$order_id=$val;
@@ -1154,8 +1033,8 @@ class CartAction extends BaseAction
 //			}
 			// 因为cookie存在本地所以不能再notify中删除
 			//modify order_qty
-			$order_qty_arr = cookie('order_qty_arr');
-			$qtystr=urlencode(serialize($order_qty_arr));
+//			$order_qty_arr = cookie('order_qty_arr');
+//			$qtystr=urlencode(serialize($order_qty_arr));
 //			$qtystr="sfsfsfsfsf";
 			//遍历购物车 将已经支付了的商品从购物车列表里删掉
 			$cartlist = cookie('cart_list');
@@ -1172,12 +1051,12 @@ class CartAction extends BaseAction
 				//build payment url,return ,then javascript reward to paypal
 
 				//$formurl = 'https://www.paypal.com/cgi-bin/webscr';//正试提交地址
-				$gateway = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';//测试提交地址
-//				$gateway = C('PAYPAL_GATEWAY');
-//				$account = C('PAYPAL_ACCOUNT');
+//				$gateway = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';//测试提交地址
+				$gateway = C('PAYPAL_GATEWAY');
+				$account = C('PAYPAL_ACCOUNT');
 //				$account = 'jing.wang@allocacoc.com.cn';
 //				$account = '624696365@qq.com';
-				$account = 'arthur.limpens@allocacoc.com';
+//				$account = 'arthur.limpens@allocacoc.com';
 				$pp_info = array();// 初始化准备提交到Paypal的数据
 				$pp_info['cmd'] = '_xclick';// 告诉Paypal，我的网站是用的我自己的购物车系统
 				$pp_info['business'] = $account;// 告诉paypal，我的（商城的商户）Paypal账号，就是这钱是付给谁的
@@ -1185,27 +1064,92 @@ class CartAction extends BaseAction
 				$pp_info['amount'] = $total; // 告诉Paypal，我要收多少钱
 				$pp_info['currency_code'] = 'USD';
 				//$pp_info['currency_code'] = 'USD';// 告诉Paypal，我要用什么货币。这里需要注意的是，由于汇率问题，如果网站提供了更改货币的功能，那么上面的amount也要做适当更改，paypal是不会智能的根据汇率更改总额的
-				$pp_info['return'] = 'http://webshop.allocacoc.com/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当用户成功付款后paypal会将用户自动引导到此页面。如果为空或不传递该参数，则不会跳转
+//				$pp_info['return'] = 'http://webshop.allocacoc.com/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当用户成功付款后paypal会将用户自动引导到此页面。如果为空或不传递该参数，则不会跳转
+//				$pp_info['return'] = 'http://103.12.68.82/Cart/index.html';
+				$pp_info['return'] = C('PAYPAL_RETURN');
 				$pp_info['invoice'] = $orderid;
 				$pp_info['charset'] = 'utf-8';
 				$pp_info['no_shipping'] = '1';
 				$pp_info['no_note'] = '1';
-				$pp_info['cancel_return'] = 'http://webshop.allocacoc.com/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面
-//				$pp_info['notify_url'] = 'http://webshop.allocacoc.com/Cart/paypal_notify/orderid/' . $orderid . '/';
-				$pp_info['notify_url'] = 'http://webshop.allocacoc.com/Cart/paypal_notify/orderid/' . $orderid . '/qtystr/'.$qtystr.'/';
+//				$pp_info['cancel_return'] = 'http://103.12.68.82/Cart/index.html';//'http://webshop.allocacoc.com/Product/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面
+				$pp_info['cancel_return'] = C('PAYPAL_CANCEL_RETURN');//'http://webshop.allocacoc.com/Product/index.html';// 当跳转到paypal付款页面时，用户又突然不想买了。则会跳转到此页面
+				$pp_info['notify_url'] = 'http://www.allocacoc.com/Cart/paypal_notify/orderid/' . $orderid . '/';
+//				$pp_info['notify_url'] = 'http://103.12.68.82/Cart/paypal_notify/orderid/' . $orderid . '/qtystr/'.$qtystr.'/';
 
 				//'http://www.domain.com/index.php/design/paypal_notify/orderid/'.$order_id;// Paypal会将指定 invoice 的订单的状态定时发送到此URL(Paypal的此操作，是paypal的服务器和我方商城的服务器点对点的通信，用户感觉不到）
 				//notify_url=http%3A%2F%2Fwebshop.allocacoc.com%2FCart%2Fpaypal_notify%2Fordesrid%2F2016100857f87e4e543c0%2F&rm=2
 
 				$pp_info['rm'] = 2;
 				$paypal_payment_url = $gateway . http_build_query($pp_info);
+				error_log(json_encode($paypal_payment_url));
 				unset($pp_info);
 				$rs = array('status' => 1, 'paymenturl' => $paypal_payment_url);
 				echo json_encode($rs);
 				exit;
 			}
+			header("Content-type:text/html;charset=utf-8");
+			//			alipay 其实就是将接口文件包下alipayapi.php的内容复制过来，然后进行相关处理
+			if ($_POST['paytype'] == 2) {
+				error_log('Alipay ready for payment');
 
+				//这里我们通过TP的C函数把配置项参数读出，赋给$alipay_config；
+				$alipay_config=C('alipay_config');
 
+//				$this->ajaxReturn(json_encode($alipay_config));
+				$payment_type = "1"; //支付类型 //必填，不能修改
+				$notify_url = C('alipay.notify_url'); //服务器异步通知页面路径
+				$return_url = C('alipay.return_url'); //页面跳转同步通知页面路径
+//				$seller_email = C('alipay.seller_email');//卖家支付宝帐户必填
+//				$out_trade_no = $_POST['trade_no'];//商户订单号 通过支付页面的表单进行传递，注意要唯一！
+				$out_trade_no = $orderid;//商户订单号 通过支付页面的表单进行传递，注意要唯一！
+//				$subject = $_POST['ordsubject'];  //订单名称 //必填 通过支付页面的表单进行传递
+				$subject = "Allocacoc";  //订单名称 //必填 通过支付页面的表单进行传递
+//				$total_fee = $_POST['ordtotal_fee'];   //付款金额  //必填 通过支付页面的表单进行传递
+				$total_fee = $total;   //付款金额  //必填 通过支付页面的表单进行传递
+
+				$currency = 'USD';//付款外币币种，必填
+//				$body = $_POST['ordbody'];  //订单描述 通过支付页面的表单进行传递
+				$body = "Your order id is:".$orderid;  //订单描述 通过支付页面的表单进行传递
+//				$show_url = $_POST['ordshow_url'];  //商品展示地址 通过支付页面的表单进行传递
+//				$show_url = "http://webshop.allocacoc.com";  //商品展示地址 通过支付页面的表单进行传递
+				$show_url = "http://www.allocacoc.com/";  //商品展示地址 通过支付页面的表单进行传递
+				$anti_phishing_key = "";//防钓鱼时间戳 //若要使用请调用类文件submit中的query_timestamp函数
+				$exter_invoke_ip = get_client_ip(); //客户端的IP地址
+
+				//构造要请求的参数数组，无需改动
+				$parameter = array(
+//					"service" => "create_direct_pay_by_user",
+//					"service" => 'create_forex_trade',
+					"service" => trim($alipay_config['service']),
+					"partner" => trim($alipay_config['partner']),
+					"payment_type"    => $payment_type,
+					"notify_url"    => $notify_url,
+					"return_url"    => $return_url,
+//					"seller_email"    => $seller_email,
+					"seller_id"=>trim($alipay_config['partner']),//不可为空
+					"out_trade_no"    => $out_trade_no,
+					"subject"    => $subject,
+					"total_fee"    => $total_fee,
+					"body"            => $body,
+					'currency'=>$currency,
+//					"show_url"    => $show_url,
+//					"anti_phishing_key"    => $anti_phishing_key,
+//					"exter_invoke_ip"    => $exter_invoke_ip,
+					"_input_charset"    => trim(strtolower($alipay_config['input_charset']))
+				);
+				//建立请求
+				error_log('alipay_config is:'.json_encode($alipay_config));
+				error_log('parameter is:'.json_encode($parameter));
+				$alipaySubmit = new AlipaySubmit($alipay_config);
+				$html_text = $alipaySubmit->buildRequestForm($parameter,"post", "ok");
+//				$this->ajaxReturn($html_text);
+
+				$rs = array('status' => 1, 'paymenturl' => $html_text);
+				echo json_encode($rs);
+				error_log('html_text is:'.$html_text);
+				exit;
+//				echo $html_text;
+			}
 			/*
 //			stripe,card
 			if ($_POST['paytype'] == 2) {
@@ -1292,6 +1236,110 @@ class CartAction extends BaseAction
 			*/
 		}
 
+	}
+	//doalipay  notifyurl方法  其实这里就是将notify_url.php文件中的代码复制过来进行处理
+
+	function notifyurl(){
+
+		//require_once("alipay.config.php");
+		//require_once("lib/alipay_notify.class.php");
+		error_log("Function notifyurl:start to verify post info");
+		//这里还是通过C函数来读取配置项，赋值给$alipay_config
+		$alipay_config=C('alipay_config');
+		error_log("Notifyurl: Post info is:".json_encode($_POST));
+		//计算得出通知验证结果
+		$alipayNotify = new AlipayNotify($alipay_config);
+//		error_log("Notifyurl:  AlipayNotify object is:".json_encode($alipayNotify));
+		$verify_result = $alipayNotify->verifyNotify();
+		error_log('Notifyurl: post verify_result is:'.json_encode($verify_result));
+		if($verify_result) {
+			//验证成功
+			//获取支付宝的通知返回参数，可参考技术文档中服务器异步通知参数列表
+			$out_trade_no   = $_POST['out_trade_no'];      //商户订单号
+			$trade_no       = $_POST['trade_no'];          //支付宝交易号
+			$trade_status   = $_POST['trade_status'];      //交易状态
+			$total_fee      = $_POST['total_fee'];         //交易金额
+			$notify_id      = $_POST['notify_id'];         //通知校验ID。
+			$notify_time    = $_POST['notify_time'];       //通知的发送时间。格式为yyyy-MM-dd HH:mm:ss。
+			$buyer_email    = $_POST['buyer_email'];       //买家支付宝帐号；
+//			$parameter = array(
+//				"out_trade_no"     => $out_trade_no, //商户订单编号；
+//				"trade_no"     => $trade_no,     //支付宝交易号；
+//				"total_fee"     => $total_fee,    //交易金额；
+//				"trade_status"     => $trade_status, //交易状态
+//				"notify_id"     => $notify_id,    //通知校验ID。
+//				"notify_time"   => $notify_time,  //通知的发送时间。
+//				"buyer_email"   => $buyer_email,  //买家支付宝帐号；
+//			);
+			error_log("Notifyurl: verification successed, order_id_str=".$out_trade_no."trade_no is:".$trade_no."total_fee is".$total_fee."notify_time".$notify_time."buyer_email is:".$buyer_email."\r\n");
+			if($_POST['trade_status'] == 'TRADE_FINISHED') {
+				error_log('Notifyurl: trade status is trade finished:');
+				$orderid = $out_trade_no;
+				$order_id_arr = str_split($orderid, 21);
+				error_log("Notifyurl: order arr: ".json_encode($order_id_arr));
+				$this->sendmail($order_id_arr);
+			}else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
+				error_log('Notifyurl: trade status is trade success');
+
+//				if(!checkorderstatus($out_trade_no)){
+//					orderhandle($parameter);
+//					//进行订单处理，并传送从支付宝返回的参数；
+//				}
+			}
+			echo "success";        //请不要修改或删除
+			error_log("return alipay success");
+		}else {
+			//验证失败
+			echo "fail";
+		}
+	}
+	//这里其实就是将return_url.php这个文件中的代码复制过来，进行处理；
+	function returnurl(){
+		//头部的处理跟上面两个方法一样，这里不罗嗦了！
+		error_log("Function returnurl:start to return url verify");
+		$alipay_config=C('alipay_config');
+		error_log("Returnurl: get info is:".json_encode($_GET));
+		$alipayNotify = new AlipayNotify($alipay_config);//计算得出通知验证结果
+//		error_log("Returnurl: alipayNotify object is:".json_encode($alipayNotify));
+		$verify_result = $alipayNotify->verifyReturn();
+		error_log('Returnurl: verify_result is:'.json_encode($verify_result));
+		if($verify_result) {
+			//验证成功
+			//获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
+			$out_trade_no   = $_GET['out_trade_no'];      //商户订单号
+			$trade_no       = $_GET['trade_no'];          //支付宝交易号
+			$trade_status   = $_GET['trade_status'];      //交易状态
+			$total_fee      = $_GET['total_fee'];         //交易金额
+			$notify_id      = $_GET['notify_id'];         //通知校验ID。
+			$notify_time    = $_GET['notify_time'];       //通知的发送时间。
+			$buyer_email    = $_GET['buyer_email'];       //买家支付宝帐号；
+
+//			$parameter = array(
+//				"out_trade_no"     => $out_trade_no,      //商户订单编号；
+//				"trade_no"     => $trade_no,          //支付宝交易号；
+//				"total_fee"      => $total_fee,         //交易金额；
+//				"trade_status"     => $trade_status,      //交易状态
+//				"notify_id"      => $notify_id,         //通知校验ID。
+//				"notify_time"    => $notify_time,       //通知的发送时间。
+//				"buyer_email"    => $buyer_email,       //买家支付宝帐号
+//			);
+			error_log("Returnurl: verification successed, order_id_str=".$out_trade_no."trade_no is:".$trade_no."total_fee is".$total_fee."notify_time".$notify_time."buyer_email is:".$buyer_email."\r\n");
+			if($_GET['trade_status'] == 'TRADE_FINISHED' || $_GET['trade_status'] == 'TRADE_SUCCESS') {
+//				if(!checkorderstatus($out_trade_no)){
+//					orderhandle($parameter);  //进行订单处理，并传送从支付宝返回的参数；
+//				}
+				error_log('Returnurl: trade status is trade finished and trade success:'.$_GET['trade_status']);
+				$this->redirect(C('alipay.successpage'));//跳转到配置项中配置的支付成功页面；
+			}else {
+				error_log('Returnurl: trade status is failed:'.$_GET['trade_status']);
+				echo "trade_status=".$_GET['trade_status'];
+				$this->redirect(C('alipay.errorpage'));//跳转到配置项中配置的支付失败页面；
+			}
+		}else {
+			//验证失败
+			//如要调试，请看alipay_notify.php页面的verifyReturn函数
+			echo "支付失败！";
+		}
 	}
 
 	//delete from cookie, cart
@@ -1387,16 +1435,16 @@ class CartAction extends BaseAction
 		// 由于这个文件只有被Paypal的服务器访问，所以无需考虑做什么页面什么的，这个页面不是给人看的，是给机器看的
 		//$order_id = (int) $_REQUEST['orderid'];
 		$orderid = $_GET['orderid'];
-		error_log(time()."here notify"."\r\n"."and orderid is:".$_GET['orderid'],3,"/tmp/error/errors.log");
+		error_log(time()."here notify"."\r\n"."and orderid is:".$_GET['orderid']);
 		$order_id_arr = str_split($orderid, 21);
-		error_log("order arr: ".json_encode($order_id_arr)."\r\n",3,"/tmp/error/errors.log");
+		error_log("order arr: ".json_encode($order_id_arr));
 		//这个标示用来区分是不是所有的订单都支付了
 //		$flag = 1;
 		$order_info=array();
 		foreach ($order_id_arr as $value) {
 			$orderid = $value;
 			$order_info = M('design_order')->where('orderid=\'' . $orderid . '\'')->find();
-			error_log("order info:".json_encode($order_info)."\r\n",3,"/tmp/error/errors.log");
+			error_log("order info:".json_encode($order_info));
 //			if(empty($order_info)){
 //				error_log("order_info is empty");
 //				$flag=0;
@@ -1410,23 +1458,23 @@ class CartAction extends BaseAction
 //		$req = 'cmd=_notify-validate';// 验证请求
 		$req = 'cmd=' . urlencode('_notify-validate');
 		foreach ($_POST as $k => $v) {
-			error_log("post content:".$k."=>".$v."\r\n",3,"/tmp/error/errors.log");
+			error_log("post content:".$k."=>".$v);
 			$v = urlencode(stripslashes($v));
 			$req .= "&$k=$v";
 		}
-		error_log("start verify Post ,request data is $req"."\r\n",3,"/tmp/error/errors.log");
+		error_log("start verify Post ,request data is $req");
 ///////////////////////////////////////////////////////////////////
 //		Curl 方法
 /////////////////////////////////////////////////////////////////
 		$ch = curl_init();
-//		curl_setopt($ch,CURLOPT_URL,'https://www.paypal.com/cgi-bin/webscr');//https://www.sandbox.paypal.com/cgi-bin/webscr
-		curl_setopt($ch, CURLOPT_URL, 'https://www.sandbox.paypal.com/cgi-bin/webscr');
+		curl_setopt($ch,CURLOPT_URL,'https://www.paypal.com/cgi-bin/webscr');//https://www.sandbox.paypal.com/cgi-bin/webscr
+//		curl_setopt($ch, CURLOPT_URL, 'https://www.sandbox.paypal.com/cgi-bin/webscr');
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
 		curl_setopt($ch,CURLOPT_POST,1);
 		curl_setopt($ch,CURLOPT_POSTFIELDS,$req);
 		$res = curl_exec($ch);
 		curl_close($ch);
-		error_log("res:".json_encode($res)."\r\n",3,"/tmp/error/errors.log");
+		error_log("res:".json_encode($res));
 //////////////////////////////////////////////////////////////////////
 //		$ch = curl_init();
 //		error_log("curl_init is :".$ch);
@@ -1478,7 +1526,7 @@ class CartAction extends BaseAction
 //		$res = 'VERIFIED';
 //		if ($res && !empty($order_info)) {
 //		if ($res) {
-				error_log("verified order status：" . json_encode($res)."\r\n",3,"/tmp/error/errors.log");
+				error_log("verified order status：" . json_encode($res));
 				// 本次请求是否由Paypal官方的服务器发出的请求
 				if (strcmp($res, 'VERIFIED') == 0) {
 					/**
@@ -1487,17 +1535,17 @@ class CartAction extends BaseAction
 					 * 判断订单金额
 					 * 判断货币类型
 					 */
-					error_log(time().'here verified',3,"/tmp/error/errors.log");
+					error_log(time().'here verified');
 					if (($_POST['payment_status'] != 'Completed' && $_POST['payment_status'] != 'Pending')) {
 						// 如果有任意一项成立，则终止执行。由于是给机器看的，所以不用考虑什么页面。直接输出即可
-						error_log('payment status is fail'."\r\n",3,"/tmp/error/errors.log");
+						error_log('payment status is fail');
 						exit('fail');
 					} else {// 如果验证通过，则证明本次请求是合法的
 
-						error_log('payment status is succ'."\r\n",3,"/tmp/error/errors.log");
+						error_log('payment status is succ');
 						// motify payflag
 
-						error_log("order arr: ".json_encode($order_id_arr)."and orderid is:".$_GET['orderid']."\r\n",3,"/tmp/error/errors.log");
+						error_log("order arr: ".json_encode($order_id_arr)."and orderid is:".$_GET['orderid']);
 
 
 						$this->sendmail($order_id_arr);
@@ -1521,7 +1569,7 @@ class CartAction extends BaseAction
 						exit('success');
 					}
 				} else {
-					error_log("pay fail  fail  fail"."\r\n",3,"/tmp/error/errors.log");
+					error_log("pay fail  fail  fail");
 					exit('fail');
 				}
 //		}
@@ -1549,14 +1597,15 @@ class CartAction extends BaseAction
       */
 
 			$mail->IsSMTP(); // send via SMTP
-//			$mail->Host = "mail.allocacoc.com"; // SMTP servers
-			$mail->Host = "smtp.exmail.qq.com"; // SMTP servers
+			$mail->Host = "mail.allocacoc.com"; // SMTP servers
+//			$mail->Host = "smtp.exmail.qq.com"; // SMTP servers
 			$mail->SMTPAuth = true; // turn on SMTP authentication
-//			$mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
-			$mail->Username = "leo.li@allocacoc.com.cn"; // SMTP username 注意：普通邮件认证不需要加 @域名
-//			$mail->Password = "egx-7VW-Y4o-Bps"; // SMTP password
-			$mail->Password = "Liyonghui890"; // SMTP password
-			$mail->From = "leo.li@allocacoc.com.cn"; // 发件人邮箱
+			$mail->Username = "designnest.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
+//			$mail->Username = "leo.li@allocacoc.com.cn"; // SMTP username 注意：普通邮件认证不需要加 @域名
+			$mail->Password = "j~9B96sw"; // SMTP password
+//			$mail->Password = "Liyonghui890"; // SMTP password
+			$mail->From = "designnest.orders@allocacoc.com"; // 发件人邮箱
+//			$mail->From = "leo.li@allocacoc.com.cn"; // 发件人邮箱
 			$mail->FromName = "allocacoc"; // 发件人 ,比如 中国资金管理网
 			$mail->CharSet = "GB2312"; // 这里指定字符集！
 			$mail->Encoding = "base64";
@@ -1576,10 +1625,10 @@ class CartAction extends BaseAction
 				if(!$result || !$result2)
 				{
 					$statusflag=0;
-					error_log("PayFlag and qty modified error: fail to modify pay flag, order is ".$order_id." qty is ".$order_info['qty']."\r\n",3,"/tmp/error/errors.log");
+					error_log("PayFlag and qty modified error: fail to modify pay flag, order is ".$order_id." qty is ".$order_info['qty']);
 
 				}else{
-					error_log('orderid is:'.$order_id.'pay flag and qty have been changed successfully'."\r\n",3,"/tmp/error/errors.log");
+					error_log('orderid is:'.$order_id.'pay flag and qty have been changed successfully');
 				}
 				$mail->AddAddress($order_info['email'], ''); // 收件人邮箱和姓名
 				$this->generateEmail($order_info, $content);
@@ -1587,9 +1636,9 @@ class CartAction extends BaseAction
 				$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
 
 				if (!$mail->Send()) {
-					error_log('send error:' . $mail->ErrorInfo.', the email address is:'.$order_info['email'].'orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
+					error_log('send error:' . $mail->ErrorInfo.', the email address is:'.$order_info['email'].'orderid is:'.$order_info['orderid']);
 				}else{
-					error_log('The confirmation email have been send successfully, the email address is:'.$order_info['email'].'orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
+					error_log('The confirmation email have been send successfully, the email address is:'.$order_info['email'].'orderid is:'.$order_info['orderid']);
 				}
 
 			}
@@ -1611,75 +1660,7 @@ class CartAction extends BaseAction
             */
 
 		}
-//	public function sendmail($email, $order_info)
-//		{
-//			error_log('start to send email, the email address is:'.$email.', orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
-//			import("@.ORG.PHPMailer");
-//			$mail = new PHPMailer();
-//
-//			/*
-//      $mail->IsSMTP(); // send via SMTP
-//      $mail->Host = "smtp.exmail.qq.com"; // SMTP servers
-//      $mail->SMTPAuth = true; // turn on SMTP authentication
-//      $mail->Username = "tell@allocacoc.com.cn"; // SMTP username 注意：普通邮件认证不需要加 @域名
-//      $mail->Password = "powercube123"; // SMTP password
-//      $mail->From = "tell@allocacoc.com.cn"; // 发件人邮箱
-//      $mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
-//      $mail->Password = "egx-7VW-Y4o-Bps"; // SMTP password
-//      */
-//
-//			$mail->IsSMTP(); // send via SMTP
-////			$mail->Host = "mail.allocacoc.com"; // SMTP servers
-//			$mail->Host = "smtp.exmail.qq.com"; // SMTP servers
-//			$mail->SMTPAuth = true; // turn on SMTP authentication
-////			$mail->Username = "designhouse.orders@allocacoc.com"; // SMTP username 注意：普通邮件认证不需要加 @域名
-//			$mail->Username = "leo.li@allocacoc.com.cn"; // SMTP username 注意：普通邮件认证不需要加 @域名
-////			$mail->Password = "egx-7VW-Y4o-Bps"; // SMTP password
-//			$mail->Password = "Liyonghui890"; // SMTP password
-//			$mail->From = "leo.li@allocacoc.com.cn"; // 发件人邮箱
-//			$mail->FromName = "allocacoc"; // 发件人 ,比如 中国资金管理网
-//			$mail->CharSet = "GB2312"; // 这里指定字符集！
-//			$mail->Encoding = "base64";
-//			$mail->AddAddress($email, ''); // 收件人邮箱和姓名
-//			$mail->AddReplyTo("", "allocacoc");
-//			$mail->IsHTML(true); // send as HTML
-//			$mail->Subject = "Thanks for order our product, from Allocacoc";
-//
-//
-//			/*
-//            $mail->IsSMTP(); // send via SMTP
-//            $mail->Host = C('MAIL_SMTP_SERVER'); // SMTP servers
-//            $mail->SMTPAuth = true; // turn on SMTP authentication
-//            $mail->Username = C('MAIL_USERNAME'); // SMTP username 注意：普通邮件认证不需要加 @域名
-//            $mail->Password = C('MAIL_PASSWD'); // SMTP password
-//            $mail->From = C('MAIL_FROM'); // 发件人邮箱
-//            $mail->FromName = C('MAIL_FROMNAME'); // 发件人 ,比如 中国资金管理网
-//            $mail->CharSet = C('MAIL_CHARSET'); // 这里指定字符集！
-//            $mail->Encoding = C('MAIL_ENCODING');
-//            $mail->AddAddress($email,''); // 收件人邮箱和姓名
-//            $mail->AddAddress(C('MAIL_ORDER'),'');
-//            $mail->AddReplyTo("",C('MAIL_REPLYTO'));
-//            $mail->IsHTML(true); // send as HTML
-//            $mail->Subject = C('MAIL_SUBJECT');
-//            */
-//
-//
-//			$mail->WordWrap = 80; // 设置每行字符串的长度
-//			//$mail->Body = "Thank you for order our product, You payed successfully. We will send products to You as soon as possible.<br> Allocacoc.";
-//			$this->generateEmail($order_info, $content);
-//
-//			$mail->Body = $content;
-//
-//			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!";
-//
-//			if (!$mail->Send()) {
-//				error_log('send error:' . $mail->ErrorInfo."\r\n",3,"/tmp/error/errors.log");
-//				return false;
-//			}else{
-//				error_log('The confirmation email have been send successfully, the email address is:'.$email.'orderid is:'.$order_info['orderid']."\r\n",3,"/tmp/error/errors.log");
-//				return true;
-//			}
-//		}
+
 
 
 		// generate mail content for order, including customer info,shipping address,product list ,etc.
@@ -1687,7 +1668,7 @@ class CartAction extends BaseAction
 		{
 			$paytype = '';
 			if ($order_info['paytype'] == 1) $paytype = 'Paypal';
-			if ($order_info['paytype'] == 2) $paytype = 'Card';
+			if ($order_info['paytype'] == 2) $paytype = 'Alipay';
 
 
 			/*
@@ -1835,7 +1816,7 @@ class CartAction extends BaseAction
 </html>
 ';
 
-			error_log('start to send email, the email content have been edited:'."\r\n",3,"/tmp/error/errors.log");
+			error_log('start to send email, the email content have been edited:');
 
 		}
 

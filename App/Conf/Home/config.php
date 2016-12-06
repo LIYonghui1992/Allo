@@ -12,11 +12,6 @@ $config=array(
 
 		'TMPL_CACHE_TIME'	=> 3600,
 
-//		'TMPL_PARSE_STRING'=>array( //添加个人模板变量规则
-//			'__CSS__'=>__ROOT__.'/Public/Css',
-//			'__JS__'=>__ROOT__.'/Public/Js',
-//		),
-
 		'URL_MODEL'			=> 2,
 
 		'DEFAULT_LANG'      => 'en',

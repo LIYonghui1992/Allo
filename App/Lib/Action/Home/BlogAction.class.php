@@ -151,7 +151,7 @@ class BlogAction extends BaseAction {
         	$start_time=array();
 		    foreach ($data as $key => $value) {
 				$start_time[]=(int)$value['month'];
-						}
+			}
 				$start_time=array_unique($start_time);
 				rsort($start_time);
 				// var_dump($start_time);
@@ -208,10 +208,9 @@ class BlogAction extends BaseAction {
 			$this -> display("fairs");
 		}else
 		$this -> display();
-
-		
-
 	}
+
+
 	public function detail(){
 
 		if (IS_POST) {
@@ -228,6 +227,15 @@ class BlogAction extends BaseAction {
 
 		}
 
+	}
+
+	public function details(){
+		$id=$_GET['id'];
+		$blog = M('blog') -> where('id=' . $id) -> find();
+		$blog['updatetime']=date("Y.m.d", $blog['updatetime']);
+//		var_dump($blog);
+		$this->assign("blog",$blog);
+		$this->display();
 	}
 	
 	

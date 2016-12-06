@@ -264,6 +264,8 @@ class Submit_ideaAction extends AdminbaseAction {
 		$featurelist = M('submit_idea_feature')->where($fwhere)->select();
     $idea['featurelist'] = $featurelist;
     //var_dump($idea);
+    
+    //var_dump(json_encode($idea));
     $this -> assign('idea', $idea);
 
 		$this -> display();

@@ -88,7 +88,6 @@ layout_list里面分显示 不显示和存数据 三部分
     height:120px;
     line-height:120px;
     text-align:center;
-    /*background:red;*/
 }
 .image{
     float:left;
@@ -224,7 +223,7 @@ layout_list里面分显示 不显示和存数据 三部分
     width:150px;
     background-color:#874597;
     text-align:center;
-    line-height: 30px;
+    line-height: 32px;
     height:35px;
     margin-right: 40px;
     margin-top:5px;
@@ -242,9 +241,7 @@ layout_list里面分显示 不显示和存数据 三部分
     width:700px;
     height:350px;
     margin-top:10px;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: #dddddd;
+    border:0;
     display:none;
 }
 .shipping-div{
@@ -317,9 +314,10 @@ layout_list里面分显示 不显示和存数据 三部分
 /*}*/
 
 /*!*button*!*/
-.chk_2{
-    visibility: hidden;
-}
+/*.chk_2{*/
+    /*visibility: hidden;*/
+    /*display: none;*/
+/*}*/
 
 /*.chk_2 + label {*/
 
@@ -435,5 +433,16 @@ layout_list里面分显示 不显示和存数据 三部分
 
 .select_address_color:hover{
     cursor:pointer;
+    background:white;
+
+}
+
+::selection {
+    background:white;
+}
+::-moz-selection {
+    background:white;
+}
+::-webkit-selection {
     background:white;
 }

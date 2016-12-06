@@ -79,6 +79,7 @@ class Design_suborderAction extends AdminbaseAction {
    function insert() { 
 	   
 	   R('Admin/Content/'.ACTION_NAME);
+
 	   
    }
    
@@ -458,6 +459,175 @@ class Design_suborderAction extends AdminbaseAction {
       exit;    
           					 
   	}
+	/**
+	 * 删除
+	 *
+	 */
+	function delete(){
+		$flag=1;
+		$name = MODULE_NAME;
+//		$model = M ( $name );
+		$model=new Model();
+		$model->startTrans();
+		$pk = $model->table(C('DB_PREFIX') . 'design_order')->getPk ();
+		$id = $_REQUEST [$pk];
+		$where['id']=$id;
+		$orderid=$model->table(C('DB_PREFIX') . 'design_suborder')->where($where)->getField("orderid");
+		$result1=$model->table(C('DB_PREFIX') . 'design_suborder')->delete($id);
+		$where1['orderid']=$orderid;
+		error_log(time()."delete_order is".$orderid);
+		$count=$model->table(C('DB_PREFIX') . 'design_suborder')->where($where1)->count();
+		$result2=true;
+		if($count==0){
+			$result2=$model->table(C('DB_PREFIX') . 'design_order')->where($where1)->delete();
+		}
+		if(false!==$result1&&false!==$result2){
+			$model->commit();
+			$flag=1;
+		}else{
+			$model->rollback();
+			$flag=0;
+		}
+
+		$model = M ( $name );
+		if (isset ( $id )) {
+			if($flag==1){
+				if(in_array($name,$this->cache_model)) savecache($name);
+				if($this->moduleid){
+					$fields =  $model->getDbFields();
+					//var_dump($fields);
+					delattach(array('moduleid'=>$this->moduleid,'id'=>$id));
+					if($fields['keywords']){
+						$olddata  = $model->field('keywords')->find($id);
+						$where['name']=array('in',$olddata['keywords']);
+						$where['moduleid']=array('eq',$this->moduleid);
+						if(APP_LANG)$where['lang']=array('eq',LANG_ID);
+						M('Tags')->where($where)->setDec('num');
+						M('Tags_data')->where("id=".$id)->delete();
+					}
+				}
+				if($name=="Language"){
+					savecache('Language');
+				}
+
+				if($name=="Country"){
+					savecache('Country');
+				}
+
+				if($name=="Product_model"){
+					savecache('Product_model');
+				}
+
+				if($name=="Product_group"){
+					savecache('Product_group');
+				}
+
+				if($name=="Product"){
+					savecache('Product');
+				}
+
+				if($name=="Version"){
+					savecache('Version');
+				}
+
+				if($name=="Design"){
+					savecache('Design');
+				}
+
+				if($name=="Design_years"){
+					savecache('Design_years');
+				}
+				if($name=="Design_winner"){
+					savecache('Design_winner');
+				}
+
+				if($name=="Download"){
+					savecache('Download');
+				}
+
+				if($name=="Download_two"){
+					savecache('Download_two');
+				}
+
+				if($name=='Order')M('Order_data')->where('order_id='.$id)->delete();
+				$this->success(L('delete_ok'));
+			}else{
+				$this->error(L('delete_error').': '.$model->getDbError());
+			}
+		}else{
+			$this->error (L('do_empty'));
+		}
+	}
+
+	/**
+	 * 批量删除
+	 *
+	 */
+
+	function deleteall(){
+		$flag=1;
+		$name = MODULE_NAME;
+		$model=new Model();
+		$model->startTrans();
+//		$model = M ( $name );
+		$ids=$_POST['ids'];
+		$orderid="";
+		if(!empty($ids) && is_array($ids)){
+			foreach($ids as $id){
+				$where['id']=$id;
+				$orderid=$model->table(C('DB_PREFIX') . 'design_suborder')->where($where)->getField("orderid");
+				$result1=$model->table(C('DB_PREFIX') . 'design_suborder')->delete($id);
+				if(false!==$result1){
+					$flag=1;
+				}else{
+					$flag=0;
+				}
+			}
+			$where1['orderid']=$orderid;
+			error_log(time()."delete_order is".$orderid);
+			$count=$model->table(C('DB_PREFIX') . 'design_suborder')->where($where1)->count();
+			$result2=true;
+			if($count==0){
+				$result2=$model->table(C('DB_PREFIX') . 'design_order')->where($where1)->delete();
+			}
+			if(false==$result2){
+				$flag=0;
+			}
+			if($flag==1){
+				$model->commit();
+			}else{
+				$model->rollback();
+			}
+
+			$id=implode(',',$ids);
+//			if(false!==$model->delete($id)){
+			$model = M ( $name );
+			if($flag==1){
+				if(in_array($name,$this->cache_model)) savecache($name);
+				if($this->moduleid){
+					$fields =  $model->getDbFields();
+					delattach("moduleid=$this->moduleid and id in($id)");
+					if($fields['keywords']){
+						$olddata  = $model->field('keywords')->where("id in($id)")->select();
+						foreach((array)$olddata as $r){
+							$where['name']=array('in',$r['keywords']);
+							$where['moduleid']=array('eq',$this->moduleid);
+							if(APP_LANG)$where['lang']=array('eq',LANG_ID);
+							M('Tags')->where($where)->setDec('num');
+						}
+						M('Tags_data')->where("id in($id)")->delete();
+						M('Tags')->where('num<=0')->delete();
+					}
+				}
+				if($name=='Order')M('Order_data')->where('order_id in('.$id.')')->delete();
+				$this->success(L('delete_ok'));
+			}else{
+				$this->error(L('delete_error').': '.$model->getDbError());
+			}
+		}else{
+			$this->error(L('do_empty'));
+		}
+	}
 
 }
 

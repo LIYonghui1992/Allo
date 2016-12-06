@@ -405,7 +405,7 @@ class Download_file_newAction extends AdminbaseAction {
    	 	   $listorder = intval($_REQUEST['file_listorder']);
    	 	 
    	 	 //error_log('11before add record');
-   	 	 if(!empty( $_FILES['file_img_upload']))
+   	 	 if(!empty( $_FILES['file_img_upload']['tmp_name']))
    	 	 {
    	 	 	 $back_pic = $_FILES['file_img_upload'];
    	 	 	 $picname = $back_pic['name'];
@@ -425,7 +425,7 @@ class Download_file_newAction extends AdminbaseAction {
    	 	 }
    	 	 //error_log('12before add record');
 
-   	 	 if(!empty( $_FILES['file_file_upload']))
+   	 	 if(!empty( $_FILES['file_file_upload']['tmp_name']))
    	 	 {
    	 	 	 $file = $_FILES['file_file_upload'];
    	 	 	 $filename = $file['name'];
